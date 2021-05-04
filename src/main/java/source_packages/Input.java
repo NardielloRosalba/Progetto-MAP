@@ -8,10 +8,6 @@ import java.util.Scanner;
  * and open the template in the editor.
  */
 
-/**
- *
- * @author Rosalba
- */
 public class Input {
 
     String comando;

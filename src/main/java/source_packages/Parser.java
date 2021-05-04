@@ -8,10 +8,7 @@ package source_packages;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- *
- * @author Luca
- */
+
 public class Parser {
 
     public Parser() {
