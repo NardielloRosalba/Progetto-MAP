@@ -5,10 +5,7 @@
  */
 package source_packages;
 
-/**
- *
- * @author Luca
- */
+
 public class Menu {
 
     public Menu() {

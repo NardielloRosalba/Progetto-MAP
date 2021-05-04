@@ -5,10 +5,6 @@
  */
 package source_packages;
 
-/**
- *
- * @author Luca
- */
 public class Comandi {
 
     public void Comandi() {
