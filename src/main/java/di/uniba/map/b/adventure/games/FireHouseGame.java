@@ -12,8 +12,13 @@ import di.uniba.map.b.adventure.type.AdvObjectContainer;
 import di.uniba.map.b.adventure.type.Command;
 import di.uniba.map.b.adventure.type.CommandType;
 import di.uniba.map.b.adventure.type.Room;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.PrintStream;
 import java.util.Iterator;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ATTENZIONE: La descrizione del gioco è fatta in modo che qualsiasi gioco
@@ -37,61 +42,167 @@ public class FireHouseGame extends GameDescription {
         Command nord = new Command(CommandType.NORD, "nord");
         nord.setAlias(new String[]{"n", "N", "Nord", "NORD"});
         getCommands().add(nord);
+
         Command iventory = new Command(CommandType.INVENTORY, "inventario");
         iventory.setAlias(new String[]{"inv", "i", "I"});
         getCommands().add(iventory);
+
         Command sud = new Command(CommandType.SOUTH, "sud");
         sud.setAlias(new String[]{"s", "S", "Sud", "SUD"});
         getCommands().add(sud);
+
         Command est = new Command(CommandType.EAST, "est");
         est.setAlias(new String[]{"e", "E", "Est", "EST"});
         getCommands().add(est);
+
         Command ovest = new Command(CommandType.WEST, "ovest");
         ovest.setAlias(new String[]{"o", "O", "Ovest", "OVEST"});
         getCommands().add(ovest);
+
         Command end = new Command(CommandType.END, "end");
-        end.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati","exit"});
+        end.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati", "exit"});
         getCommands().add(end);
+
         Command look = new Command(CommandType.LOOK_AT, "osserva");
         look.setAlias(new String[]{"guarda", "vedi", "trova", "cerca", "descrivi"});
         getCommands().add(look);
+
         Command pickup = new Command(CommandType.PICK_UP, "raccogli");
         pickup.setAlias(new String[]{"prendi"});
         getCommands().add(pickup);
+
         Command open = new Command(CommandType.OPEN, "apri");
         open.setAlias(new String[]{});
         getCommands().add(open);
+
         Command push = new Command(CommandType.PUSH, "premi");
-        push.setAlias(new String[]{"spingi","attiva"});
+        push.setAlias(new String[]{"spingi", "attiva"});
         getCommands().add(push);
-        //Rooms
-        Room hall = new Room(0, "Corridoio", "Sei appena tornato a casa e non sai cosa fare. Ti ricordi che non hai ancora aperto quel fantastico regalo di tua zia Lina."
-                + " Sarà il caso di cercarlo e di giocarci!");
-        hall.setLook("Sei nel corridoio, a nord vedi il bagno, a sud il soggiorno e ad ovest la tua cameretta, forse il gioco sarà lì?");
-        Room livingRoom = new Room(1, "Soggiorno", "Ti trovi nel soggiorno. Ci sono quei mobili marrone scuro che hai sempre odiato e delle orribili sedie.");
-        livingRoom.setLook("Non c'è nulla di interessante qui.");
-        Room kitchen = new Room(2, "Cucina", "Ti trovi nella solita cucina. Mobili bianchi, maniglie azzurre, quello strano lampadario che adoravi tanto quando eri piccolo. "
-                + "C'è un tavolo con un bel portafrutta e una finestra.");
-        kitchen.setLook("La solita cucina, ma noti una chiave vicino al portafrutta.");
-        Room bathroom = new Room(3, "Bagno", "Sei nel bagno. Quanto tempo passato qui dentro...meglio non pensarci...");
-        bathroom.setLook("Vedo delle batterie sul mobile alla destra del lavandino.");
+
+        //Stanze lette da file
+        Scanner fr = new Scanner(new FileReader("resources/Stanze.txt"));
+        String titolo, descrizione = "";
+        String[] prova;
+
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room salaComandi = new Room(0, titolo, descrizione);
+        //salaComandi.setLook("Sei nel corridoio, a nord vedi il bagno, a sud il soggiorno e ad ovest la tua cameretta, forse il gioco sarà lì?");
+
+        descrizione = "";
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room corridoioX = new Room(1, titolo, descrizione);
+
+        descrizione = "";
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room corridoioSud = new Room(2, titolo, descrizione);
+
+        descrizione = "";
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room salaElettrica = new Room(3, titolo, descrizione);
+
+        descrizione = "";
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room corridoioNord = new Room(4, titolo, descrizione);
+
+        descrizione = "";
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room infermeria = new Room(5, titolo, descrizione);
+
+        descrizione = "";
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room stanzaTelecomunicazioni = new Room(6, titolo, descrizione);
+
+        descrizione = "";
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room stanzaEsterna = new Room(7, titolo, descrizione);
+
         Room yourRoom = new Room(4, "La tua cameratta", "Finalmente la tua cameretta! Questo luogo ti è così famigliare...ma non ricordi dove hai messo il nuovo regalo di zia Lina.");
         yourRoom.setLook("C'è un armadio bianco, di solito conservi lì i tuoi giochi.");
+
         //maps
-        kitchen.setEast(livingRoom);
-        livingRoom.setNorth(hall);
-        livingRoom.setWest(kitchen);
-        hall.setSouth(livingRoom);
-        hall.setWest(yourRoom);
-        hall.setNorth(bathroom);
-        bathroom.setSouth(hall);
-        yourRoom.setEast(hall);
-        getRooms().add(kitchen);
-        getRooms().add(livingRoom);
-        getRooms().add(hall);
+        salaComandi.setSouth(corridoioX);
+
+        corridoioX.setWest(salaComandi);
+        corridoioX.setNorth(corridoioNord);
+        corridoioX.setSouth(corridoioSud);
+        corridoioX.setEast(stanzaTelecomunicazioni);
+
+        corridoioNord.setEast(infermeria);
+        corridoioNord.setSouth(corridoioX);
+
+        infermeria.setSouth(stanzaTelecomunicazioni);
+        infermeria.setWest(corridoioNord);
+
+        salaElettrica.setEast(corridoioSud);
+
+        corridoioSud.setWest(salaElettrica);
+        corridoioSud.setNorth(corridoioX);
+
+        stanzaTelecomunicazioni.setEast(corridoioX);
+        stanzaTelecomunicazioni.setNorth(infermeria);
+        stanzaTelecomunicazioni.setSouth(stanzaEsterna);
+        stanzaTelecomunicazioni.setWest(corridoioX);
+        
+        stanzaEsterna.setNorth(stanzaTelecomunicazioni);
+
+        getRooms().add(salaComandi);
+        getRooms().add(corridoioX);
+        getRooms().add(corridoioSud);
+        getRooms().add(salaElettrica);
+        getRooms().add(infermeria);
+        getRooms().add(corridoioNord);
+        getRooms().add(stanzaTelecomunicazioni);
+        getRooms().add(stanzaEsterna);
+
+        /*corridoio_x.setEast(corridoio);
+        corridoio.setNorth(salaComandi);
+        corridoio.setWest(corridoio_x);
+        salaComandi.setSouth(corridoio);
+        salaComandi.setWest(yourRoom);
+        salaComandi.setNorth(bathroom);
+        bathroom.setSouth(salaComandi);
+        yourRoom.setEast(salaComandi);
+        getRooms().add(corridoio_x);
+        getRooms().add(corridoio);
+        getRooms().add(salaComandi);
         getRooms().add(bathroom);
         getRooms().add(yourRoom);
+        
         //obejcts
+        //AdvObjectContainer armadio = new AdvObjectContainer(1, );
+
         AdvObject battery = new AdvObject(1, "batteria", "Un pacco di batterie, chissà se sono cariche.");
         battery.setAlias(new String[]{"batterie", "pile", "pila"});
         bathroom.getObjects().add(battery);
@@ -106,8 +217,9 @@ public class FireHouseGame extends GameDescription {
         toy.setPushable(true);
         toy.setPush(false);
         wardrobe.add(toy);
+         */
         //set starting room
-        setCurrentRoom(hall);
+        setCurrentRoom(salaComandi);
     }
 
     @Override

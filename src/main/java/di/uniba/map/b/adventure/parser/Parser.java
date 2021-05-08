@@ -32,9 +32,9 @@ public class Parser {
         return -1;
     }
 
-    private int checkForObject(String token, List<AdvObject> obejcts) {
-        for (int i = 0; i < obejcts.size(); i++) {
-            if (obejcts.get(i).getName().equals(token) || obejcts.get(i).getAlias().contains(token)) {
+    private int checkForObject(String token, List<AdvObject> objects) {
+        for (int i = 0; i < objects.size(); i++) {
+            if (objects.get(i).getName().equals(token) || objects.get(i).getAlias().contains(token)) {
                 return i;
             }
         }
