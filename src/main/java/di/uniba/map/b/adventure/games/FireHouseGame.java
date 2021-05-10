@@ -79,8 +79,8 @@ public class FireHouseGame extends GameDescription {
         push.setAlias(new String[]{"spingi", "attiva"});
         getCommands().add(push);
 
-        //Stanze lette da file
-        Scanner fr = new Scanner(new FileReader("resources/Stanze.txt"));
+        //Stanze lette da file aggiungi try catch
+        Scanner fr = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Stanze.txt"));
         String titolo, descrizione = "";
         String[] prova;
 
