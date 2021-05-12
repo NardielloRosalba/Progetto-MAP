@@ -43,9 +43,9 @@ public class Engine {
     }
 
     public void execute() {
-        System.out.println("================================");
-        System.out.println("* Adventure v. 0.1 - 2020-2021 *");
-        System.out.println("================================");
+        System.out.println("===================================================");
+        System.out.println("* Adventure Luca, Rosalba, Raffaella - 2020-2021 *");
+        System.out.println("===================================================");
         System.out.println(game.getCurrentRoom().getName());
         System.out.println();
         System.out.println(game.getCurrentRoom().getDescription());

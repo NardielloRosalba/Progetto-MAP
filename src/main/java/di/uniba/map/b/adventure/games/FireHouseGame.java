@@ -44,7 +44,7 @@ public class FireHouseGame extends GameDescription {
         getCommands().add(nord);
 
         Command iventory = new Command(CommandType.INVENTORY, "inventario");
-        iventory.setAlias(new String[]{"inv", "i", "I"});
+        iventory.setAlias(new String[]{"inv", "i", "I","zaino"});
         getCommands().add(iventory);
 
         Command sud = new Command(CommandType.SOUTH, "sud");
@@ -64,7 +64,7 @@ public class FireHouseGame extends GameDescription {
         getCommands().add(end);
 
         Command look = new Command(CommandType.LOOK_AT, "osserva");
-        look.setAlias(new String[]{"guarda", "vedi", "trova", "cerca", "descrivi"});
+        look.setAlias(new String[]{"guarda", "vedi", "trova", "cerca", "descrivi", "esamina"});
         getCommands().add(look);
 
         Command pickup = new Command(CommandType.PICK_UP, "raccogli");
@@ -78,6 +78,8 @@ public class FireHouseGame extends GameDescription {
         Command push = new Command(CommandType.PUSH, "premi");
         push.setAlias(new String[]{"spingi", "attiva"});
         getCommands().add(push);
+        //AGGIUNGERE ALTRI COMANDI IN BASE ALLA STORIA!!!!!!!!!!!!!!!
+        
 
         //Stanze lette da file aggiungi try catch
         Scanner fr = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Stanze.txt"));
@@ -90,7 +92,9 @@ public class FireHouseGame extends GameDescription {
             descrizione += (s + ".\n");
         }
         Room salaComandi = new Room(0, titolo, descrizione);
-        //salaComandi.setLook("Sei nel corridoio, a nord vedi il bagno, a sud il soggiorno e ad ovest la tua cameretta, forse il gioco sarà lì?");
+        salaComandi.setLook("Attorno a te è tutto buio, solo una luce fioca "
+                + "proviene dall'oblo situato a nord. A Sud è presente una porta"
+                + " e accanto ad essa un armadio di colore nero. ");
 
         descrizione = "";
         titolo = fr.nextLine();
@@ -99,7 +103,8 @@ public class FireHouseGame extends GameDescription {
             descrizione += (s + ".\n");
         }
         Room corridoioX = new Room(1, titolo, descrizione);
-
+        corridoioX.setLook("E' un semplice corridoio, cosa ti aspettavi?! Continua con le tue missioni!!");
+        
         descrizione = "";
         titolo = fr.nextLine();
         prova = fr.nextLine().split("\\.");
@@ -107,7 +112,8 @@ public class FireHouseGame extends GameDescription {
             descrizione += (s + ".\n");
         }
         Room corridoioSud = new Room(2, titolo, descrizione);
-
+        
+        
         descrizione = "";
         titolo = fr.nextLine();
         prova = fr.nextLine().split("\\.");
@@ -115,7 +121,10 @@ public class FireHouseGame extends GameDescription {
             descrizione += (s + ".\n");
         }
         Room salaElettrica = new Room(3, titolo, descrizione);
-
+        salaElettrica.setLook("Puoi notare una frase sul contatore elettronico "
+                + "con su scritto \"Attenzione, non tirare i fili "
+                + "perchè trasportano corrente!!\"");
+        
         descrizione = "";
         titolo = fr.nextLine();
         prova = fr.nextLine().split("\\.");
@@ -147,9 +156,6 @@ public class FireHouseGame extends GameDescription {
             descrizione += (s + ".\n");
         }
         Room stanzaEsterna = new Room(7, titolo, descrizione);
-
-        Room yourRoom = new Room(4, "La tua cameratta", "Finalmente la tua cameretta! Questo luogo ti è così famigliare...ma non ricordi dove hai messo il nuovo regalo di zia Lina.");
-        yourRoom.setLook("C'è un armadio bianco, di solito conservi lì i tuoi giochi.");
 
         //maps
         salaComandi.setSouth(corridoioX);
@@ -185,25 +191,16 @@ public class FireHouseGame extends GameDescription {
         getRooms().add(corridoioNord);
         getRooms().add(stanzaTelecomunicazioni);
         getRooms().add(stanzaEsterna);
-
-        /*corridoio_x.setEast(corridoio);
-        corridoio.setNorth(salaComandi);
-        corridoio.setWest(corridoio_x);
-        salaComandi.setSouth(corridoio);
-        salaComandi.setWest(yourRoom);
-        salaComandi.setNorth(bathroom);
-        bathroom.setSouth(salaComandi);
-        yourRoom.setEast(salaComandi);
-        getRooms().add(corridoio_x);
-        getRooms().add(corridoio);
-        getRooms().add(salaComandi);
-        getRooms().add(bathroom);
-        getRooms().add(yourRoom);
         
         //obejcts
         //AdvObjectContainer armadio = new AdvObjectContainer(1, );
-
-        AdvObject battery = new AdvObject(1, "batteria", "Un pacco di batterie, chissà se sono cariche.");
+/*
+        AdvObject torcia = new AdvObject(0, "torcia", "Un pacco di batterie, chissà se sono cariche.");
+        AdvObject chiave = new AdvObject(1, "torcia", "Un pacco di batterie, chissà se sono cariche.");
+        AdvObject colla = new AdvObject(2, "torcia", "Un pacco di batterie, chissà se sono cariche.");
+        AdvObject pozione1 = new AdvObject(3, "pozione", "Un pacco di batterie, chissà se sono cariche.");
+        AdvObject battery = new AdvObject(0, "torcia", "Un pacco di batterie, chissà se sono cariche.");
+        
         battery.setAlias(new String[]{"batterie", "pile", "pila"});
         bathroom.getObjects().add(battery);
         AdvObjectContainer wardrobe = new AdvObjectContainer(2, "armadio", "Un semplice armadio.");
