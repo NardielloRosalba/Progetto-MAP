@@ -12,13 +12,10 @@ import di.uniba.map.b.adventure.type.AdvObjectContainer;
 import di.uniba.map.b.adventure.type.Command;
 import di.uniba.map.b.adventure.type.CommandType;
 import di.uniba.map.b.adventure.type.Room;
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * ATTENZIONE: La descrizione del gioco è fatta in modo che qualsiasi gioco
@@ -148,11 +145,12 @@ public class FireHouseGame extends GameDescription {
         }
         Room stanzaEsterna = new Room(7, titolo, descrizione);
 
-        Room yourRoom = new Room(4, "La tua cameratta", "Finalmente la tua cameretta! Questo luogo ti è così famigliare...ma non ricordi dove hai messo il nuovo regalo di zia Lina.");
-        yourRoom.setLook("C'è un armadio bianco, di solito conservi lì i tuoi giochi.");
-
+        // Room yourRoom = new Room(4, "La tua cameratta", "Finalmente la tua cameretta! Questo luogo ti è così famigliare...ma non ricordi dove hai messo il nuovo regalo di zia Lina.");
+        //yourRoom.setLook("C'è un armadio bianco, di solito conservi lì i tuoi giochi.");
         //maps
         salaComandi.setSouth(corridoioX);
+        salaComandi.setLock(true);
+        salaComandi.setLook(salaComandi.getDescription());
 
         corridoioX.setWest(salaComandi);
         corridoioX.setNorth(corridoioNord);
@@ -170,11 +168,10 @@ public class FireHouseGame extends GameDescription {
         corridoioSud.setWest(salaElettrica);
         corridoioSud.setNorth(corridoioX);
 
-        stanzaTelecomunicazioni.setEast(corridoioX);
         stanzaTelecomunicazioni.setNorth(infermeria);
         stanzaTelecomunicazioni.setSouth(stanzaEsterna);
         stanzaTelecomunicazioni.setWest(corridoioX);
-        
+
         stanzaEsterna.setNorth(stanzaTelecomunicazioni);
 
         getRooms().add(salaComandi);
@@ -186,26 +183,34 @@ public class FireHouseGame extends GameDescription {
         getRooms().add(stanzaTelecomunicazioni);
         getRooms().add(stanzaEsterna);
 
-        /*corridoio_x.setEast(corridoio);
-        corridoio.setNorth(salaComandi);
-        corridoio.setWest(corridoio_x);
-        salaComandi.setSouth(corridoio);
-        salaComandi.setWest(yourRoom);
-        salaComandi.setNorth(bathroom);
-        bathroom.setSouth(salaComandi);
-        yourRoom.setEast(salaComandi);
-        getRooms().add(corridoio_x);
-        getRooms().add(corridoio);
-        getRooms().add(salaComandi);
-        getRooms().add(bathroom);
-        getRooms().add(yourRoom);
-        
         //obejcts
         //AdvObjectContainer armadio = new AdvObjectContainer(1, );
+        Scanner obj = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Oggetti.txt"));
 
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObjectContainer armadio = new AdvObjectContainer(0, titolo, descrizione);
+        armadio.setAlias(new String[]{"armadio"});
+        armadio.setPickupable(false);
+        armadio.setOpenable(true);
+        salaComandi.getObjects().add(armadio);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObject tessera = new AdvObject(1, titolo, descrizione);
+        tessera.setAlias(new String[]{"tessera", "carta", "pass"});
+        tessera.setPushable(true);
+        armadio.getList().add(tessera);
+
+        /*AdvObject porta = new AdvObject(2, "Porta Sala Comandi", "Porta da sbloccare per uscire");
+        porta.setPickupable(false);
+        porta.setPushable(true);
+        salaComandi.getObjects().add(porta);
+        /*
         AdvObject battery = new AdvObject(1, "batteria", "Un pacco di batterie, chissà se sono cariche.");
         battery.setAlias(new String[]{"batterie", "pile", "pila"});
         bathroom.getObjects().add(battery);
+        
         AdvObjectContainer wardrobe = new AdvObjectContainer(2, "armadio", "Un semplice armadio.");
         wardrobe.setAlias(new String[]{"guardaroba", "vestiario"});
         wardrobe.setOpenable(true);
@@ -217,8 +222,9 @@ public class FireHouseGame extends GameDescription {
         toy.setPushable(true);
         toy.setPush(false);
         wardrobe.add(toy);
-         */
-        //set starting room
+         */ //set starting room
+        fr.close();
+        obj.close();
         setCurrentRoom(salaComandi);
     }
 
@@ -230,34 +236,64 @@ public class FireHouseGame extends GameDescription {
             //move
             boolean noroom = false;
             boolean move = false;
+            boolean roomLocked = false;
+            boolean moveLocked = false;
             if (p.getCommand().getType() == CommandType.NORD) {
-                if (getCurrentRoom().getNorth() != null) {
+
+                if (getCurrentRoom().isLock()) {
+                    roomLocked = true;
+                }
+                if (getCurrentRoom().getNorth() != null && !roomLocked) {
                     setCurrentRoom(getCurrentRoom().getNorth());
                     move = true;
+                } else if (getCurrentRoom().getNorth() != null && roomLocked) {
+                    moveLocked = true;
                 } else {
                     noroom = true;
                 }
+
             } else if (p.getCommand().getType() == CommandType.SOUTH) {
-                if (getCurrentRoom().getSouth() != null) {
+
+                if (getCurrentRoom().isLock()) {
+                    roomLocked = true;
+                }
+                if (getCurrentRoom().getSouth() != null && !roomLocked) {
                     setCurrentRoom(getCurrentRoom().getSouth());
                     move = true;
+                } else if (getCurrentRoom().getSouth() != null && roomLocked) {
+                    moveLocked = true;
                 } else {
                     noroom = true;
                 }
+
             } else if (p.getCommand().getType() == CommandType.EAST) {
-                if (getCurrentRoom().getEast() != null) {
+
+                if (getCurrentRoom().isLock()) {
+                    roomLocked = true;
+                }
+                if (getCurrentRoom().getEast() != null && !roomLocked) {
                     setCurrentRoom(getCurrentRoom().getEast());
                     move = true;
+                } else if (getCurrentRoom().getEast() != null && roomLocked) {
+                    moveLocked = true;
                 } else {
                     noroom = true;
                 }
+
             } else if (p.getCommand().getType() == CommandType.WEST) {
-                if (getCurrentRoom().getWest() != null) {
+
+                if (getCurrentRoom().isLock()) {
+                    roomLocked = true;
+                }
+                if (getCurrentRoom().getWest() != null && !roomLocked) {
                     setCurrentRoom(getCurrentRoom().getWest());
                     move = true;
+                } else if (getCurrentRoom().getWest() != null && roomLocked) {
+                    moveLocked = true;
                 } else {
                     noroom = true;
                 }
+
             } else if (p.getCommand().getType() == CommandType.INVENTORY) {
                 out.println("Nel tuo inventario ci sono:");
                 for (AdvObject o : getInventory()) {
@@ -355,12 +391,15 @@ public class FireHouseGame extends GameDescription {
                     out.println("Non ci sono oggetti che puoi premere qui.");
                 }
             }
+
             if (noroom) {
                 out.println("Da quella parte non si può andare c'è un muro! Non hai ancora acquisito i poteri per oltrepassare i muri...");
             } else if (move) {
                 out.println(getCurrentRoom().getName());
                 out.println("================================================");
                 out.println(getCurrentRoom().getDescription());
+            } else if (roomLocked && moveLocked) {
+                System.out.println("prima di cambiare stanza devi fare qualcosa");
             }
         }
     }

@@ -1,0 +1,10 @@
+Armadio
+Un semplice armadio. Cosa pensavi di vedere?
+Tessera
+una tessera, sembra un pass magnetico.
+Torcia
+una torcia, chissà se le batterie sono cariche.
+Chiave
+una chiave. Quale porta aprirà?
+Colla
+un vasetto di colla industriale.

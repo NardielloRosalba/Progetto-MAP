@@ -24,6 +24,8 @@ public class Room {
 
     private boolean visible = true;
 
+    private boolean lock = false;
+
     private Room south = null;
 
     private Room north = null;
@@ -31,8 +33,8 @@ public class Room {
     private Room east = null;
 
     private Room west = null;
-    
-    private final List<AdvObject> objects=new ArrayList<>();
+
+    private final List<AdvObject> objects = new ArrayList<>();
 
     public Room(int id) {
         this.id = id;
@@ -135,6 +137,14 @@ public class Room {
 
     public void setLook(String look) {
         this.look = look;
+    }
+
+    public boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
     }
 
 }
