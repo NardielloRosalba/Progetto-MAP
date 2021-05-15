@@ -8,10 +8,6 @@ package di.uniba.map.b.adventure.parser;
 import di.uniba.map.b.adventure.type.AdvObject;
 import di.uniba.map.b.adventure.type.Command;
 
-/**
- *
- * @author pierpaolo
- */
 public class ParserOutput {
 
     private Command command;

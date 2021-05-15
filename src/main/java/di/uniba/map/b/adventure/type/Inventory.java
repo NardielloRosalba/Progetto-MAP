@@ -8,10 +8,6 @@ package di.uniba.map.b.adventure.type;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author pierpaolo
- */
 public class Inventory {
 
     private List<AdvObject> list = new ArrayList<>();

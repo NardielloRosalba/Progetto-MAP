@@ -9,10 +9,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- *
- * @author pierpaolo
- */
 public class AdvObject {
 
     private final int id;
@@ -20,7 +16,7 @@ public class AdvObject {
     private String name;
 
     private String description;
-    
+
     private Set<String> alias;
 
     private boolean openable = false;
@@ -32,6 +28,8 @@ public class AdvObject {
     private boolean open = false;
 
     private boolean push = false;
+
+    private boolean usable = false;
 
     public AdvObject(int id) {
         this.id = id;
@@ -118,7 +116,7 @@ public class AdvObject {
     public void setAlias(Set<String> alias) {
         this.alias = alias;
     }
-    
+
     public void setAlias(String[] alias) {
         this.alias = new HashSet<>(Arrays.asList(alias));
     }
@@ -127,6 +125,15 @@ public class AdvObject {
         return id;
     }
 
+    public boolean isUsable() {
+        return usable;
+    }
+
+    public void setUsable(boolean usable) {
+        this.usable = usable;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 7;

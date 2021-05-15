@@ -6,12 +6,10 @@
 package di.uniba.map.b.adventure.type;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-/**
- *
- * @author pierpaolo
- */
 public class Room {
 
     private final int id;
@@ -36,14 +34,39 @@ public class Room {
 
     private final List<AdvObject> objects = new ArrayList<>();
 
+    private final Map<AdvObject, AdvObject> combinazioni;
+
     public Room(int id) {
         this.id = id;
+        this.combinazioni = new HashMap<>();
     }
 
     public Room(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.combinazioni = new HashMap<>();
+    }
+
+    public void addCombinazioni(AdvObject ogg1, AdvObject ogg2) {
+        combinazioni.put(ogg1, ogg2);
+    }
+
+    public boolean vediCombinazioni(AdvObject ogg1, AdvObject ogg2) {
+        boolean giusta = false;
+        for (Map.Entry<AdvObject, AdvObject> e : combinazioni.entrySet()) { //combinazione ogg2 e ogg1
+            if (e.getValue() == ogg1) {
+                giusta = true;
+            }
+        }
+        if (giusta == false) {
+            for (Map.Entry<AdvObject, AdvObject> e : combinazioni.entrySet()) { //combinazione ogg1 e ogg2
+                if (e.getValue() == ogg2) {
+                    giusta = true;
+                }
+            }
+        }
+        return giusta;
     }
 
     public String getName() {
@@ -80,6 +103,10 @@ public class Room {
 
     public Room getNorth() {
         return north;
+    }
+
+    public Map<AdvObject, AdvObject> getCombinazioni() {
+        return combinazioni;
     }
 
     public void setNorth(Room north) {
