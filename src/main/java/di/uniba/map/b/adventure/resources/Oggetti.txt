@@ -1,7 +1,7 @@
 Armadio
 Un semplice armadio. Cosa pensavi di vedere?
 Tessera
-una tessera, sembra un pass magnetico.
+una tessera, sembra un pass magnetico. E' presente la scritta 'Star Enterprise'
 Torcia
 una torcia, chissà se le batterie sono cariche.
 Chiave

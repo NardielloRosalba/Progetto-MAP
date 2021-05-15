@@ -11,10 +11,6 @@ import di.uniba.map.b.adventure.type.Command;
 import java.util.List;
 import java.util.Set;
 
-/**
- *
- * @author pierpaolo
- */
 public class Parser {
 
     private final Set<String> stopwords;
@@ -47,32 +43,45 @@ public class Parser {
      */
     public ParserOutput parse(String command, List<Command> commands, List<AdvObject> objects, List<AdvObject> inventory) {
         List<String> tokens = Utils.parseString(command, stopwords);
+        int io1 = -1;
+        int io2 = -1;
+        int ioinv1 = -1;
+        int ioinv2 = -1;
+        System.out.println("vediamo: "+ tokens.get(0));
         if (!tokens.isEmpty()) {
             int ic = checkForCommand(tokens.get(0), commands);
             if (ic > -1) {
-                if (tokens.size() > 1) {
-                    int io = checkForObject(tokens.get(1), objects);
-                    int ioinv = -1;
-                    if (io < 0 && tokens.size() > 2) {
-                        io = checkForObject(tokens.get(2), objects);
+                if (tokens.size() > 1) { //dopo il comando c'è qualcosa USA TESSERA
+                    io1 = checkForObject(tokens.get(1), objects);
+                    if (io1 < 0) {
+                        ioinv1 = checkForObject(tokens.get(1), inventory); //usa tessera e la tessera sta nell'inventario
                     }
-                    if (io < 0) {
-                        ioinv = checkForObject(tokens.get(1), inventory);
-                        if (ioinv < 0 && tokens.size() > 2) {
-                            ioinv = checkForObject(tokens.get(2), inventory);
+                    if (io1 < 0 && ioinv1 < 0) {
+                        return new ParserOutput(null, null);
+                    }else {
+                        if (tokens.size() > 2) { //USA TESSERA PORTA
+                            
+                            io2 = checkForObject(tokens.get(2), objects);
+                            if (io2 < 0) {
+                                ioinv2 = checkForObject(tokens.get(2), inventory);
+                            }
                         }
                     }
-                    if (io > -1 && ioinv > -1) {
-                        return new ParserOutput(commands.get(ic), objects.get(io), inventory.get(ioinv));
-                    } else if (io > -1) {
-                        return new ParserOutput(commands.get(ic), objects.get(io), null);
-                    } else if (ioinv > -1) {
-                        return new ParserOutput(commands.get(ic), null, inventory.get(ioinv));
+                    
+                    if (io1 > -1 && ioinv2 > -1) { //entrambi maggiori oggetto e inventario
+                       
+                        return new ParserOutput(commands.get(ic), objects.get(io1), inventory.get(ioinv2));
+                    } else if (ioinv1 > -1 && io2 > -1) { // entrambi maggiori inventario oggetto
+                        return new ParserOutput(commands.get(ic), objects.get(io2), inventory.get(ioinv1));
+                    } else if (io1 > -1 && io2 < 0 && ioinv2 < 0) { //maggiore solo oggetto e niente 2 parola
+                        return new ParserOutput(commands.get(ic), objects.get(io1), null);
+                    } else if (ioinv1 > -1 && io2 < 0 && ioinv2 < 0) { //maggiore solo primo inventario e niente 2 parola
+                        return new ParserOutput(commands.get(ic), null, inventory.get(ioinv1));
                     } else {
-                        return new ParserOutput(commands.get(ic), null, null);
+                         return new ParserOutput(commands.get(ic), null, null);
                     }
                 } else {
-                    return new ParserOutput(commands.get(ic), null);
+                    return new ParserOutput(commands.get(ic), null, null);
                 }
             } else {
                 return new ParserOutput(null, null);
@@ -81,5 +90,6 @@ public class Parser {
             return null;
         }
     }
+    
 
 }

@@ -14,10 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- *
- * @author pierpaolo
- */
 public class Utils {
 
     public static Set<String> loadFileListInSet(File file) throws IOException {

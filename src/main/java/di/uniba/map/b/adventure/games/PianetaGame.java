@@ -31,8 +31,22 @@ import java.util.Scanner;
  *
  * @author pierpaolo
  */
-public class FireHouseGame extends GameDescription {
+public class PianetaGame extends GameDescription {
 
+    private final int ID_ROOM_SALA_COMANDI = 0;
+    private final int ID_ROOM_CORRIDOIO_X = 1;
+    private final int ID_ROOM_CORRIDOIO_SUD = 2;
+    private final int ID_ROOM_SALA_ELETTRICA = 3;
+    private final int ID_ROOM_CORRIDOIO_NORD = 4;
+    private final int ID_ROOM_INFERMERIA = 5;
+    private final int ID_ROOM_SALA_TELECOMUNICAZIONI = 6;
+    private final int ID_ROOM_SALA_ESTERNA = 7;
+    
+    private final int ID_OBJECT_ARMADIO = 0;
+    private final int ID_OBJECT_TESSERA = 1; 
+    private final int ID_OBJECT_PORTA = 2; 
+    
+    
     @Override
     public void init() throws Exception {
         //Commands
@@ -40,9 +54,9 @@ public class FireHouseGame extends GameDescription {
         nord.setAlias(new String[]{"n", "N", "Nord", "NORD"});
         getCommands().add(nord);
 
-        Command iventory = new Command(CommandType.INVENTORY, "inventario");
-        iventory.setAlias(new String[]{"inv", "i", "I"});
-        getCommands().add(iventory);
+        Command inventory = new Command(CommandType.INVENTORY, "inventario");
+        inventory.setAlias(new String[]{"inv", "i", "I"});
+        getCommands().add(inventory);
 
         Command sud = new Command(CommandType.SOUTH, "sud");
         sud.setAlias(new String[]{"s", "S", "Sud", "SUD"});
@@ -55,6 +69,14 @@ public class FireHouseGame extends GameDescription {
         Command ovest = new Command(CommandType.WEST, "ovest");
         ovest.setAlias(new String[]{"o", "O", "Ovest", "OVEST"});
         getCommands().add(ovest);
+
+        Command save = new Command(CommandType.SAVE, "save");
+        save.setAlias(new String[]{"SALVA", "salva"});
+        getCommands().add(save);
+
+        Command load = new Command(CommandType.LOAD, "load");
+        load.setAlias(new String[]{"CARICA", "carica"});
+        getCommands().add(load);
 
         Command end = new Command(CommandType.END, "end");
         end.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati", "exit"});
@@ -76,6 +98,10 @@ public class FireHouseGame extends GameDescription {
         push.setAlias(new String[]{"spingi", "attiva"});
         getCommands().add(push);
 
+        Command use = new Command(CommandType.USE, "usa");
+        use.setAlias(new String[]{"utilizza"});
+        getCommands().add(use);
+
         //Stanze lette da file aggiungi try catch
         Scanner fr = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Stanze.txt"));
         String titolo, descrizione = "";
@@ -86,8 +112,16 @@ public class FireHouseGame extends GameDescription {
         for (String s : prova) {
             descrizione += (s + ".\n");
         }
-        Room salaComandi = new Room(0, titolo, descrizione);
+        Room salaComandi = new Room(ID_ROOM_SALA_COMANDI, titolo, descrizione);
         //salaComandi.setLook("Sei nel corridoio, a nord vedi il bagno, a sud il soggiorno e ad ovest la tua cameretta, forse il gioco sarà lì?");
+        
+        descrizione = "";
+        titolo = fr.nextLine();
+        prova = fr.nextLine().split("\\.");
+        for (String s : prova) {
+            descrizione += (s + ".\n");
+        }
+        Room corridoioX = new Room(ID_ROOM_CORRIDOIO_X, titolo, descrizione);
 
         descrizione = "";
         titolo = fr.nextLine();
@@ -95,7 +129,7 @@ public class FireHouseGame extends GameDescription {
         for (String s : prova) {
             descrizione += (s + ".\n");
         }
-        Room corridoioX = new Room(1, titolo, descrizione);
+        Room corridoioSud = new Room(ID_ROOM_CORRIDOIO_SUD, titolo, descrizione);
 
         descrizione = "";
         titolo = fr.nextLine();
@@ -103,7 +137,7 @@ public class FireHouseGame extends GameDescription {
         for (String s : prova) {
             descrizione += (s + ".\n");
         }
-        Room corridoioSud = new Room(2, titolo, descrizione);
+        Room salaElettrica = new Room(ID_ROOM_SALA_ELETTRICA, titolo, descrizione);
 
         descrizione = "";
         titolo = fr.nextLine();
@@ -111,7 +145,7 @@ public class FireHouseGame extends GameDescription {
         for (String s : prova) {
             descrizione += (s + ".\n");
         }
-        Room salaElettrica = new Room(3, titolo, descrizione);
+        Room corridoioNord = new Room(ID_ROOM_CORRIDOIO_NORD, titolo, descrizione);
 
         descrizione = "";
         titolo = fr.nextLine();
@@ -119,7 +153,7 @@ public class FireHouseGame extends GameDescription {
         for (String s : prova) {
             descrizione += (s + ".\n");
         }
-        Room corridoioNord = new Room(4, titolo, descrizione);
+        Room infermeria = new Room(ID_ROOM_INFERMERIA, titolo, descrizione);
 
         descrizione = "";
         titolo = fr.nextLine();
@@ -127,7 +161,7 @@ public class FireHouseGame extends GameDescription {
         for (String s : prova) {
             descrizione += (s + ".\n");
         }
-        Room infermeria = new Room(5, titolo, descrizione);
+        Room stanzaTelecomunicazioni = new Room(ID_ROOM_SALA_TELECOMUNICAZIONI, titolo, descrizione);
 
         descrizione = "";
         titolo = fr.nextLine();
@@ -135,15 +169,7 @@ public class FireHouseGame extends GameDescription {
         for (String s : prova) {
             descrizione += (s + ".\n");
         }
-        Room stanzaTelecomunicazioni = new Room(6, titolo, descrizione);
-
-        descrizione = "";
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
-        for (String s : prova) {
-            descrizione += (s + ".\n");
-        }
-        Room stanzaEsterna = new Room(7, titolo, descrizione);
+        Room stanzaEsterna = new Room(ID_ROOM_SALA_ESTERNA, titolo, descrizione);
 
         // Room yourRoom = new Room(4, "La tua cameratta", "Finalmente la tua cameretta! Questo luogo ti è così famigliare...ma non ricordi dove hai messo il nuovo regalo di zia Lina.");
         //yourRoom.setLook("C'è un armadio bianco, di solito conservi lì i tuoi giochi.");
@@ -189,7 +215,7 @@ public class FireHouseGame extends GameDescription {
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
-        AdvObjectContainer armadio = new AdvObjectContainer(0, titolo, descrizione);
+        AdvObjectContainer armadio = new AdvObjectContainer(ID_OBJECT_ARMADIO, titolo, descrizione);
         armadio.setAlias(new String[]{"armadio"});
         armadio.setPickupable(false);
         armadio.setOpenable(true);
@@ -197,15 +223,23 @@ public class FireHouseGame extends GameDescription {
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
-        AdvObject tessera = new AdvObject(1, titolo, descrizione);
+        AdvObject tessera = new AdvObject(ID_OBJECT_TESSERA, titolo, descrizione);
         tessera.setAlias(new String[]{"tessera", "carta", "pass"});
-        tessera.setPushable(true);
+        //tessera.setPushable(true);
+        tessera.setPickupable(true);
+        tessera.setUsable(true);
         armadio.getList().add(tessera);
 
-        /*AdvObject porta = new AdvObject(2, "Porta Sala Comandi", "Porta da sbloccare per uscire");
-        porta.setPickupable(false);
-        porta.setPushable(true);
+        //aggiungere nel file
+        AdvObject porta = new AdvObject(ID_OBJECT_PORTA, "Porta Sala Comandi", "E' presente una scritta 'Star Enterprise'");
+        porta.setOpenable(true);
+        porta.setOpen(false);
+        porta.setAlias(new String[]{"porta", "portone", "porta sala"});
         salaComandi.getObjects().add(porta);
+        
+        //AGGIUNGO COMBINAZIONI PER OGNI STANZA
+        salaComandi.addCombinazioni(porta, tessera);
+        
         /*
         AdvObject battery = new AdvObject(1, "batteria", "Un pacco di batterie, chissà se sono cariche.");
         battery.setAlias(new String[]{"batterie", "pile", "pila"});
@@ -300,10 +334,39 @@ public class FireHouseGame extends GameDescription {
                     out.println(o.getName() + ": " + o.getDescription());
                 }
             } else if (p.getCommand().getType() == CommandType.LOOK_AT) {
-                if (getCurrentRoom().getLook() != null) {
+                if (getCurrentRoom().getLook() != null && p.getObject() == null) {
                     out.println(getCurrentRoom().getLook());
-                } else {
+                } else if (getCurrentRoom().getLook() == null && p.getObject() == null) {
+                    //aggiungere il fatto che vengano elencati gli elementi che contiene e dove è possibile andare
                     out.println("Non c'è niente di interessante qui.");
+                } else if (p.getObject() != null && p.getObject().getDescription() != null) {
+                    out.println(p.getObject().getDescription());
+                } else {
+                    out.println("Non è possibile osservare nulla!");
+                }
+            } else if (p.getCommand().getType() == CommandType.USE) {
+                if(p.getInvObject()==null){
+                    out.println("Devi specificare l'oggetto da usare o devi averlo nell'inventario");
+                }else{
+                    if (p.getInvObject().isUsable()){
+                        if(p.getObject()==null){
+                            out.println("Con cosa vorresti usare "+ p.getInvObject().getName()+" ! Non posso leggerti nel pensiero!");
+                        } else {
+                            if(getCurrentRoom().vediCombinazioni(p.getInvObject(), p.getObject())){
+                                if(p.getObject().getId()==ID_OBJECT_PORTA){
+                                    p.getObject().setOpenable(true);
+                                    getCurrentRoom().setLock(false);
+                                    out.println("Hai aperto tutte le porte della navicella");
+                                    
+                                    
+                                }
+                            }else{
+                                out.println("Non è possibile usare questi oggetti insieme!");
+                            }
+                        }
+                    }else{
+                        out.println("Non è possibile usare l'oggetto!");
+                    }
                 }
             } else if (p.getCommand().getType() == CommandType.PICK_UP) {
                 if (p.getObject() != null) {
@@ -335,6 +398,7 @@ public class FireHouseGame extends GameDescription {
                                 if (!c.getList().isEmpty()) {
                                     out.print(c.getName() + " contiene:");
                                     Iterator<AdvObject> it = c.getList().iterator();
+                                    //qui poi li inserisce nella lista degli oggetti della stanza!SBAGLIATO!
                                     while (it.hasNext()) {
                                         AdvObject next = it.next();
                                         getCurrentRoom().getObjects().add(next);
@@ -379,9 +443,9 @@ public class FireHouseGame extends GameDescription {
                 //ricerca oggetti pushabili
                 if (p.getObject() != null && p.getObject().isPushable()) {
                     out.println("Hai premuto: " + p.getObject().getName());
-                    if (p.getObject().getId() == 3) {
+                    /*if (p.getObject().getId() == 3) {
                         end(out);
-                    }
+                    }*/
                 } else if (p.getInvObject() != null && p.getInvObject().isPushable()) {
                     out.println("Hai premuto: " + p.getInvObject().getName());
                     if (p.getInvObject().getId() == 3) {
