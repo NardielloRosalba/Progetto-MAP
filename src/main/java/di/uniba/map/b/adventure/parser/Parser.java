@@ -47,7 +47,6 @@ public class Parser {
         int io2 = -1;
         int ioinv1 = -1;
         int ioinv2 = -1;
-        System.out.println("vediamo: "+ tokens.get(0));
         if (!tokens.isEmpty()) {
             int ic = checkForCommand(tokens.get(0), commands);
             if (ic > -1) {
