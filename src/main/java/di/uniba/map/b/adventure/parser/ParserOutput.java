@@ -28,7 +28,7 @@ public class ParserOutput {
     }
 
     public Command getCommand() {
-        return command;
+        return this.command;
     }
 
     public void setCommand(Command command) {
@@ -36,7 +36,7 @@ public class ParserOutput {
     }
 
     public AdvObject getObject() {
-        return object;
+        return this.object;
     }
 
     public void setObject(AdvObject object) {

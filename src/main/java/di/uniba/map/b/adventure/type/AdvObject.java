@@ -24,12 +24,22 @@ public class AdvObject {
     private boolean pickupable = true;
 
     private boolean pushable = false;
+    
+    private boolean siAccende = false;
+    
+    private boolean pullable = false;
 
     private boolean open = false;
 
     private boolean push = false;
 
     private boolean usable = false;
+    
+    private boolean acceso = false;
+    
+    private boolean visibile = true;
+    
+    private boolean pull = false;
 
     public AdvObject(int id) {
         this.id = id;
@@ -77,6 +87,22 @@ public class AdvObject {
         this.openable = openable;
     }
 
+    public boolean isSiAccende() {
+        return siAccende;
+    }
+
+    public void setSiAccende(boolean siAccende) {
+        this.siAccende = siAccende;
+    }
+
+    public boolean isAcceso() {
+        return acceso;
+    }
+
+    public void setAcceso(boolean acceso) {
+        this.acceso = acceso;
+    }
+    
     public boolean isPickupable() {
         return pickupable;
     }
@@ -133,6 +159,31 @@ public class AdvObject {
         this.usable = usable;
     }
 
+    public boolean isPullable() {
+        return pullable;
+    }
+
+    public void setPullable(boolean pullable) {
+        this.pullable = pullable;
+    }
+
+    public boolean isPull() {
+        return pull;
+    }
+
+    public void setPull(boolean pull) {
+        this.pull = pull;
+    }
+
+    
+    
+    public boolean isVisibile() {
+        return visibile;
+    }
+
+    public void setVisibile(boolean visibile) {
+        this.visibile = visibile;
+    }
     
     @Override
     public int hashCode() {
