@@ -66,9 +66,8 @@ public class Parser {
                             }
                         }
                     }
-                    
                     if (io1 > -1 && ioinv2 > -1) { //entrambi maggiori oggetto e inventario
-                       
+                        
                         return new ParserOutput(commands.get(ic), objects.get(io1), inventory.get(ioinv2));
                     } else if (ioinv1 > -1 && io2 > -1) { // entrambi maggiori inventario oggetto
                         return new ParserOutput(commands.get(ic), objects.get(io2), inventory.get(ioinv1));

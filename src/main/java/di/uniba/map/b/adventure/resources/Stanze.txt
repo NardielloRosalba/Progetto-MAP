@@ -3,9 +3,9 @@ Ti trovi nella 'Sala dei Comandi', c'e' un piccolo oblo situato a Nord. A Sud e'
 CORRIDOIO  A INCROCIO
 Sei arrivato ad un incrocio all'interno della navicella. Puoi dirigerti a Nord, Sud, Est e ad Ovest.
 CORRIDOIO PICCOLO
-Davanti a te vedi un piccolo corridoio. Puoi vedere l’entrata di una stanza verso Ovest.
+Davanti a te vedi un piccolo corridoio. Puoi vedere l'entrata di una stanza verso Ovest.
 SALA ELETTRICA
-Ti trovi nella 'Sala Elettrica'. Intorno a te e' presente un contatore elettronico, ad ovest una parete piena di fili e verso est la porta da cui sei entrato.
+Ti trovi nella 'Sala Elettrica'. Intorno a te e' presente un contatore elettronico, una parete piena di fili e verso est la porta da cui sei entrato.
 CORRIDOIO NORD
 BOOM-BOOM-BOOM!La navicella si e' scontrata contro un ammasso di asteroidi.La navicella si e' danneggiata.E' presente un crepa da cui entra un gas tossico che puo' nuocere alla tua salute. Sei nel 'Corridoio Nord'! E' possibile dirigerti a sud o a est in cui e' presente una porta.
 INFERMERIA

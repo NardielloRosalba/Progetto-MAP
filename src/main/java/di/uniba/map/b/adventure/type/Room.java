@@ -7,7 +7,9 @@ package di.uniba.map.b.adventure.type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 public class Room {
@@ -48,6 +50,10 @@ public class Room {
         this.combinazioni = new HashMap<>();
     }
 
+    public int getId() {
+        return id;
+    }
+    
     public void addCombinazioni(AdvObject ogg1, AdvObject ogg2) {
         combinazioni.put(ogg1, ogg2);
     }
@@ -133,6 +139,15 @@ public class Room {
         return objects;
     }
 
+    public AdvObject cercaObject(int index) {
+        for (AdvObject object : this.objects) {
+            if (object.getId()== index){
+                return object;
+            }
+        }
+        return null;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;

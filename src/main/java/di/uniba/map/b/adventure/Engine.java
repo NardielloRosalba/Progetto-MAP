@@ -75,7 +75,7 @@ public class Engine {
                 System.out.println("Caricamento...");
                 break;
             } else {
-                game.nextMove(p, System.out);
+                System.out.println(game.nextMove(p));
                 System.out.println();
             }
         }

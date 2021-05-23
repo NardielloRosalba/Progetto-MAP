@@ -3,8 +3,18 @@ Un semplice armadio. Cosa pensavi di vedere?
 Tessera
 una tessera, sembra un pass magnetico. E' presente la scritta 'Star Enterprise'
 Torcia
-una torcia, chissà se le batterie sono cariche.
+una torcia, chissa' se le batterie sono cariche.
+Porta Sala Comandi
+E' presente una scritta 'Star Enterprise'.
+Contatore elettronico
+Al centro di esso e' presente una leva bloccata da un lucchetto.
+Lucchetto
+Un semplice lucchetto chiuso. Forse servirebbe qualcosa per aprirlo!
+Parete
+Una parete con tanti fili intrecciati tra di loro e tra di essi si intravede una chiave.
 Chiave
-una chiave. Quale porta aprirà?
+una chiave. Forse servira' ad aprire qualcosa?
+Leva
+Usa semplice leva. Forse dovresti alzerla?
 Colla
 un vasetto di colla industriale.
