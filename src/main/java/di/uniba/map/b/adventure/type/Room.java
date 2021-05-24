@@ -53,7 +53,7 @@ public class Room {
     public int getId() {
         return id;
     }
-    
+
     public void addCombinazioni(AdvObject ogg1, AdvObject ogg2) {
         combinazioni.put(ogg1, ogg2);
     }
@@ -61,15 +61,25 @@ public class Room {
     public boolean vediCombinazioni(AdvObject ogg1, AdvObject ogg2) {
         boolean giusta = false;
         for (Map.Entry<AdvObject, AdvObject> e : combinazioni.entrySet()) { //combinazione ogg2 e ogg1
-            if (e.getValue() == ogg1) {
+            if (e.getValue() == ogg1 && e.getKey() == ogg2) {
                 giusta = true;
             }
         }
         if (giusta == false) {
             for (Map.Entry<AdvObject, AdvObject> e : combinazioni.entrySet()) { //combinazione ogg1 e ogg2
-                if (e.getValue() == ogg2) {
+                if (e.getKey() == ogg1 && e.getValue() == ogg2) {
                     giusta = true;
                 }
+            }
+        }
+        return giusta;
+    }
+
+    public boolean vediCombinazioni_(AdvObject ogg1) {
+        boolean giusta = false;
+        for (Map.Entry<AdvObject, AdvObject> e : combinazioni.entrySet()) { //combinazione ogg2 e ogg1
+            if (e.getValue() == ogg1) {
+                giusta = true;
             }
         }
         return giusta;
@@ -141,13 +151,13 @@ public class Room {
 
     public AdvObject cercaObject(int index) {
         for (AdvObject object : this.objects) {
-            if (object.getId()== index){
+            if (object.getId() == index) {
                 return object;
             }
         }
         return null;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 3;

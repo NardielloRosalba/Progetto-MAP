@@ -113,7 +113,7 @@ public class PianetaGame extends GameDescription {
         Command use = new Command(CommandType.USE, "usa");
         use.setAlias(new String[]{"utilizza, striscia"});
         getCommands().add(use);
-        
+
         Command pull = new Command(CommandType.PULL, "tira");
         pull.setAlias(new String[]{"alza", "solleva"});
         getCommands().add(pull);
@@ -266,8 +266,8 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject porta = new AdvObject(ID_OBJECT_PORTA, titolo, descrizione);
-        porta.setOpenable(true);
-        porta.setOpen(false);
+        //porta.setOpenable(true);
+        //porta.setOpen(false);
         porta.setAlias(new String[]{"porta", "portone", "porta sala"});
         salaComandi.getObjects().add(porta);
 
@@ -281,14 +281,16 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject lucchetto = new AdvObject(ID_OBJECT_LUCCHETTO, titolo, descrizione);
         lucchetto.setAlias(new String[]{"lucchetto"});
-        lucchetto.setVisibile(false);
+        lucchetto.setPickupable(false);
         lucchetto.setOpenable(true);
+        lucchetto.setVisibile(false);
         salaElettrica.getObjects().add(lucchetto);
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject parete = new AdvObject(ID_OBJECT_PARETE, titolo, descrizione);
         parete.setAlias(new String[]{"Parete con fili", "Parete piena di fili", "parete", "fili"});
+        parete.setPickupable(false);
         salaElettrica.getObjects().add(parete);
 
         titolo = obj.nextLine();
@@ -297,11 +299,12 @@ public class PianetaGame extends GameDescription {
         chiave.setAlias(new String[]{"chiave"});
         chiave.setVisibile(false);
         salaElettrica.getObjects().add(chiave);
-        
+
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject leva = new AdvObject(ID_OBJECT_LEVA, titolo, descrizione);
         leva.setAlias(new String[]{"leva"});
+        leva.setPickupable(false);
         leva.setPullable(true);
         leva.setVisibile(false);
         salaElettrica.getObjects().add(leva);
@@ -612,7 +615,7 @@ public class PianetaGame extends GameDescription {
                 } else {
                     if (getCurrentRoom().vediCombinazioni(p.getInvObject(), p.getObject())) {
                         if (p.getObject().getId() == ID_OBJECT_PORTA) {
-                            p.getObject().setOpenable(true);
+                            p.getObject().setOpen(true);
                             getCurrentRoom().setLock(false);
                             output.append("Hai aperto tutte le porte della navicella");
                         }
@@ -658,7 +661,9 @@ public class PianetaGame extends GameDescription {
                 //quando apro un oggetto dell'inventario
                 output.append("Non puoi aprire gli oggetti dell'inventario.");
             } else if (p.getObject() != null && p.getInvObject() == null) {
-                if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
+                if (getCurrentRoom().vediCombinazioni_(p.getObject()) && p.getObject().isOpenable()) {
+                    System.out.println("L'oggetto non nembra apribile in questo modo...");
+                } else if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
                     if (p.getObject() instanceof AdvObjectContainer) {
                         output.append("Hai aperto: ").append(p.getObject().getName()).append("\n");
                         AdvObjectContainer c = (AdvObjectContainer) p.getObject();
@@ -693,11 +698,11 @@ public class PianetaGame extends GameDescription {
                         if (p.getObject().getId() == ID_OBJECT_LUCCHETTO) {
                             getCurrentRoom().cercaObject(ID_OBJECT_LEVA).setVisibile(true);
                         }
-                    }else {
+                    } else {
                         output.append("E' gia' aperto!");
                     }
-                }else {
-                    
+                } else {
+
                 }
             } else {
                 if (p.getInvObject() != null) {
@@ -745,27 +750,27 @@ public class PianetaGame extends GameDescription {
         }
         return output;
     }
-    
+
     private StringBuilder comandoPull(ParserOutput p, StringBuilder output) {
         //ricerca oggetti pullabili
         if (p.getObject() != null && p.getObject().isPullable() && p.getObject().isVisibile()) {
-            if(p.getObject().isPull()==true){
+            if (p.getObject().isPull() == true) {
                 output.append(p.getObject().getName()).append(" era stato gia' alzato.\nHai perso la memoria per caso?");
-            }else {
+            } else {
                 p.getObject().setPull(true);
                 output.append(p.getObject().getName()).append(" e' stato alzato");
-                if(ID_OBJECT_LEVA==p.getObject().getId()){
+                if (ID_OBJECT_LEVA == p.getObject().getId()) {
                     output.append("\nAdesso sei riuscito ad accedere le luci della navicella.");
                     //cambiare tutte le descrizioni!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
             }
         } else if (p.getInvObject() != null && p.getInvObject().isPushable()) {
-            if(p.getInvObject().isPull()==true){
+            if (p.getInvObject().isPull() == true) {
                 output.append(p.getInvObject().getName()).append(" era stato gia' alzato.\nHai perso la memoria per caso?");
-            }else {
+            } else {
                 p.getInvObject().setPull(true);
                 output.append(p.getInvObject().getName()).append(" e' stato alzato");
-                if(ID_OBJECT_LEVA==p.getInvObject().getId()){
+                if (ID_OBJECT_LEVA == p.getInvObject().getId()) {
                     output.append("\nAdesso sei riuscito ad accedere le luci della navicella.");
                     //cambiare tutte le descrizioni!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
