@@ -290,7 +290,6 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject parete = new AdvObject(ID_OBJECT_PARETE, titolo, descrizione);
         parete.setAlias(new String[]{"Parete con fili", "Parete piena di fili", "parete", "fili"});
-        parete.setPickupable(false);
         salaElettrica.getObjects().add(parete);
 
         titolo = obj.nextLine();
@@ -634,6 +633,10 @@ public class PianetaGame extends GameDescription {
         if (p.getObject() != null) {
             if (p.getObject().isPickupable()) {
                 getInventory().add(p.getObject());
+                if (p.getObject().getId() == ID_OBJECT_PARETE) {
+                    output.append("dove hai visto che puoi prendere in mano i cavi? bravo sei morto");
+                    this.end(output);
+                }
                 getCurrentRoom().getObjects().remove(p.getObject());
                 output.append("Hai raccolto: ").append(p.getObject().getDescription());
             } else {
@@ -782,7 +785,7 @@ public class PianetaGame extends GameDescription {
     }
 
     private void end(StringBuilder output) {
-        output.append("Premi il pulsante del giocattolo e in seguito ad una forte esplosione la tua casa prende fuoco...tu e tuoi famigliari cercate invano di salvarvi e venite avvolti dalle fiamme...è stata una morte CALOROSA...addio!\n");
+        System.out.println(output);
         System.exit(0);
     }
 }
