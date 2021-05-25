@@ -12,6 +12,7 @@ import di.uniba.map.b.adventure.type.AdvObjectContainer;
 import di.uniba.map.b.adventure.type.Command;
 import di.uniba.map.b.adventure.type.CommandType;
 import di.uniba.map.b.adventure.type.Room;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintStream;
 import java.util.Iterator;
@@ -56,7 +57,7 @@ public class PianetaGame extends GameDescription {
     private boolean eventTorcia = false;
 
     @Override
-    public void init() throws Exception {
+    public void init() throws FileNotFoundException {
         //Commands
         Command nord = new Command(CommandType.NORD, "nord");
         nord.setAlias(new String[]{"n", "N", "Nord", "NORD"});
@@ -123,7 +124,6 @@ public class PianetaGame extends GameDescription {
         fr = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Stanze.txt"));
         String titolo, descrizione = "";
         String[] prova;
-
         titolo = fr.nextLine();
         prova = fr.nextLine().split("\\.");
         for (String s : prova) {
@@ -312,6 +312,7 @@ public class PianetaGame extends GameDescription {
         salaComandi.addCombinazioni(porta, tessera);
         salaElettrica.addCombinazioni(chiave, lucchetto);
 
+        //DESCRIZIONI STANZE IN SEGUITO AL COMANDO OSSERVA
         Scanner os;
         os = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Osserva.txt"));
         String[] osserva;
