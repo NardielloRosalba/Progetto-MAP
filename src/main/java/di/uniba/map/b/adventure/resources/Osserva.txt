@@ -1,9 +1,8 @@
 Attorno a te e' tutto buio, solo una luce fioca proviene dall'oblo situato a nord. A Sud e' presente una porta e accanto ad essa un armadio di colore nero.
 Adesso la luce dell'oblo della 'Sala dei comandi' non riesce piu' a illuminare il tuo cammino.
 E' un semplice corridoio, cosa ti aspettavi?! Continua con le tue missioni!!.
-E' un semplice corridoio, cosa ti aspettavi?! Continua con le tue missioni!!.
-Puoi notare una frase sul contatore elettronico con su scritto "Attenzione, non tirare i fili perche' trasportano corrente!!".
-E' possibile dirigerti a sud o a est in cui e' presente una porta.
 La stanza ha delle luci a led per far maggiore luce in caso di operazioni di primo soccorso.
+Puoi notare una frase sul contatore elettronico con su scritto "Attenzione, non tirare i fili perche' trasportano corrente!!".
+E' possibile dirigerti a nord, o a ovest in cui e' presente una porta.
 Davanti a te vedi una ricetrasmittente, un deposito per le attrezzature interstellari e tre porte: una a ovest, una a nord e una a sud.
 Sei uscito dalla navicella! Alla tua sinistra c'e' il pannello dell'ossigeno e d'avanti a te puoi godere del panorama di tutta la galassia.
