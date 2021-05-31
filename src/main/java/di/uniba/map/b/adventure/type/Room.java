@@ -18,9 +18,9 @@ public class Room {
 
     private String name;
 
-    private String description;
+    private StringBuilder description = new StringBuilder("");
 
-    private String look;
+    private StringBuilder look = new StringBuilder("");
 
     private boolean visible = true;
 
@@ -46,7 +46,7 @@ public class Room {
     public Room(int id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.description.append(description);
         this.combinazioni = new HashMap<>();
     }
 
@@ -86,7 +86,7 @@ public class Room {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -94,11 +94,12 @@ public class Room {
     }
 
     public String getDescription() {
-        return description;
+        return description.toString();
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description.delete(0, this.description.length());
+        this.description.append(description);
     }
 
     public boolean isVisible() {
@@ -184,11 +185,12 @@ public class Room {
     }
 
     public String getLook() {
-        return look;
+        return look.toString();
     }
 
     public void setLook(String look) {
-        this.look = look;
+        this.look.delete(0, this.look.length());
+        this.look.append(look);
     }
 
     public boolean isLock() {

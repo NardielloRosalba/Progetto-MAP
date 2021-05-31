@@ -15,6 +15,10 @@ Una parete con tanti fili intrecciati tra di loro e tra di essi si intravede una
 Chiave
 una chiave. Forse servira' ad aprire qualcosa?
 Leva
-Usa semplice leva. Forse dovresti alzerla?
+Una semplice leva. Forse dovresti alzerla?
+Cassetta
+Una cassetta di pronto soccorso.
 Colla
-un vasetto di colla industriale.
+un vasetto di colla industriale utilizzabile per riparare TUTTO!
+Crepa
+Un buco di modeste dimensioni da cui entra un gas tossico. Riparalo al piu' presto!!

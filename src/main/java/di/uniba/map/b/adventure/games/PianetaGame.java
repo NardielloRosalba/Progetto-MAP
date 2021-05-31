@@ -53,9 +53,28 @@ public class PianetaGame extends GameDescription {
     private final int ID_OBJECT_PARETE = 6;
     private final int ID_OBJECT_CHIAVE = 7;
     private final int ID_OBJECT_LEVA = 8;
+    private final int ID_OBJECT_COLLA = 9;
+    private final int ID_OBJECT_CREPA = 10;
+    private final int ID_OBJECT_CASSETTA = 11;
 
     private boolean eventTorcia = false;
+    private boolean eventTorciaAccesa = false;
+    private boolean eventAvvisoCrepa = false;
 
+    private boolean missioneCorrente = false;
+    private boolean missioneCrepa = false;
+
+    /*static class Torcia extends Thread {
+
+        public Torcia() {
+        }
+
+        @Override
+        public void run() {
+            System.out.println("_________!!!ATTENZIONE!!!_________ \n"
+                    + "Sei inciampato su un oggetto! \n");
+        }
+    }*/
     @Override
     public void init() throws FileNotFoundException {
         //Commands
@@ -103,6 +122,10 @@ public class PianetaGame extends GameDescription {
         turnOn.setAlias(new String[]{"attiva"});
         getCommands().add(turnOn);
 
+        Command turnOff = new Command(CommandType.TURN_OFF, "spegni");
+        turnOff.setAlias(new String[]{"disattiva"});
+        getCommands().add(turnOff);
+
         Command open = new Command(CommandType.OPEN, "apri");
         open.setAlias(new String[]{"aprire"});
         getCommands().add(open);
@@ -112,7 +135,7 @@ public class PianetaGame extends GameDescription {
         getCommands().add(push);
 
         Command use = new Command(CommandType.USE, "usa");
-        use.setAlias(new String[]{"utilizza, striscia"});
+        use.setAlias(new String[]{"utilizza", "striscia", "ripara"});
         getCommands().add(use);
 
         Command pull = new Command(CommandType.PULL, "tira");
@@ -296,6 +319,7 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject chiave = new AdvObject(ID_OBJECT_CHIAVE, titolo, descrizione);
         chiave.setAlias(new String[]{"chiave"});
+        chiave.setPickupable(false);
         chiave.setVisibile(false);
         salaElettrica.getObjects().add(chiave);
 
@@ -308,9 +332,32 @@ public class PianetaGame extends GameDescription {
         leva.setVisibile(false);
         salaElettrica.getObjects().add(leva);
 
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObjectContainer cassetta = new AdvObjectContainer(ID_OBJECT_CASSETTA, titolo, descrizione);
+        cassetta.setAlias(new String[]{"cassetta", "cassetta di pronto soccorso"});
+        cassetta.setPickupable(false);
+        cassetta.setOpenable(true);
+        infermeria.getObjects().add(cassetta);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObject colla = new AdvObject(ID_OBJECT_COLLA, titolo, descrizione);
+        colla.setAlias(new String[]{"colla industiale", "super colla", "colla"});
+        colla.setUsable(true);
+        cassetta.getList().add(colla);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObject crepa = new AdvObject(ID_OBJECT_CREPA, titolo, descrizione);
+        crepa.setAlias(new String[]{"buco", "crepa"});
+        crepa.setPickupable(false);
+        corridoioNord.getObjects().add(crepa);
+
         //AGGIUNGO COMBINAZIONI PER OGNI STANZA
         salaComandi.addCombinazioni(porta, tessera);
         salaElettrica.addCombinazioni(chiave, lucchetto);
+        corridoioNord.addCombinazioni(colla, crepa);
 
         //DESCRIZIONI STANZE IN SEGUITO AL COMANDO OSSERVA
         Scanner os;
@@ -405,7 +452,12 @@ public class PianetaGame extends GameDescription {
                         output = comandoInventory(p, output);
                         break;
                     case LOOK_AT:
-                        output = comandoLookAt(p, output);
+                        if ((getCurrentRoom().getId() == ID_ROOM_SALA_COMANDI || getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X) || eventTorciaAccesa || missioneCorrente) {
+                            output = comandoLookAt(p, output);
+                        } else {
+                            output.append("Non riesco a vedere nulla.\n"
+                                    + "La luce dell'oblo' non arriva fin qui... Fai qualcosa!");
+                        }
                         break;
                     case USE:
                         output = comandoUse(p, output);
@@ -424,6 +476,9 @@ public class PianetaGame extends GameDescription {
                         break;
                     case PULL:
                         output = comandoPull(p, output);
+                        break;
+                    case TURN_OFF:
+                        output = comandoTurnOff(p, output);
                         break;
                     default:
                         break;
@@ -470,13 +525,6 @@ public class PianetaGame extends GameDescription {
         if (getCurrentRoom().getSouth() != null && !roomLocked) {
             setCurrentRoom(getCurrentRoom().getSouth());
             move = true;
-            if (!eventTorcia) {
-                //volendo si potrebbe mettere un thread che si riposa per 10 secondi 
-                //e poi esce il messaggio
-                output.append("_________!!!ATTENZIONE!!!_________ \n");
-                output.append("\nSei inciampato su un oggetto! \n");
-                eventTorcia = true;
-            }
         } else if (getCurrentRoom().getSouth() != null && roomLocked) {
             moveLocked = true;
         } else {
@@ -543,11 +591,31 @@ public class PianetaGame extends GameDescription {
                     output.append("Un vicolo cieco, da qui non si puo' proprio andare da nessuna parte. Ti conviene cambiare direzione...\n");
             }
         } else if (move) {
-            output.append("////   ").append(getCurrentRoom().getName()).append("   ////");
-            output.append("\n================================================\n");
-            output.append("\n").append(getCurrentRoom().getDescription()).append("\n");
+
+            output.append("           ////  ").append(getCurrentRoom().getName()).append("   ////");
+            output.append("\n=====================================================================\n");
+            if ((getCurrentRoom().getId() == ID_ROOM_SALA_COMANDI || getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X) || eventTorciaAccesa || missioneCorrente) {
+                output.append("\n").append(getCurrentRoom().getDescription()).append("\n");
+            } else {
+                output.append("Non riesco a vedere nulla.\n"
+                        + "La luce dell'oblo' non arriva fin qui... Fai qualcosa!");
+            }
             //oppure aggiungere una seconda descrizione se la stanza è stata già visitata
             // o se ha compiuto una missione!!!
+            if (getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X && eventTorcia == false) {
+                /*try {
+                    attivaThread();
+                } catch (InterruptedException ex) {
+                    output.append("Errore nel thread ").append(ex.getMessage());
+                }*/
+                output.append("\n\n_________!!!ATTENZIONE!!!_________ \n"
+                        + "Sei inciampato su un oggetto! \n");
+            }
+            if (getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_NORD && eventAvvisoCrepa == false) {
+                eventAvvisoCrepa = true;
+                getCurrentRoom().setDescription("La navicella si e' danneggiata in seguito allo scontro.\nE' presente un crepa da cui entra"
+                        + " un gas tossico che puo' nuocere alla tua salute.\nSei nel 'Corridoio Nord'!\nE' possibile dirigerti a sud o a est in cui e' presente una porta.");
+            }
         } else if (roomLocked) {
             output.append("La stanza è bloccata prima di cambiare stanza dovresti fare qualcosa\n");
         }
@@ -566,10 +634,32 @@ public class PianetaGame extends GameDescription {
                     output.append(p.getInvObject().getName()).append(" e' stato acceso");
                     if (p.getInvObject().getId() == ID_OBJECT_TORCIA) {
                         output.append("\nAdesso riesci a vedere meglio l’ambiente che ti circonda");
+                        eventTorciaAccesa = true;
                     }
                 }
             } else {
                 output.append("Non è possibile accendere l'oggetto!");
+            }
+        }
+        return output;
+    }
+
+    private StringBuilder comandoTurnOff(ParserOutput p, StringBuilder output) {
+        if (p.getInvObject() == null) {
+            output.append("Devi specificare l'oggetto da spegnere o devi averlo nell'inventario");
+        } else {
+            if (p.getInvObject().isSiAccende()) {
+                if (p.getInvObject().isAcceso()) {
+                    p.getInvObject().setAcceso(false);
+                    output.append("L'oggetto ").append(p.getInvObject().getName()).append(" e' stato spento");
+                    if (p.getInvObject().getId() == ID_OBJECT_TORCIA) {
+                        eventTorciaAccesa = false;
+                    }
+                } else {
+                    output.append("L'oggetto ").append(p.getInvObject().getName()).append(" e' gia' spento. Stai perdendo la memoria??");
+                }
+            } else {
+                output.append("Non è possibile spegnere l'oggetto!");
             }
         }
         return output;
@@ -586,6 +676,12 @@ public class PianetaGame extends GameDescription {
     private StringBuilder comandoLookAt(ParserOutput p, StringBuilder output) {
         if (getCurrentRoom().getLook() != null && p.getObject() == null && p.getInvObject() == null) {
             output.append(getCurrentRoom().getLook());
+            output.append("\nLa stanza contiene: ");
+            for (AdvObject object : getCurrentRoom().getObjects()) {
+                if (object.isVisibile()) {
+                    output.append("\n").append(object.getName());
+                }
+            }
         } else if (getCurrentRoom().getLook() == null && p.getObject() == null && p.getInvObject() == null) {
             //aggiungere il fatto che vengano elencati gli elementi che contiene e dove è possibile andare
             output.append("Non c'è niente di interessante qui.");
@@ -593,6 +689,7 @@ public class PianetaGame extends GameDescription {
             output.append(p.getObject().getDescription());
             if (p.getObject().getId() == ID_OBJECT_PARETE) {
                 getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setVisibile(true);
+                getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setPickupable(true);
             }
             if (p.getObject().getId() == ID_OBJECT_CONTATORE) {
                 getCurrentRoom().cercaObject(ID_OBJECT_LUCCHETTO).setVisibile(true);
@@ -615,9 +712,14 @@ public class PianetaGame extends GameDescription {
                 } else {
                     if (getCurrentRoom().vediCombinazioni(p.getInvObject(), p.getObject())) {
                         if (p.getObject().getId() == ID_OBJECT_PORTA) {
-                            p.getObject().setOpen(true);
                             getCurrentRoom().setLock(false);
                             output.append("Hai aperto tutte le porte della navicella");
+                        }
+                        if (p.getObject().getId() == ID_OBJECT_CREPA) {
+                            missioneCrepa = true;
+                            output.append("Hai riparato la crepa. Complimenti!!");
+                            getCurrentRoom().setDescription("Sei nel 'Corridoio Nord'! E' possibile dirigerti a sud e a est.");
+                            getCurrentRoom().getObjects().remove(getCurrentRoom().cercaObject(ID_OBJECT_CREPA));
                         }
                     } else {
                         output.append("Non è possibile usare questi oggetti insieme!");
@@ -637,6 +739,9 @@ public class PianetaGame extends GameDescription {
                 if (p.getObject().getId() == ID_OBJECT_PARETE) {
                     output.append("dove hai visto che puoi prendere in mano i cavi? bravo sei morto");
                     this.end(output);
+                }
+                if (p.getObject().getId() == ID_OBJECT_TORCIA) {
+                    eventTorcia = true;
                 }
                 getCurrentRoom().getObjects().remove(p.getObject());
                 output.append("Hai raccolto: ").append(p.getObject().getDescription());
@@ -666,7 +771,7 @@ public class PianetaGame extends GameDescription {
                 output.append("Non puoi aprire gli oggetti dell'inventario.");
             } else if (p.getObject() != null && p.getInvObject() == null) {
                 if (getCurrentRoom().vediCombinazioni_(p.getObject()) && p.getObject().isOpenable()) {
-                    System.out.println("L'oggetto non nembra apribile in questo modo...");
+                    System.out.println("L'oggetto non sembra apribile in questo modo...");
                 } else if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
                     if (p.getObject() instanceof AdvObjectContainer) {
                         output.append("Hai aperto: ").append(p.getObject().getName()).append("\n");
@@ -692,15 +797,13 @@ public class PianetaGame extends GameDescription {
                 }
             } else if (p.getObject() != null && p.getInvObject() != null) {
                 if (getCurrentRoom().vediCombinazioni(p.getInvObject(), p.getObject())) {
-                    if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
-                        output.append(p.getObject().getName()).append(" e' stato aperto");
-                        if (p.getObject().getId() == ID_OBJECT_LUCCHETTO) {
-                            getCurrentRoom().cercaObject(ID_OBJECT_LEVA).setVisibile(true);
-                        }
+                    if (p.getObject().isOpenable() && p.getObject().isOpen()) {
+                        output.append("L'oggetto ").append(p.getObject().getName()).append(" e' gia' aperto");
                     } else if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
-                        output.append(p.getObject().getName()).append(" e' stato aperto");
+                        output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato aperto");
                         if (p.getObject().getId() == ID_OBJECT_LUCCHETTO) {
                             getCurrentRoom().cercaObject(ID_OBJECT_LEVA).setVisibile(true);
+                            p.getObject().setDescription("Un semplice lucchetto");
                         }
                     } else {
                         output.append("E' gia' aperto!");
@@ -759,13 +862,22 @@ public class PianetaGame extends GameDescription {
         //ricerca oggetti pullabili
         if (p.getObject() != null && p.getObject().isPullable() && p.getObject().isVisibile()) {
             if (p.getObject().isPull() == true) {
-                output.append(p.getObject().getName()).append(" era stato gia' alzato.\nHai perso la memoria per caso?");
+                output.append("L'oggetto ").append(p.getObject().getName()).append(" era stato gia' alzato.\nHai perso la memoria per caso?");
             } else {
                 p.getObject().setPull(true);
-                output.append(p.getObject().getName()).append(" e' stato alzato");
+                output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato alzato");
                 if (ID_OBJECT_LEVA == p.getObject().getId()) {
                     output.append("\nAdesso sei riuscito ad accedere le luci della navicella.");
-                    //cambiare tutte le descrizioni!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    missioneCorrente = true;
+                    for (Room room : getRooms()) {
+                        if (room.getId() == ID_ROOM_SALA_COMANDI) {
+                            room.setLook("Riesci a vedere tutti i comandi che però"
+                                    + " non sono in funzione, dall'oblo riesci a vedere il cielo stellato, ma mi raccomando, non perdere tempo!!");
+                        }
+                        if (room.getId() == ID_ROOM_CORRIDOIO_X) {
+                            room.setLook("E' un semplice corridoio, cosa ti aspettavi?! Continua con le tue missioni!!");
+                        }
+                    }
                 }
             }
         } else if (p.getInvObject() != null && p.getInvObject().isPushable()) {
@@ -785,6 +897,12 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
+    /*private void attivaThread() throws InterruptedException {
+        //for (int i = 0; i < 10; i++) {
+        Thread t = new Thread(new Torcia());
+        t.start();
+        t.run();
+    }*/
     private void end(StringBuilder output) {
         System.out.println(output);
         System.exit(0);
