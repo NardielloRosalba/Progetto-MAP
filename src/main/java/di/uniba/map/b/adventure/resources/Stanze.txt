@@ -7,10 +7,10 @@ Davanti a te vedi un piccolo corridoio. Puoi vedere l'entrata di una stanza vers
 SALA ELETTRICA
 Ti trovi nella 'Sala Elettrica'. Intorno a te e' presente un contatore elettronico, una parete piena di fili e verso est la porta da cui sei entrato.
 CORRIDOIO NORD
-BOOM-BOOM-BOOM!La navicella si e' scontrata contro un ammasso di asteroidi.La navicella si e' danneggiata.E' presente un crepa da cui entra un gas tossico che puo' nuocere alla tua salute. Sei nel 'Corridoio Nord'! E' possibile dirigerti a sud o a est in cui e' presente una porta.
+BOOM-BOOM-BOOM!La navicella si e' scontrata contro un ammasso di asteroidi.La navicella si e' danneggiata.E' presente un crepa da cui entra un gas tossico che puo' nuocere alla tua salute. Sei nel 'Corridoio Nord'! E' possibile dirigerti a sud e a est.
 INFERMERIA
 Ti trovi nell' 'Infermeria'.Qui puoi vedere un lettino, un tavolo e una cassetta di pronto soccorso.Sono presenti due porte: una a Sud, una a Ovest.
 STANZA TELECOMUNICAZIONI
 Sei entrato nella 'Stanza telecomunicazioni'! Qui puoi entrare in contatto con il tuo pianeta ma ora le comunicazioni sono interrotte a causa del blackout. Davanti a te vedi una ricetrasmittente, un deposito per le attrezzature interstellari e tre porte: una a ovest, una a nord e una a sud.
 ESTERNO NAVICELLA/ IMPIANTO O2
-Sei uscito dalla navicella! Alla tua sinistra c'è il pannello dell'ossigeno e d'avanti a te puoi godere del panorama di tutta la galassia, ma miraccomando! il tempo scade!
+Sei uscito dalla navicella! Alla tua sinistra c'e' il pannello dell'ossigeno e d'avanti a te puoi godere del panorama di tutta la galassia, ma miraccomando! il tempo scade!

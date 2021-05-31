@@ -21,7 +21,7 @@ public class AdvObject {
 
     private boolean openable = false;
 
-    private boolean pickupable = true;
+    private boolean pickupable = true; //TRUE
 
     private boolean pushable = false;
     
@@ -37,7 +37,7 @@ public class AdvObject {
     
     private boolean acceso = false;
     
-    private boolean visibile = true;
+    private boolean visibile = true; //TRUE
     
     private boolean pull = false;
 
