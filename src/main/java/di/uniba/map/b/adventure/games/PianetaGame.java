@@ -118,6 +118,10 @@ public class PianetaGame extends GameDescription {
         pickup.setAlias(new String[]{"prendi"});
         getCommands().add(pickup);
 
+        Command putDown = new Command(CommandType.PUT_DOWN, "lascia");
+        putDown.setAlias(new String[]{"posa"});
+        getCommands().add(putDown);
+
         Command turnOn = new Command(CommandType.TURN_ON, "accendi");
         turnOn.setAlias(new String[]{"attiva"});
         getCommands().add(turnOn);
@@ -465,6 +469,9 @@ public class PianetaGame extends GameDescription {
                     case PICK_UP:
                         output = comandoPickUp(p, output);
                         break;
+                    case PUT_DOWN:
+                        //output = comandoPutDown(p, output);
+                        break;
                     case OPEN:
                         output = comandoOpen(p, output);
                         break;
@@ -733,11 +740,11 @@ public class PianetaGame extends GameDescription {
     }
 
     private StringBuilder comandoPickUp(ParserOutput p, StringBuilder output) {
-        if (p.getObject() != null) {
+        if (p.getObject() != null && p.getObject2() == null) {
             if (p.getObject().isPickupable()) {
                 getInventory().add(p.getObject());
                 if (p.getObject().getId() == ID_OBJECT_PARETE) {
-                    output.append("dove hai visto che puoi prendere in mano i cavi? bravo sei morto");
+                    output.append("Dove hai visto che puoi prendere in mano i cavi? bravo sei morto");
                     this.end(output);
                 }
                 if (p.getObject().getId() == ID_OBJECT_TORCIA) {
@@ -745,8 +752,29 @@ public class PianetaGame extends GameDescription {
                 }
                 getCurrentRoom().getObjects().remove(p.getObject());
                 output.append("Hai raccolto: ").append(p.getObject().getDescription());
+                output.append("\nVerra' inserito nell'inventario");
             } else {
                 output.append("Non puoi raccogliere questo oggetto.");
+            }
+        } else if (p.getObject() != null && p.getObject2() != null) {
+            if (p.getObject2().isOpenable() && !(p.getObject2().isOpen())) {
+                output.append(p.getObject2().getName()).append(" e' chiuso. Aprilo prima!");
+            } else { //caso in cui non sia apribile(es tavolo con pozioni) o e' gia aperto 
+                if (!p.getObject2().getList().isEmpty()) {
+                    Iterator<AdvObject> it = p.getObject2().getList().iterator();
+                    while (it.hasNext()) {
+                        AdvObject next = it.next();
+                        if (p.getObject().getId() == next.getId()) {
+                            getInventory().add(next);
+                            it.remove();
+                            output.append("Hai preso: ").append(p.getObject().getName());
+                            output.append("\nVerra' inserito nell'inventario");
+                        }
+                    }
+                    output.append("\n");
+                } else {
+                    output.append(p.getObject2().getName()).append(" non contiene nulla.");
+                }
             }
         } else {
             output.append("Non c'è niente da raccogliere qui.");
@@ -754,6 +782,9 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
+   /*private StringBuilder comandoPickUp(ParserOutput p, StringBuilder output) {
+        
+    }*/
     //cercare di rendere questo metodo meno lungo
     //semplificando qualcosa!
     private StringBuilder comandoOpen(ParserOutput p, StringBuilder output) {
@@ -770,23 +801,24 @@ public class PianetaGame extends GameDescription {
                 //quando apro un oggetto dell'inventario
                 output.append("Non puoi aprire gli oggetti dell'inventario.");
             } else if (p.getObject() != null && p.getInvObject() == null) {
-                if (getCurrentRoom().vediCombinazioni_(p.getObject()) && p.getObject().isOpenable()) {
-                    System.out.println("L'oggetto non sembra apribile in questo modo...");
+                //if (getCurrentRoom().vediCombinazioni_(p.getObject()) && p.getObject().isOpenable()) { (stava prima)
+                if (!p.getObject().isOpenable()) {
+                    output.append("L'oggetto ").append(p.getObject().getName()).append(" non si puo' aprire");
                 } else if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
                     if (p.getObject() instanceof AdvObjectContainer) {
                         output.append("Hai aperto: ").append(p.getObject().getName()).append("\n");
+                        p.getObject().setOpen(true);
                         AdvObjectContainer c = (AdvObjectContainer) p.getObject();
                         if (!c.getList().isEmpty()) {
                             output.append(c.getName()).append(" contiene:");
-                            Iterator<AdvObject> it = c.getList().iterator();
+                            Iterator<AdvObject> it = c.getList().iterator(); //prendo gli oggetti che contiene
                             //qui poi li inserisce nella lista degli oggetti della stanza!SBAGLIATO!
                             while (it.hasNext()) {
                                 AdvObject next = it.next();
-                                getCurrentRoom().getObjects().add(next);
-                                output.append(" ").append(next.getName());
-                                it.remove();
+                                //getCurrentRoom().getObjects().add(next);
+                                output.append("  ").append(next.getName());
+                                //it.remove();
                             }
-                            output.append("\n");
                         }
                     } else {
                         output.append("\nHai aperto: ").append(p.getObject().getName());
@@ -809,7 +841,7 @@ public class PianetaGame extends GameDescription {
                         output.append("E' gia' aperto!");
                     }
                 } else {
-
+                    //non e possibile aprirli cosi
                 }
             } else {
                 if (p.getInvObject() != null) {
