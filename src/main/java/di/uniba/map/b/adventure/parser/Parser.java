@@ -7,12 +7,14 @@ package di.uniba.map.b.adventure.parser;
 
 import di.uniba.map.b.adventure.Utils;
 import di.uniba.map.b.adventure.type.AdvObject;
+import di.uniba.map.b.adventure.type.AdvObjectContainer;
 import di.uniba.map.b.adventure.type.Command;
 import java.util.List;
 import java.util.Set;
 
 public class Parser {
 
+    private final int COSTANTE_CONTENITORI = 50;
     private final Set<String> stopwords;
 
     public Parser(Set<String> stopwords) {
@@ -37,6 +39,19 @@ public class Parser {
         return -1;
     }
 
+    private int checkForObjectContainer(String token, List<AdvObject> objects) {
+        for (int i = 0; i < objects.size(); i++) {
+            if (objects.get(i).getName().equals(token) || objects.get(i).getAlias().contains(token)) {
+                if (objects.get(i) instanceof AdvObjectContainer) {
+                    return i + COSTANTE_CONTENITORI;
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return -1;
+    }
+
     /* ATTENZIONE: il parser è implementato in modo abbastanza independete dalla lingua, ma riconosce solo 
     * frasi semplici del tipo <azione> <oggetto> <oggetto>. Eventuali articoli o preposizioni vengono semplicemente
     * rimossi.
@@ -55,11 +70,16 @@ public class Parser {
                     if (io1 < 0) {
                         ioinv1 = checkForObject(tokens.get(1), inventory); //usa tessera e la tessera sta nell'inventario
                     }
-                    if (io1 < 0 && ioinv1 < 0) {
-                        return new ParserOutput(null, null);
-                    }else {
-                        if (tokens.size() > 2) { //USA TESSERA PORTA
-                            
+                    if (tokens.size() > 2) {
+                        if (io1 < 0 && ioinv1 < 0) {
+                            io2 = checkForObjectContainer(tokens.get(2), objects);
+                            if (io2 > -1) {
+                                AdvObjectContainer contenitore = (AdvObjectContainer) objects.get(io2 - COSTANTE_CONTENITORI);
+                                io1 = checkForObject(tokens.get(1), contenitore.getList());
+                            } else {
+                                return new ParserOutput(null, null);
+                            }
+                        } else {
                             io2 = checkForObject(tokens.get(2), objects);
                             if (io2 < 0) {
                                 ioinv2 = checkForObject(tokens.get(2), inventory);
@@ -67,7 +87,7 @@ public class Parser {
                         }
                     }
                     if (io1 > -1 && ioinv2 > -1) { //entrambi maggiori oggetto e inventario
-                        
+
                         return new ParserOutput(commands.get(ic), objects.get(io1), inventory.get(ioinv2));
                     } else if (ioinv1 > -1 && io2 > -1) { // entrambi maggiori inventario oggetto
                         return new ParserOutput(commands.get(ic), objects.get(io2), inventory.get(ioinv1));
@@ -75,8 +95,11 @@ public class Parser {
                         return new ParserOutput(commands.get(ic), objects.get(io1), null);
                     } else if (ioinv1 > -1 && io2 < 0 && ioinv2 < 0) { //maggiore solo primo inventario e niente 2 parola
                         return new ParserOutput(commands.get(ic), null, inventory.get(ioinv1));
+                    } else if (io2 >= COSTANTE_CONTENITORI && io1 > -1) {
+                        AdvObjectContainer contenitore = (AdvObjectContainer) objects.get(io2 - COSTANTE_CONTENITORI);
+                        return (new ParserOutput(commands.get(ic), contenitore.getList().get(io1), null, contenitore));
                     } else {
-                         return new ParserOutput(commands.get(ic), null, null);
+                        return new ParserOutput(commands.get(ic), null, null);
                     }
                 } else {
                     return new ParserOutput(commands.get(ic), null, null);
@@ -88,6 +111,5 @@ public class Parser {
             return null;
         }
     }
-    
 
 }
