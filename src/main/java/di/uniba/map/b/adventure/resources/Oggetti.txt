@@ -2,10 +2,10 @@ Armadio
 Un semplice armadio.
 Tessera
 una tessera, sembra un pass magnetico. E' presente la scritta 'Star Enterprise'
-Protocolli di navigazione
+ProtocolliNavigazione
 Fogli che regolano il viaggio nello spazio.
 Torcia
-una torcia, chissa' se le batterie sono cariche.
+una torcia.
 Porta Sala Comandi
 E' presente una scritta 'Star Enterprise'.
 Contatore elettronico
@@ -32,17 +32,17 @@ Laccio
 laccio utile per il primo soccorso
 Crepa
 Un buco di modeste dimensioni da cui entra un gas tossico. Riparalo al piu' presto!!
-Lettino da visita
+LettinoVisita
 E' un semplice letto. Cosa vuoi che ci sia?
 Tavolo
 Sul tavolo e' presente un libro e varie fiale.
 Libro
 Questo libro contiene tutti i funzionamenti delle pozioni.
-Fiala acqua
+FialaAcqua
 serve per farti respirare sott'acqua
-Fiala animali
+FialaAnimali
 serve per capire il linguaggio di tutti gli animali
-Fiala gas tossici
+FialaGasTossici
 serve per guarire da tutti i gas tossici
-Fiala pensiero
+FialaPensiero
 serve per leggere nel pensiero

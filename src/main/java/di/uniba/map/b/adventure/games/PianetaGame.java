@@ -91,7 +91,7 @@ public class PianetaGame extends GameDescription {
         public void run() {
             while (this.taskCount != countDown) {
                 try {
-                    System.out.println(avviso());
+                    System.out.println(avviso(this.countDown - this.taskCount));
                     Thread.sleep(60000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
@@ -101,13 +101,19 @@ public class PianetaGame extends GameDescription {
             new PianetaGame().end(new StringBuilder("Sei morto!"));
         }
 
-        public String avviso() {
-            return ("- Manca " + (this.countDown - this.taskCount) + " minuti prima di morire a causa del gas!");
+        public String avviso(int n) {
+            if (n != 1) {
+                return ("- Mancano " + (this.countDown - this.taskCount) + " minuti prima di morire a causa del gas!");
+            } else {
+                return ("- Manca " + (this.countDown - this.taskCount) + " minuto prima di morire a causa del gas!");
+            }
         }
+        
     }
 
-    @Override
-    public void init() throws FileNotFoundException {
+
+@Override
+        public void init() throws FileNotFoundException {
         //Commands
         Command nord = new Command(CommandType.NORD, "nord");
         nord.setAlias(new String[]{"n", "N", "Nord", "NORD"});
@@ -313,7 +319,7 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject protocolli = new AdvObject(ID_OBJECT_PROTOCOLLI, titolo, descrizione);
-        protocolli.setAlias(new String[]{"protocolli", "protocolli di navigazione", "fogli di navigazione", "fogli"});
+        protocolli.setAlias(new String[]{"protocolli", "protocolliNavigazione", "fogliNavigazione", "fogli"});
         //tessera.setPushable(true);
         protocolli.setPickupable(true);
         armadio.getList().add(protocolli);
@@ -338,7 +344,7 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject contatore = new AdvObject(ID_OBJECT_CONTATORE, titolo, descrizione);
-        contatore.setAlias(new String[]{"contatore", "contatore elettrico"});
+        contatore.setAlias(new String[]{"contatore", "contatoreElettrico"});
         salaElettrica.getObjects().add(contatore);
 
         titolo = obj.nextLine();
@@ -353,7 +359,7 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject parete = new AdvObject(ID_OBJECT_PARETE, titolo, descrizione);
-        parete.setAlias(new String[]{"Parete con fili", "Parete piena di fili", "parete", "fili"});
+        parete.setAlias(new String[]{"PareteFili", "parete", "fili"});
         salaElettrica.getObjects().add(parete);
 
         titolo = obj.nextLine();
@@ -376,7 +382,7 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObjectContainer cassetta = new AdvObjectContainer(ID_OBJECT_CASSETTA, titolo, descrizione);
-        cassetta.setAlias(new String[]{"cassetta", "cassetta di pronto soccorso"});
+        cassetta.setAlias(new String[]{"cassetta", "cassettaProntoSoccorso"});
         cassetta.setPickupable(false);
         cassetta.setOpenable(true);
         infermeria.getObjects().add(cassetta);
@@ -384,7 +390,7 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject colla = new AdvObject(ID_OBJECT_COLLA, titolo, descrizione);
-        colla.setAlias(new String[]{"colla industiale", "super colla", "colla"});
+        colla.setAlias(new String[]{"collaIndustiale", "superColla", "colla"});
         colla.setUsable(true);
         cassetta.getList().add(colla);
 
@@ -422,7 +428,7 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject lettino = new AdvObject(ID_OBJECT_LETTINO, titolo, descrizione);
-        lettino.setAlias(new String[]{"lettino", "lettino da visita", "letto da visita", "letto"});
+        lettino.setAlias(new String[]{"lettino", "lettinoVisita", "lettoVisita", "letto"});
         lettino.setPickupable(false);
         infermeria.getObjects().add(lettino);
 
@@ -436,27 +442,27 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject libro = new AdvObject(ID_OBJECT_LIBRO, titolo, descrizione);
-        libro.setAlias(new String[]{"libro", "libro fiale"});
+        libro.setAlias(new String[]{"libro", "libroFiale"});
         tavolo.getList().add(libro); //aggiungere comando leggi libro/ osserva libro
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject fiala1 = new AdvObject(ID_OBJECT_FIALA1, titolo, descrizione);
         fiala1.setDrinkable(true);
-        fiala1.setAlias(new String[]{"fiala 1", "pozione 1", "fiala acqua"});
+        fiala1.setAlias(new String[]{"fiala1", "pozione1", "fialaAcqua"});
         tavolo.getList().add(fiala1);
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject fiala2 = new AdvObject(ID_OBJECT_FIALA2, titolo, descrizione);
         fiala2.setDrinkable(true);
-        fiala2.setAlias(new String[]{"fiala 2", "pozione 2", "fiala animali"});
+        fiala2.setAlias(new String[]{"fiala2", "pozione2", "fialaAnimali"});
         tavolo.getList().add(fiala2);
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject fiala3 = new AdvObject(ID_OBJECT_FIALA3, titolo, descrizione);
-        fiala3.setAlias(new String[]{"fiala 3", "pozione 3", "fiala gas", "fiala gas tossici"});
+        fiala3.setAlias(new String[]{"fiala3", "pozione3", "fialagas", "fialaGasTossici"});
         fiala3.setDrinkable(true);
         tavolo.getList().add(fiala3);
 
@@ -464,7 +470,7 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject fiala4 = new AdvObject(ID_OBJECT_FIALA4, titolo, descrizione);
         fiala4.setDrinkable(true);
-        fiala4.setAlias(new String[]{"fiala 4", "pozione 4", "fiala pensiero"});
+        fiala4.setAlias(new String[]{"fiala4", "pozione4", "fialaPensiero"});
         tavolo.getList().add(fiala4);
 
         //AGGIUNGO COMBINAZIONI PER OGNI STANZA
@@ -540,7 +546,7 @@ public class PianetaGame extends GameDescription {
     }
 
     @Override
-    public String nextMove(ParserOutput p) {
+        public String nextMove(ParserOutput p) {
         StringBuilder output = new StringBuilder();
 
         if (p.getCommand() == null) {
@@ -797,7 +803,7 @@ public class PianetaGame extends GameDescription {
         if (getCurrentRoom().getLook() != null && p.getObject() == null && p.getInvObject() == null && p.getObject2() == null) {
             output.append(getCurrentRoom().getDescription()).append("\n");
             output.append(getCurrentRoom().getLook());
-            if (getCurrentRoom().getObjects().isEmpty()) {
+            if (!getCurrentRoom().getObjects().isEmpty()) {
                 output.append("\nLa stanza contiene: ");
                 for (AdvObject object : getCurrentRoom().getObjects()) {
                     if (object.isVisibile()) {
@@ -879,7 +885,7 @@ public class PianetaGame extends GameDescription {
     private StringBuilder comandoDrink(ParserOutput p, StringBuilder output) {
         if (p.getInvObject() == null && p.getObject() == null && p.getObject2() == null) {
             output.append("Devi specificare l'oggetto");
-        } else if (p.getInvObject() == null && p.getObject() != null || p.getObject2() == null){
+        } else if (p.getInvObject() == null && p.getObject() != null && p.getObject2() == null){
             output.append("Devi avere l'oggetto nell'inventario");
         } else if (p.getInvObject() != null && p.getObject() == null && p.getObject2() == null) {
             if (p.getInvObject().isDrinkable()) {
@@ -892,6 +898,7 @@ public class PianetaGame extends GameDescription {
                         if (timerGasTossico.isAlive()) {
                             timerGasTossico.interrupt();
                             output.append("\nBravo, sei riuscito a salvarti la vita!");
+                            output.append("\nSono vivo? " + timerGasTossico.isAlive());
                         }
                     }
                 }
@@ -927,6 +934,7 @@ public class PianetaGame extends GameDescription {
                     Iterator<AdvObject> it = p.getObject2().getList().iterator();
                     while (it.hasNext()) {
                         AdvObject next = it.next();
+                        System.out.println("primo oggetto chiesto "+ p.getObject().getId() + "iteratore "+ next.getId());
                         if (p.getObject().getId() == next.getId()) {
                             getInventory().add(next);
                             it.remove();
@@ -1025,6 +1033,7 @@ public class PianetaGame extends GameDescription {
                         output.append("L'oggetto ").append(p.getObject().getName()).append(" e' gia' aperto");
                     } else if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
                         output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato aperto");
+                        getCurrentRoom().togliCombinazione(p.getInvObject(), p.getObject());
                         if (p.getObject().getId() == ID_OBJECT_LUCCHETTO) {
                             getCurrentRoom().cercaObject(ID_OBJECT_LEVA).setVisibile(true);
                             p.getObject().setDescription("Un semplice lucchetto");
@@ -1034,9 +1043,9 @@ public class PianetaGame extends GameDescription {
                     } else {
                         output.append("Non puoi fare cosi'!");
                     }
-                    getCurrentRoom().togliCombinazione(p.getInvObject(), p.getObject());
+                    
                 } else {
-                    //non e possibile aprirli cosi
+                    output.append("Non puoi fare cosi'!");
                 }
             } else {
                 if (p.getInvObject() != null) {
