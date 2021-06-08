@@ -47,15 +47,14 @@ public class Engine {
         System.out.println("========================================");
         System.out.println("** Adventure Luca, Rosalba, Raffaella **");
         System.out.println("========================================" + "\n" + "\n");
-        /*   System.out.println("Il protagonista, Capitan Hector, si trova \n"
-                    + "nella Navicella B612 della galassia Reggy e sta per \n"
-                    + "tornare nel suo pianeta nativo: Blind,per cause oscure,\n"
-                    + "  perde il controllo della navicella e di tutti i suoi \n"
-                    + "comandi, per salvarsi dovrà finire tutte le missioni \n"
-                    + "nelle varie stanze e ricomporre un puzzle,\n"
-                    + " i cui pezzi si avranno alla fine di ogni missione,\n"
-                    + " che darà il codice per ristabilire i comandi persi della\n"
-                    + " navicella.\n");*/
+        System.out.println("Il protagonista, Capitan Hector, si trova \n"
+                + "nella Navicella B612 della galassia Reggy e sta per \n"
+                + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
+                + "perde il controllo della navicella e di tutti i suoi \n"
+                + "comandi, per salvarsi dovrà finire tutte le missioni \n"
+                + "nelle varie stanze,\n"
+                + "cosi' da ristabilire i comandi persi della\n"
+                + "navicella.\n");
         System.out.println("");
         System.out.println(game.getCurrentRoom().getName());
         System.out.println("");

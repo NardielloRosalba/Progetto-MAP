@@ -64,9 +64,11 @@ public class Parser {
         int ioinv2 = -1;
         if (!tokens.isEmpty()) {
             int ic = checkForCommand(tokens.get(0), commands);
+            System.out.println("comando " + tokens.get(0));
             if (ic > -1) {
                 if (tokens.size() > 1) { //dopo il comando c'è qualcosa USA TESSERA
                     io1 = checkForObject(tokens.get(1), objects);
+                    System.out.println("altro 1 " + tokens.get(1));
                     if (io1 < 0) {
                         ioinv1 = checkForObject(tokens.get(1), inventory); //usa tessera e la tessera sta nell'inventario
                     }
@@ -81,13 +83,18 @@ public class Parser {
                             }
                         } else {
                             io2 = checkForObject(tokens.get(2), objects);
+                            System.out.println("altro 2 " + tokens.get(2));
                             if (io2 < 0) {
                                 ioinv2 = checkForObject(tokens.get(2), inventory);
                             }
                         }
                     }
+                    System.out.println("io1 "+ io1
+                            + "\n io2 " + io2
+                            + "\n inv1 " + ioinv1
+                            + "\n inv2 "+ ioinv2
+                            + "\n ");
                     if (io1 > -1 && ioinv2 > -1) { //entrambi maggiori oggetto e inventario
-
                         return new ParserOutput(commands.get(ic), objects.get(io1), inventory.get(ioinv2));
                     } else if (ioinv1 > -1 && io2 > -1) { // entrambi maggiori inventario oggetto
                         return new ParserOutput(commands.get(ic), objects.get(io2), inventory.get(ioinv1));
