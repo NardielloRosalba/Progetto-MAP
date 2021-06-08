@@ -1,7 +1,9 @@
 Armadio
-Un semplice armadio. Cosa pensavi di vedere?
+Un semplice armadio.
 Tessera
 una tessera, sembra un pass magnetico. E' presente la scritta 'Star Enterprise'
+Protocolli di navigazione
+Fogli che regolano il viaggio nello spazio.
 Torcia
 una torcia, chissa' se le batterie sono cariche.
 Porta Sala Comandi
@@ -20,5 +22,27 @@ Cassetta
 Una cassetta di pronto soccorso.
 Colla
 un vasetto di colla industriale utilizzabile per riparare TUTTO!
+Forbici
+semplici forbici utili per il primo soccorso
+Bisturi
+bisturi utile per il primo soccorso
+Garze
+garze utili per il primo soccorso
+Laccio
+laccio utile per il primo soccorso
 Crepa
 Un buco di modeste dimensioni da cui entra un gas tossico. Riparalo al piu' presto!!
+Lettino da visita
+E' un semplice letto. Cosa vuoi che ci sia?
+Tavolo
+Sul tavolo e' presente un libro e varie fiale.
+Libro
+Questo libro contiene tutti i funzionamenti delle pozioni.
+Fiala acqua
+serve per farti respirare sott'acqua
+Fiala animali
+serve per capire il linguaggio di tutti gli animali
+Fiala gas tossici
+serve per guarire da tutti i gas tossici
+Fiala pensiero
+serve per leggere nel pensiero

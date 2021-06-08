@@ -97,7 +97,7 @@ public class Parser {
                         return new ParserOutput(commands.get(ic), null, inventory.get(ioinv1));
                     } else if (io2 >= COSTANTE_CONTENITORI && io1 > -1) {
                         AdvObjectContainer contenitore = (AdvObjectContainer) objects.get(io2 - COSTANTE_CONTENITORI);
-                        return (new ParserOutput(commands.get(ic), contenitore.getList().get(io1), null, contenitore));
+                        return (new ParserOutput(commands.get(ic), contenitore.getList().get(io1), null, contenitore)); //caso di oggetti nel contenitore
                     } else {
                         return new ParserOutput(commands.get(ic), null, null);
                     }
@@ -108,7 +108,7 @@ public class Parser {
                 return new ParserOutput(null, null);
             }
         } else {
-            return null;
+            return new ParserOutput(null, null);
         }
     }
 

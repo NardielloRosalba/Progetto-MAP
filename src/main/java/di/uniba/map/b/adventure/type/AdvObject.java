@@ -35,11 +35,15 @@ public class AdvObject {
 
     private boolean usable = false;
     
+    private boolean drinkable = false;
+    
     private boolean acceso = false;
     
     private boolean visibile = true; //TRUE
     
     private boolean pull = false;
+    
+    private boolean bevuta = false;
 
     public AdvObject(int id) {
         this.id = id;
@@ -159,6 +163,22 @@ public class AdvObject {
         this.usable = usable;
     }
 
+    public boolean isDrinkable() {
+        return drinkable;
+    }
+
+    public void setDrinkable(boolean drinkable) {
+        this.drinkable = drinkable;
+    }
+
+    public boolean isBevuta() {
+        return bevuta;
+    }
+
+    public void setBevuta(boolean bevuta) {
+        this.bevuta = bevuta;
+    }
+    
     public boolean isPullable() {
         return pullable;
     }
@@ -175,8 +195,6 @@ public class AdvObject {
         this.pull = pull;
     }
 
-    
-    
     public boolean isVisibile() {
         return visibile;
     }

@@ -75,14 +75,23 @@ public class Room {
         return giusta;
     }
 
-    public boolean vediCombinazioni_(AdvObject ogg1) {
-        boolean giusta = false;
-        for (Map.Entry<AdvObject, AdvObject> e : combinazioni.entrySet()) { //combinazione ogg2 e ogg1
-            if (e.getValue() == ogg1) {
-                giusta = true;
+    public void togliCombinazione(AdvObject ogg1, AdvObject ogg2) {
+        if (this.vediCombinazioni(ogg1, ogg2)) {
+            if (combinazioni.containsKey(ogg1)) {
+                combinazioni.remove(ogg1);
+            } else {
+                combinazioni.remove(ogg2);
             }
         }
-        return giusta;
+    }
+
+    public boolean vediCombinazioni_(AdvObject ogg1) {
+        for (Map.Entry<AdvObject, AdvObject> e : combinazioni.entrySet()) { //combinazione ogg2 e ogg1
+            if (e.getValue() == ogg1 || e.getKey() == ogg1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String getName() {
