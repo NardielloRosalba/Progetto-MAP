@@ -77,7 +77,7 @@ public class PianetaGame extends GameDescription {
 
     private boolean missioneCorrente = false;
     private boolean missioneCrepa = false;
-    private TimerGasTossico timerGasTossico = new TimerGasTossico();
+    private Thread timerGasTossico = new TimerGasTossico();
 
     static class TimerGasTossico extends Thread {
 
@@ -96,6 +96,7 @@ public class PianetaGame extends GameDescription {
                     this.taskCount++;
                 } catch (InterruptedException ex) {
                     System.out.println("Ti sei salvato la vita!");
+                    return;
                 }
             }
             new PianetaGame().end(new StringBuilder("Sei morto!"));
@@ -320,7 +321,6 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject protocolli = new AdvObject(ID_OBJECT_PROTOCOLLI, titolo, descrizione);
         protocolli.setAlias(new String[]{"protocolli", "protocolliNavigazione", "fogliNavigazione", "fogli"});
-        //tessera.setPushable(true);
         protocolli.setPickupable(true);
         armadio.getList().add(protocolli);
 
@@ -934,7 +934,7 @@ public class PianetaGame extends GameDescription {
                     Iterator<AdvObject> it = p.getObject2().getList().iterator();
                     while (it.hasNext()) {
                         AdvObject next = it.next();
-                        System.out.println("primo oggetto chiesto "+ p.getObject().getId() + "iteratore "+ next.getId());
+                        //System.out.println("primo oggetto chiesto "+ p.getObject().getId() + "iteratore "+ next.getId());
                         if (p.getObject().getId() == next.getId()) {
                             getInventory().add(next);
                             it.remove();
