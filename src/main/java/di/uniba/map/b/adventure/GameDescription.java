@@ -9,7 +9,6 @@ import di.uniba.map.b.adventure.parser.ParserOutput;
 import di.uniba.map.b.adventure.type.AdvObject;
 import di.uniba.map.b.adventure.type.Command;
 import di.uniba.map.b.adventure.type.Room;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
