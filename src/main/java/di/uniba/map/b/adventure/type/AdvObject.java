@@ -15,23 +15,19 @@ public class AdvObject {
 
     private String name;
 
-    private String description;
+    private StringBuilder description = new StringBuilder("");
 
     private Set<String> alias;
 
     private boolean openable = false;
 
     private boolean pickupable = true; //TRUE
-
-    private boolean pushable = false;
     
     private boolean siAccende = false;
     
     private boolean pullable = false;
 
     private boolean open = false;
-
-    private boolean push = false;
 
     private boolean usable = false;
     
@@ -57,13 +53,13 @@ public class AdvObject {
     public AdvObject(int id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.description.append(description);
     }
 
     public AdvObject(int id, String name, String description, Set<String> alias) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.description.append(description);
         this.alias = alias;
     }
 
@@ -76,11 +72,12 @@ public class AdvObject {
     }
 
     public String getDescription() {
-        return description;
+        return description.toString();
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description.delete(0, this.description.length());
+        this.description.append(description);
     }
 
     public boolean isOpenable() {
@@ -115,28 +112,12 @@ public class AdvObject {
         this.pickupable = pickupable;
     }
 
-    public boolean isPushable() {
-        return pushable;
-    }
-
-    public void setPushable(boolean pushable) {
-        this.pushable = pushable;
-    }
-
     public boolean isOpen() {
         return open;
     }
 
     public void setOpen(boolean open) {
         this.open = open;
-    }
-
-    public boolean isPush() {
-        return push;
-    }
-
-    public void setPush(boolean push) {
-        this.push = push;
     }
 
     public Set<String> getAlias() {
