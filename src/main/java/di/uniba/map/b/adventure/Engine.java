@@ -62,7 +62,7 @@ public class Engine {
                 + "nella Navicella B612 della galassia Reggy e sta per \n"
                 + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
                 + "perde il controllo della navicella e di tutti i suoi \n"
-                + "comandi, per salvarsi dovrà finire tutte le missioni \n"
+                + "comandi, per salvarsi dovrà completare le missioni \n"
                 + "nelle varie stanze,\n"
                 + "cosi' da ristabilire i comandi persi della\n"
                 + "navicella.\n");
@@ -72,9 +72,10 @@ public class Engine {
         System.out.println(game.getCurrentRoom().getDescription());
         System.out.println("");
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Cosa devo fare? ");
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
-            ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
+            ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
             if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
                 System.out.println("Addio!");
                 break;
@@ -88,6 +89,7 @@ public class Engine {
                 System.out.println(game.nextMove(p));
                 System.out.println();
             }
+            System.out.println("Cosa devo fare? ");
         }
     }
 
