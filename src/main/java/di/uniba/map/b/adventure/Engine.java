@@ -6,6 +6,7 @@
 package di.uniba.map.b.adventure;
 
 import di.uniba.map.b.adventure.games.PianetaGame;
+import di.uniba.map.b.adventure.interfacee.Inizio;
 import di.uniba.map.b.adventure.parser.Parser;
 import di.uniba.map.b.adventure.parser.ParserOutput;
 import di.uniba.map.b.adventure.type.CommandType;
@@ -97,6 +98,8 @@ public class Engine {
         //new Thread(new Engine(new PianetaGame())).start();
         //SocketClient sc = new SocketClient();
         Engine engine = new Engine(new PianetaGame());
+        /*Inizio interfacciaInizio = new Inizio();
+        interfacciaInizio.setVisible(true);*/
         switch (engine.socket()) {
             case 0:
                 System.out.println("Inizio nuova partita");
@@ -118,19 +121,19 @@ public class Engine {
             Socket s = ss.accept();
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
-                
-            out.println("cosa vuoi fare?\t\ts->inizia partita\t\tn->esci\t\tc->carica partita");
+            
+            //out.println("cosa vuoi fare?\t\ts->inizia partita\t\tn->esci\t\tc->carica partita");
             while (true) {
                 //viene scritta risposta sul client quindi la leggo
                 str = in.readLine();
                 if (str.equals("s")) {
-                    out.println("Adios!");
+                    out.println("Adios! Ora inizierai una nuova partita");
                     return 0;
                 } else if (str.equals("n")) {
-                    out.println("Adios!");
+                    out.println("Adios! esci");
                     return 1;
                 } else if (str.equals("c")) {
-                    out.println("Adios!");
+                    out.println("Adios! ");
                     return 2;
                 } else {
                     out.println("Comando non riconosciuto");
