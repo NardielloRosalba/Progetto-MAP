@@ -76,20 +76,21 @@ public class PianetaGame extends GameDescription {
     private boolean missioneCrepa = false;
     private boolean missioneRipristinoContatti = false;
     
-    private Thread timerGasTossico = new TimerAvvisoMorte("del gas tossico!");
+    private TimerAvvisoMorte timerGasTossico = new TimerAvvisoMorte("del gas tossico!");
     //private boolean timerActived = false;
 
-    private Thread timerOssigeno = new TimerAvvisoMorte("dell'abbassamento livelli di ossigeno!");
+    private TimerAvvisoMorte timerOssigeno = new TimerAvvisoMorte("dell'abbassamento livelli di ossigeno!");
     //private boolean timerActived = false;
 
-    private Thread timerScontroSullaTerra = new TimerAvvisoMorte(3, "dello scontro sulla Terra");
+    private TimerAvvisoMorte timerScontroSullaTerra = new TimerAvvisoMorte(3, "dello scontro sulla Terra");
     //private boolean timerActived = false;
      
     static class TimerAvvisoMorte extends Thread implements Serializable{
 
-        int countDown = 10;
+        private int countDown = 10;
         private int taskCount = 0;
         String causa;
+        private boolean timerActived = false;
                 
         public TimerAvvisoMorte(int num, String causaMorte) {
             this.countDown = num;
@@ -102,6 +103,7 @@ public class PianetaGame extends GameDescription {
         
         @Override
         public void run() {
+            this.timerActived = true;
             while (this.taskCount != countDown) {
                 try {
                     System.out.println(avviso(this.countDown - this.taskCount));
@@ -109,6 +111,7 @@ public class PianetaGame extends GameDescription {
                     this.taskCount++;
                 } catch (InterruptedException ex) {
                     System.out.println("Ti sei salvato la vita!");
+                    this.timerActived = false;
                     return;
                 }
             }
@@ -121,6 +124,10 @@ public class PianetaGame extends GameDescription {
             } else {
                 return ("- Manca " + (this.countDown - this.taskCount) + " minuto prima di morire a causa " + this.causa);
             }
+        }
+
+        public boolean isTimerActived() {
+            return timerActived;
         }
 
     }
@@ -959,7 +966,7 @@ public class PianetaGame extends GameDescription {
         while (scanner.hasNextLine()) {
             String risposta = scanner.nextLine().trim();
             if (Integer.parseInt(risposta) == 15) {
-                System.out.println("Contatti riprestinati\n");
+                System.out.println("Contatti ripristinati\n");
                 missioneRipristinoContatti = true;
                 System.out.println("Hai ricevuto il seguente messaggio: \n");
                 stampaMessaggioPianeta();
@@ -1281,7 +1288,8 @@ public class PianetaGame extends GameDescription {
     }
     
     public void checkTimer(){
-            if(timerGasTossico.activeCount() == 1){
+        //non va perche mi carica il thread gas tossico senza che sia attivo
+            /*if(timerGasTossico.activeCount() == 1){
                 timerGasTossico.start();
                 
             }else if(timerOssigeno.activeCount() == 1){
@@ -1289,6 +1297,19 @@ public class PianetaGame extends GameDescription {
                 
             }else if(timerScontroSullaTerra.activeCount() == 1){
                 timerScontroSullaTerra.start();
+            }*/
+            if(timerGasTossico.isTimerActived()){
+                timerGasTossico.start();
+                System.out.println("Vediamo timer gas tossico ATTIVATO ");
+            }
+            if(timerOssigeno.isTimerActived()){
+                timerOssigeno.start();
+                System.out.println("Vediamo timerOssigeno ATTIVATO ");
+            }
+            
+            if(timerScontroSullaTerra.isTimerActived()){
+                timerScontroSullaTerra.start();
+                System.out.println("Vediamo timerOssigeno ATTIVATO ");
             }
     }
     
