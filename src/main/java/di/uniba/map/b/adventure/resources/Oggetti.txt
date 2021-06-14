@@ -1,0 +1,48 @@
+Armadio
+Un semplice armadio.
+Tessera
+una tessera, sembra un pass magnetico. E' presente la scritta 'Star Enterprise'
+ProtocolliNavigazione
+Fogli che regolano il viaggio nello spazio.
+Torcia
+una torcia.
+Porta Sala Comandi
+E' presente una scritta 'Star Enterprise'.
+Contatore elettronico
+Al centro di esso e' presente una leva bloccata da un lucchetto.
+Lucchetto
+Un semplice lucchetto chiuso. Forse servirebbe qualcosa per aprirlo!
+Parete
+Una parete con tanti fili intrecciati tra di loro e tra di essi si intravede una chiave.
+Chiave
+una chiave. Forse servira' ad aprire qualcosa?
+Leva
+Una semplice leva. Forse dovresti alzerla?
+Cassetta
+Una cassetta di pronto soccorso.
+Colla
+un vasetto di colla industriale utilizzabile per riparare TUTTO!
+Forbici
+semplici forbici utili per il primo soccorso
+Bisturi
+bisturi utile per il primo soccorso
+Garze
+garze utili per il primo soccorso
+Laccio
+laccio utile per il primo soccorso
+Crepa
+Un buco di modeste dimensioni da cui entra un gas tossico. Riparalo al piu' presto!!
+LettinoVisita
+E' un semplice letto. Cosa vuoi che ci sia?
+Tavolo
+Sul tavolo e' presente un libro e varie fiale.
+Libro
+Questo libro contiene tutti i funzionamenti delle pozioni.
+FialaAcqua
+serve per farti respirare sott'acqua
+FialaAnimali
+serve per capire il linguaggio di tutti gli animali
+FialaGasTossici
+serve per guarire da tutti i gas tossici
+FialaPensiero
+serve per leggere nel pensiero
