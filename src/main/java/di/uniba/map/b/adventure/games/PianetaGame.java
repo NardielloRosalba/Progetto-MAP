@@ -792,13 +792,10 @@ public class PianetaGame extends GameDescription {
                         output.append("Il gas tossico non puo' nuocere alla tua salute perche' hai bevuto prima la fiala\n"
                                 + "Sei immune!");
                     } else {
-                        if(timerGasTossico.activeCount() == 0)
-                            timerGasTossico.start();
-                    }
-                } else {
-                    if(timerGasTossico.activeCount() == 0){
                         timerGasTossico.start();
                     }
+                } else {
+                    timerGasTossico.start();
                 }
                 getCurrentRoom().setDescription("La navicella si e' danneggiata in seguito allo scontro.\nE' presente un crepa da cui entra"
                         + " un gas tossico che puo' nuocere alla tua salute.\nSei nel 'Corridoio Nord'!\nE' possibile dirigerti a sud o a est in cui e' presente una porta.");
@@ -808,9 +805,7 @@ public class PianetaGame extends GameDescription {
                     output.append("Hai sbagliato ad uscire senza tuta.\n Sei morto!");
                     this.end(output);
                 }
-                if(timerScontroSullaTerra.activeCount() == 0){
                     timerScontroSullaTerra.start();
-                }
             }
         } else if (roomLocked) {
             output.append("La stanza è bloccata prima di cambiare stanza dovresti fare qualcosa\n");
@@ -969,9 +964,7 @@ public class PianetaGame extends GameDescription {
                 System.out.println("Hai ricevuto il seguente messaggio: \n");
                 stampaMessaggioPianeta();
                 if (getInventory().cercaObject(ID_OBJECT_TUTA) == null) {
-                    if(timerOssigeno.activeCount() == 0){
                         timerOssigeno.start();
-                    }
                 } else {
                     System.out.println("Grazie alla tuta che hai preso prima riesci a respirare ancora");
                 }
