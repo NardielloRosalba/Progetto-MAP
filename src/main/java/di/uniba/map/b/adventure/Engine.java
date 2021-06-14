@@ -134,7 +134,6 @@ public class Engine {
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
 
-            //out.println("cosa vuoi fare?\t\ts->inizia partita\t\tn->esci\t\tc->carica partita");
             while (true) {
                 str = in.readLine();
                 switch (str) {
