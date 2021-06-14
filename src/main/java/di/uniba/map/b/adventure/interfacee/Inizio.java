@@ -6,6 +6,7 @@
 package di.uniba.map.b.adventure.interfacee;
 
 import java.io.PrintWriter;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -51,7 +52,7 @@ public class Inizio extends javax.swing.JFrame {
         setForeground(new java.awt.Color(0, 0, 0));
         setResizable(false);
 
-        jLabelImage.setIcon(new javax.swing.ImageIcon("C:\\Users\\nasca\\Progetto-MAP\\resources\\Spazio.png")); // NOI18N
+        jLabelImage.setIcon((new ImageIcon("resources/Spazio.png")));
         jLabelImage.setOpaque(true);
 
         jButtonIniziaPartita1.setBackground(new java.awt.Color(0, 0, 255));
