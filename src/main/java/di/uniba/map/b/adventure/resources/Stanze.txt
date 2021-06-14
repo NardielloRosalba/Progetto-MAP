@@ -11,6 +11,6 @@ BOOM-BOOM-BOOM!La navicella si e' scontrata contro un ammasso di asteroidi.La na
 INFERMERIA
 Ti trovi nell' 'Infermeria'.Qui puoi vedere un lettino, un tavolo e una cassetta di pronto soccorso.Sono presenti due porte: una a Sud, una a Ovest.
 STANZA TELECOMUNICAZIONI
-Sei entrato nella 'Stanza telecomunicazioni'! Qui puoi entrare in contatto con il tuo pianeta ma ora le comunicazioni sono interrotte a causa del blackout. Davanti a te vedi una ricetrasmittente, un deposito per le attrezzature interstellari e tre porte: una a ovest, una a nord e una a sud.
+Sei entrato nella 'Stanza telecomunicazioni'! Qui puoi entrare in contatto con il tuo pianeta ma ora le comunicazioni sono interrotte a causa del blackout. Davanti a te vedi una ricetrasmittente, un deposito e tre porte: una a ovest, una a nord e una a sud.
 ESTERNO NAVICELLA/ IMPIANTO O2
-Sei uscito dalla navicella! Alla tua sinistra c'e' il pannello dell'ossigeno e d'avanti a te puoi godere del panorama di tutta la galassia, ma miraccomando! il tempo scade!
+Sei uscito dalla navicella! Ti precipitando sulla Terra, fai qualcosa! Alla tua sinistra c'e' un pannello e davanti a te puoi godere del panorama di tutta la galassia. Il tempo scade, non perdere tempo!

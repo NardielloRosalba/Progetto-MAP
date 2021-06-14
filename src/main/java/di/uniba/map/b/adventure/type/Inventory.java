@@ -28,4 +28,13 @@ public class Inventory implements Serializable{
     public void remove(AdvObject o) {
         list.remove(o);
     }
+    
+    public AdvObject cercaObject(int index) {
+        for (AdvObject object : this.list) {
+            if (object.getId() == index) {
+                return object;
+            }
+        }
+        return null;
+    }
 }

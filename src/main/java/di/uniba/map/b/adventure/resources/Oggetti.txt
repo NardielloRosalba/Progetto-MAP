@@ -46,3 +46,15 @@ FialaGasTossici
 serve per guarire da tutti i gas tossici
 FialaPensiero
 serve per leggere nel pensiero
+Ricetrasmittente
+serve per entrare in contatto col tuo pianeta ma adesso non funziona... Puoi vedere la seguente sequenza: ''11 22 .. 30 22 44''
+Deposito
+usato per conservare alcune attrezzature interstellari
+TutaAstronauta
+tuta da astronauta compresa di ossigeno
+Anfibi
+scarpe utili per camminate nell'acqua, terreno umido ecc.
+Estintore
+Apparecchio per estinguere principi d'incendio
+Pannello
+serve per attivare l'atterraggio di emergenza

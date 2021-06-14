@@ -14,14 +14,10 @@ public class ParserOutput {
     private Command command;
 
     private AdvObject object;
-
+    
     private AdvObjectContainer objectContainer; //contenitore
-
+    
     private AdvObject invObject;
-
-    public ParserOutput(Command command) {
-        this.command = command;
-    }
 
     public ParserOutput(Command command, AdvObject object) {
         this.command = command;
@@ -33,7 +29,7 @@ public class ParserOutput {
         this.object = object;
         this.invObject = invObject;
     }
-
+    
     public ParserOutput(Command command, AdvObject object1, AdvObject invObject, AdvObjectContainer objectContainer) {
         this.command = command;
         this.object = object1;
@@ -52,7 +48,7 @@ public class ParserOutput {
     public AdvObject getObject() {
         return this.object;
     }
-
+    
     public AdvObjectContainer getObject2() {
         return this.objectContainer;
     }
@@ -60,7 +56,7 @@ public class ParserOutput {
     public void setObject(AdvObject object) {
         this.object = object;
     }
-
+    
     public void setObject2(AdvObjectContainer object) {
         this.objectContainer = object;
     }

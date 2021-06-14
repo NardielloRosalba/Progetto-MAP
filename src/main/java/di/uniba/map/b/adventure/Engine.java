@@ -6,6 +6,13 @@
 package di.uniba.map.b.adventure;
 
 import di.uniba.map.b.adventure.games.PianetaGame;
+import di.uniba.map.b.adventure.interfacee.Inizio;
+import di.uniba.map.b.adventure.parser.Parser;
+import di.uniba.map.b.adventure.parser.ParserOutput;
+import di.uniba.map.b.adventure.type.CommandType;
+import di.uniba.map.b.adventure.type.SocketClient;
+import di.uniba.map.b.adventure.type.SocketServer;
+import di.uniba.map.b.adventure.games.PianetaGame;
 import di.uniba.map.b.adventure.parser.Parser;
 import di.uniba.map.b.adventure.parser.ParserOutput;
 import di.uniba.map.b.adventure.type.CommandType;
@@ -34,7 +41,7 @@ import java.util.logging.Logger;
  */
 public class Engine {
 
-    private  GameDescription game;//final
+    private GameDescription game;
 
     private Parser parser;
 
@@ -54,71 +61,71 @@ public class Engine {
     }
 
     public void execute() throws IOException, FileNotFoundException, ClassNotFoundException {
-        
-        /*switch(this.socket()){
+        System.out.println("Attesa comandi!");
+        /*switch (this.socket()) {
             case 0:
+                System.out.println("Inizio nuova partita");
                 System.out.println("========================================");
                 System.out.println("** Adventure Luca, Rosalba, Raffaella **");
                 System.out.println("========================================" + "\n" + "\n");
                 System.out.println("Il protagonista, Capitan Hector, si trova \n"
-                        + "nella Navicella B612 della galassia Reggy e sta per \n"
-                        + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
-                        + "perde il controllo della navicella e di tutti i suoi \n"
-                        + "comandi, per salvarsi dovrà finire tutte le missioni \n"
-                        + "nelle varie stanze,\n"
-                        + "cosi' da ristabilire i comandi persi della\n"
-                        + "navicella.\n");
+                + "nella Navicella B612 della galassia Reggy e sta per \n"
+                + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
+                + "perde il controllo della navicella e di tutti i suoi \n"
+                + "comandi, per salvarsi dovra' completare le missioni \n"
+                + "nelle varie stanze,\n"
+                + "cosi' da ristabilire i comandi persi della\n"
+                + "navicella.\n");
                 System.out.println("");
                 System.out.println(game.getCurrentRoom().getName());
                 System.out.println("");
                 System.out.println(game.getCurrentRoom().getDescription());
-                System.out.println("");
+                System.out.println("");      
                 break;
+                
             case 1:
                 System.out.println("Uscita in corso, addio!!");
                 break;
+                
             case 2:
                 System.out.println("Caricamento partita");
                 this.game = saving_loading.comandoCarica();
-                ParserOutput o = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
+                ParserOutput o = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
                 game.nextMove(o);
-                 break;
+                break;
         }*/
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Cosa devo fare? ");
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
             System.out.println("");
-            ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
+            ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
             if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
-                System.out.println("Addio!");
+                this.game.nextMove(p);
                 break;
                 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.SAVE) {
-                System.out.println("Salvataggio...");
                 saving_loading.comandoSalva(game);
+                System.out.println("Salvataggio avvenuto con successo");
                 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
-                System.out.println("Caricamento...");
                 game = saving_loading.comandoCarica();
+                System.out.println("Caricamento partita in corso");
                 this.game.nextMove(p);
                 
             } else {
                 System.out.println(game.nextMove(p));
                 System.out.println();
             }
+            System.out.println("Cosa devo fare? ");
         }
-        
     }
 
     public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException {
-
         Engine engine = new Engine(new PianetaGame());
-        System.out.println("Attesa comando dal client!");
         engine.execute();
-
     }
 
-    
     public int socket() {
         try {
             String str;
@@ -126,27 +133,31 @@ public class Engine {
             Socket s = ss.accept();
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
-                
-            out.println("cosa vuoi fare?\t\ts->inizia partita\t\tn->esci\t\tc->carica partita");
+
+            //out.println("cosa vuoi fare?\t\ts->inizia partita\t\tn->esci\t\tc->carica partita");
             while (true) {
-                //viene scritta risposta sul client quindi la leggo
                 str = in.readLine();
                 switch (str) {
                     case "s":
-                        out.println("Adios!");
+                        out.println("Ora inizierai una nuova partita! Adios!");
+                        ss.close();
                         return 0;
+                        
                     case "n":
                         out.println("Adios!");
+                        ss.close();
                         return 1;
+                        
                     case "c":
-                        out.println("Adios!");
+                        out.println("Ora riprenderai una vecchia partita! Adios!");
+                        ss.close();
                         return 2;
+                        
                     default:
                         out.println("Comando non riconosciuto");
                         break;
                 }
             }
-
         } catch (IOException ex) {
             Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
         }

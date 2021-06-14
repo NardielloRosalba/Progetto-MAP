@@ -14,26 +14,19 @@ import di.uniba.map.b.adventure.type.CommandType;
 import di.uniba.map.b.adventure.type.Room;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * ATTENZIONE: La descrizione del gioco è fatta in modo che qualsiasi gioco
- * debba estendere la classe GameDescription. L'Engine è fatto in modo che posso
- * eseguire qualsiasi gioco che estende GameDescription, in questo modo si
- * possono creare più gioci utilizzando lo stesso Engine.
  *
- * Diverse migliorie possono essere applicate: - la descrizione del gioco
- * potrebbe essere caricate da file o da DBMS in modo da non modificare il
- * codice sorgente - l'utilizzo di file e DBMS non è semplice poiché all'interno
- * del file o del DBMS dovrebbe anche essere codificata la logica del gioco
- * (nextMove) oltre alla descrizione di stanze, oggetti, ecc...
- *
- * @author pierpaolo
+ * @author le bimbe di Luca
  */
-public class PianetaGame extends GameDescription implements Serializable {
+public class PianetaGame extends GameDescription {
 
     private final int ID_ROOM_SALA_COMANDI = 0;
     private final int ID_ROOM_CORRIDOIO_X = 1;
@@ -68,6 +61,12 @@ public class PianetaGame extends GameDescription implements Serializable {
     private final int ID_OBJECT_FIALA2 = 21;
     private final int ID_OBJECT_FIALA3 = 22;
     private final int ID_OBJECT_FIALA4 = 23;
+    private final int ID_OBJECT_RICETRASMITTENTE = 24;
+    private final int ID_OBJECT_DEPOSITO = 25;
+    private final int ID_OBJECT_TUTA = 26;
+    private final int ID_OBJECT_ANFIBI = 27;
+    private final int ID_OBJECT_ESTINTORE = 28;
+    private final int ID_OBJECT_PANNELLO = 29;
 
     private boolean eventTorcia = false;
     private boolean eventTorciaAccesa = false;
@@ -75,24 +74,29 @@ public class PianetaGame extends GameDescription implements Serializable {
 
     private boolean missioneCorrente = false;
     private boolean missioneCrepa = false;
-    private Thread timerGasTossico = new TimerGasTossico();
-
+    private boolean missioneRipristinoContatti = false;
+    private Thread timerGasTossico = new TimerAvvisoMorte(10, "del gas tossico!");
+    private Thread timerOssigeno = new TimerAvvisoMorte(10, "dell'abbassamento livelli di ossigeno!");
+    private Thread timerScontroSullaTerra = new TimerAvvisoMorte(3, "dello scontro sulla Terra");
     private boolean timerActived = false;
-
-    public static class TimerGasTossico extends Thread implements Serializable {
+     
+    static class TimerAvvisoMorte extends Thread implements Serializable{
 
         int countDown = 10;
         private int taskCount = 0;
+        String causa;
 
-        public TimerGasTossico() {
+        public TimerAvvisoMorte(int num, String causaMorte) {
+            this.countDown = num;
+            this.causa = causaMorte;
         }
 
         @Override
         public void run() {
             while (this.taskCount != countDown) {
-                try {            
+                try {
                     System.out.println(avviso(this.countDown - this.taskCount));
-                    Thread.sleep(5000);
+                    Thread.sleep(60000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
                     System.out.println("Ti sei salvato la vita!");
@@ -104,15 +108,16 @@ public class PianetaGame extends GameDescription implements Serializable {
 
         public String avviso(int n) {
             if (n != 1) {
-                return ("- Mancano " + (this.countDown - this.taskCount) + " minuti prima di morire a causa del gas!");
+                return ("- Mancano " + (this.countDown - this.taskCount) + " minuti prima di morire a causa " + this.causa);
             } else {
-                return ("- Manca " + (this.countDown - this.taskCount) + " minuto prima di morire a causa del gas!");
+                return ("- Manca " + (this.countDown - this.taskCount) + " minuto prima di morire a causa " + this.causa);
             }
         }
-}
 
-@Override
-public void init() throws FileNotFoundException {
+    }
+
+    @Override
+    public void init() throws FileNotFoundException {
         //Commands
         Command nord = new Command(CommandType.NORD, "nord");
         nord.setAlias(new String[]{"n", "N", "Nord", "NORD"});
@@ -151,7 +156,7 @@ public void init() throws FileNotFoundException {
         getCommands().add(look);
 
         Command pickup = new Command(CommandType.PICK_UP, "raccogli");
-        pickup.setAlias(new String[]{"prendi"});
+        pickup.setAlias(new String[]{"prendi", "indossa"});
         getCommands().add(pickup);
 
         Command putDown = new Command(CommandType.PUT_DOWN, "lascia");
@@ -177,7 +182,7 @@ public void init() throws FileNotFoundException {
         Command use = new Command(CommandType.USE, "usa");
         use.setAlias(new String[]{"utilizza", "striscia", "ripara"});
         getCommands().add(use);
-        
+
         Command drink = new Command(CommandType.DRINK, "bevi");
         drink.setAlias(new String[]{"ingoia"});
         getCommands().add(drink);
@@ -197,7 +202,6 @@ public void init() throws FileNotFoundException {
             descrizione += (s + ".\n");
         }
         Room salaComandi = new Room(ID_ROOM_SALA_COMANDI, titolo, descrizione);
-        //salaComandi.setLook("Sei nel corridoio, a nord vedi il bagno, a sud il soggiorno e ad ovest la tua cameretta, forse il gioco sarà lì?");
 
         descrizione = "";
         titolo = fr.nextLine();
@@ -255,8 +259,6 @@ public void init() throws FileNotFoundException {
         }
         Room stanzaEsterna = new Room(ID_ROOM_SALA_ESTERNA, titolo, descrizione);
 
-        // Room yourRoom = new Room(4, "La tua cameratta", "Finalmente la tua cameretta! Questo luogo ti è così famigliare...ma non ricordi dove hai messo il nuovo regalo di zia Lina.");
-        //yourRoom.setLook("C'è un armadio bianco, di solito conservi lì i tuoi giochi.");
         //maps
         salaComandi.setSouth(corridoioX);
         salaComandi.setLock(true);
@@ -318,7 +320,7 @@ public void init() throws FileNotFoundException {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject protocolli = new AdvObject(ID_OBJECT_PROTOCOLLI, titolo, descrizione);
-        protocolli.setAlias(new String[]{"protocolli", "protocolliNavigazione", "fogliNavigazione", "fogli"});
+        protocolli.setAlias(new String[]{"protocolli", "protocollinavigazione", "foglinavigazione", "fogli"});
         protocolli.setPickupable(true);
         armadio.getList().add(protocolli);
 
@@ -336,13 +338,13 @@ public void init() throws FileNotFoundException {
         AdvObject porta = new AdvObject(ID_OBJECT_PORTA, titolo, descrizione);
         //porta.setOpenable(true);
         //porta.setOpen(false);
-        porta.setAlias(new String[]{"porta", "portone", "porta sala"});
+        porta.setAlias(new String[]{"porta", "portone", "portasala"});
         salaComandi.getObjects().add(porta);
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject contatore = new AdvObject(ID_OBJECT_CONTATORE, titolo, descrizione);
-        contatore.setAlias(new String[]{"contatore", "contatoreElettrico"});
+        contatore.setAlias(new String[]{"contatore", "contatoreelettrico"});
         salaElettrica.getObjects().add(contatore);
 
         titolo = obj.nextLine();
@@ -357,7 +359,7 @@ public void init() throws FileNotFoundException {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject parete = new AdvObject(ID_OBJECT_PARETE, titolo, descrizione);
-        parete.setAlias(new String[]{"PareteFili", "parete", "fili"});
+        parete.setAlias(new String[]{"paretefili", "parete", "fili"});
         salaElettrica.getObjects().add(parete);
 
         titolo = obj.nextLine();
@@ -380,7 +382,7 @@ public void init() throws FileNotFoundException {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObjectContainer cassetta = new AdvObjectContainer(ID_OBJECT_CASSETTA, titolo, descrizione);
-        cassetta.setAlias(new String[]{"cassetta", "cassettaProntoSoccorso"});
+        cassetta.setAlias(new String[]{"cassetta", "cassettaprontosoccorso"});
         cassetta.setPickupable(false);
         cassetta.setOpenable(true);
         infermeria.getObjects().add(cassetta);
@@ -388,7 +390,7 @@ public void init() throws FileNotFoundException {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject colla = new AdvObject(ID_OBJECT_COLLA, titolo, descrizione);
-        colla.setAlias(new String[]{"collaIndustiale", "superColla", "colla"});
+        colla.setAlias(new String[]{"collaindustiale", "supercolla", "colla"});
         colla.setUsable(true);
         cassetta.getList().add(colla);
 
@@ -413,7 +415,7 @@ public void init() throws FileNotFoundException {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject laccio = new AdvObject(ID_OBJECT_LACCIO, titolo, descrizione);
-        laccio.setAlias(new String[]{"laccio", "laccio emostatico"});
+        laccio.setAlias(new String[]{"laccio", "laccioemostatico"});
         cassetta.getList().add(laccio);
 
         titolo = obj.nextLine();
@@ -426,7 +428,7 @@ public void init() throws FileNotFoundException {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject lettino = new AdvObject(ID_OBJECT_LETTINO, titolo, descrizione);
-        lettino.setAlias(new String[]{"lettino", "lettinoVisita", "lettoVisita", "letto"});
+        lettino.setAlias(new String[]{"lettino", "lettinovisita", "lettovisita", "letto"});
         lettino.setPickupable(false);
         infermeria.getObjects().add(lettino);
 
@@ -440,27 +442,27 @@ public void init() throws FileNotFoundException {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject libro = new AdvObject(ID_OBJECT_LIBRO, titolo, descrizione);
-        libro.setAlias(new String[]{"libro", "libroFiale"});
+        libro.setAlias(new String[]{"libro", "librofiale"});
         tavolo.getList().add(libro); //aggiungere comando leggi libro/ osserva libro
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject fiala1 = new AdvObject(ID_OBJECT_FIALA1, titolo, descrizione);
         fiala1.setDrinkable(true);
-        fiala1.setAlias(new String[]{"fiala1", "pozione1", "fialaAcqua"});
+        fiala1.setAlias(new String[]{"fiala1", "pozione1", "fialaacqua"});
         tavolo.getList().add(fiala1);
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject fiala2 = new AdvObject(ID_OBJECT_FIALA2, titolo, descrizione);
         fiala2.setDrinkable(true);
-        fiala2.setAlias(new String[]{"fiala2", "pozione2", "fialaAnimali"});
+        fiala2.setAlias(new String[]{"fiala2", "pozione2", "fialaanimali"});
         tavolo.getList().add(fiala2);
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject fiala3 = new AdvObject(ID_OBJECT_FIALA3, titolo, descrizione);
-        fiala3.setAlias(new String[]{"fiala3", "pozione3", "fialagas", "fialaGasTossici"});
+        fiala3.setAlias(new String[]{"fiala3", "pozione3", "fialagas", "fialagastossici", "fialagastossico"});
         fiala3.setDrinkable(true);
         tavolo.getList().add(fiala3);
 
@@ -468,8 +470,50 @@ public void init() throws FileNotFoundException {
         descrizione = obj.nextLine();
         AdvObject fiala4 = new AdvObject(ID_OBJECT_FIALA4, titolo, descrizione);
         fiala4.setDrinkable(true);
-        fiala4.setAlias(new String[]{"fiala4", "pozione4", "fialaPensiero"});
+        fiala4.setAlias(new String[]{"fiala4", "pozione4", "fialapensiero"});
         tavolo.getList().add(fiala4);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObject ricetrasmittente = new AdvObject(ID_OBJECT_RICETRASMITTENTE, titolo, descrizione);
+        ricetrasmittente.setPickupable(false);
+        ricetrasmittente.setVisibile(false);
+        ricetrasmittente.setAlias(new String[]{"ricetrasmittente", "radio", "radiotrasmittente", "ricetrasmettitore"});
+        stanzaTelecomunicazioni.getObjects().add(ricetrasmittente);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObjectContainer deposito = new AdvObjectContainer(ID_OBJECT_DEPOSITO, titolo, descrizione);
+        deposito.setPickupable(false);
+        deposito.setOpenable(true);
+        deposito.setAlias(new String[]{"deposito", "magazzino"});
+        stanzaTelecomunicazioni.getObjects().add(deposito);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObject tuta = new AdvObject(ID_OBJECT_TUTA, titolo, descrizione);
+        tuta.setAlias(new String[]{"tutadaastronauta", "tutaastronauta", "tuta"});
+        deposito.getList().add(tuta);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObject anfibi = new AdvObject(ID_OBJECT_ANFIBI, titolo, descrizione);
+        anfibi.setUsable(true);
+        anfibi.setAlias(new String[]{"anfibi", "stivali", "scarpe"});
+        deposito.getList().add(anfibi);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObject estintore = new AdvObject(ID_OBJECT_ESTINTORE, titolo, descrizione);
+        estintore.setUsable(true);
+        estintore.setAlias(new String[]{"anfibi", "stivali", "scarpe"});
+        deposito.getList().add(estintore);
+
+        titolo = obj.nextLine();
+        descrizione = obj.nextLine();
+        AdvObject pannello = new AdvObject(ID_OBJECT_PANNELLO, titolo, descrizione);
+        pannello.setAlias(new String[]{"pannello", "pannelloemergenza"});
+        stanzaEsterna.getObjects().add(pannello);
 
         //AGGIUNGO COMBINAZIONI PER OGNI STANZA
         salaComandi.addCombinazioni(porta, tessera);
@@ -544,7 +588,7 @@ public void init() throws FileNotFoundException {
     }
 
     @Override
-public String nextMove(ParserOutput p) {
+    public String nextMove(ParserOutput p) {
         StringBuilder output = new StringBuilder();
 
         if (p.getCommand() == null) {
@@ -591,9 +635,6 @@ public String nextMove(ParserOutput p) {
                     case OPEN:
                         output = comandoOpen(p, output);
                         break;
-                    case PUSH:
-                        output = comandoPush(p, output);
-                        break;
                     case TURN_ON:
                         output = comandoTurnOn(p, output);
                         break;
@@ -602,9 +643,13 @@ public String nextMove(ParserOutput p) {
                         break;
                     case TURN_OFF:
                         output = comandoTurnOff(p, output);
-                        break;
+                        break;       
                     case LOAD:
                         checkTimer();
+                        break;
+                    case END:
+                        end(output.append("Addio!"));
+                        break;
                     default:
                         break;
                 }
@@ -716,7 +761,6 @@ public String nextMove(ParserOutput p) {
                     output.append("Un vicolo cieco, da qui non si puo' proprio andare da nessuna parte. Ti conviene cambiare direzione...\n");
             }
         } else if (move) {
-
             output.append("           ////  ").append(getCurrentRoom().getName()).append("   ////");
             output.append("\n=====================================================================\n");
             if ((getCurrentRoom().getId() == ID_ROOM_SALA_COMANDI || getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X) || eventTorciaAccesa || missioneCorrente) {
@@ -728,20 +772,33 @@ public String nextMove(ParserOutput p) {
             //oppure aggiungere una seconda descrizione se la stanza è stata già visitata
             // o se ha compiuto una missione!!!
             if (getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X && eventTorcia == false) {
-                /*try {
-                    attivaThread();
-                } catch (InterruptedException ex) {
-                    output.append("Errore nel thread ").append(ex.getMessage());
-                }*/
                 output.append("\n\n_________!!!ATTENZIONE!!!_________ \n"
                         + "Sei inciampato su un oggetto! \n");
             }
             if (getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_NORD && eventAvvisoCrepa == false) {
                 eventAvvisoCrepa = true;
-                timerGasTossico.start();
-                timerActived = true;
+                if (getInventory().cercaObject(ID_OBJECT_FIALA3) != null) {
+                    AdvObject fiala = getInventory().cercaObject(ID_OBJECT_FIALA3);
+                    if (fiala.isBevuta()) {
+                        output.append("Il gas tossico non puo' nuocere alla tua salute perche' hai bevuto prima la fiala\n"
+                                + "Sei immune!");
+                    } else {
+                        timerGasTossico.start();
+                        timerActived = true;
+                    }
+                } else {
+                    timerGasTossico.start();
+                    timerActived = true;
+                }
                 getCurrentRoom().setDescription("La navicella si e' danneggiata in seguito allo scontro.\nE' presente un crepa da cui entra"
                         + " un gas tossico che puo' nuocere alla tua salute.\nSei nel 'Corridoio Nord'!\nE' possibile dirigerti a sud o a est in cui e' presente una porta.");
+            }
+            if (getCurrentRoom().getId() == ID_ROOM_SALA_ESTERNA) {
+                if (getInventory().cercaObject(ID_OBJECT_TUTA) == null) {
+                    output.append("Hai sbagliato ad uscire senza tuta.\n Sei morto!");
+                    this.end(output);
+                }
+                timerScontroSullaTerra.start();
             }
         } else if (roomLocked) {
             output.append("La stanza è bloccata prima di cambiare stanza dovresti fare qualcosa\n");
@@ -794,7 +851,7 @@ public String nextMove(ParserOutput p) {
 
     private StringBuilder comandoInventory(ParserOutput p, StringBuilder output) {
         output.append("Nel tuo inventario ci sono:\n");
-        for (AdvObject o : getInventory()) {
+        for (AdvObject o : getInventory().getList()) {
             output.append(o.getName()).append(": ").append(o.getDescription()).append("\n");
         }
         return output;
@@ -816,13 +873,50 @@ public String nextMove(ParserOutput p) {
             //aggiungere il fatto che vengano elencati gli elementi che contiene e dove è possibile andare
             output.append("Non c'è niente di interessante qui.");
         } else if (p.getObject() != null && p.getObject().getDescription() != null && p.getObject().isVisibile() == true && p.getInvObject() == null && p.getObject2() == null) {
-            output.append(p.getObject().getDescription());
             if (p.getObject().getId() == ID_OBJECT_PARETE) {
                 getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setVisibile(true);
                 getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setPickupable(true);
             }
             if (p.getObject().getId() == ID_OBJECT_CONTATORE) {
                 getCurrentRoom().cercaObject(ID_OBJECT_LUCCHETTO).setVisibile(true);
+            }
+            if (p.getObject().getId() == ID_OBJECT_RICETRASMITTENTE) {
+                if (!missioneRipristinoContatti) {
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.println("Vuoi riprestinare i contatti col tuo pianeta?");
+                    while (scanner.hasNextLine()) {
+                        String risposta = scanner.nextLine().toLowerCase();
+                        if (risposta.equals("si")) {
+                            ripristinoContatti();
+                            break;
+                        } else if (risposta.equals("no")) {
+                            break;
+                        } else {
+                            System.out.println("Inserire SOLO \"si\" o \"no\" \n");
+                        }
+                    }
+                } else {
+                    System.out.println("Hai ricevuto il seguente messaggio: \n");
+                    stampaMessaggioPianeta();
+                }
+            }
+            if (p.getObject().getId() == ID_OBJECT_PANNELLO) {
+                System.out.println(output);
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Vuoi attivare l'atterraggio d'emergenza?");
+                while (scanner.hasNextLine()) {
+                    String risposta = scanner.nextLine().toLowerCase();
+                    if (risposta.equals("si")) {
+                        attivazioneAtterraggioEmergenza(output);
+                        break;
+                    } else if (risposta.equals("no")) {
+                        break;
+                    } else {
+                        System.out.println("Inserire SOLO \"si\" o \"no\" \n");
+                    }
+                }
+            } else {
+                output.append(p.getObject().getDescription());
             }
             if (p.getObject() instanceof AdvObjectContainer && (!p.getObject().isOpenable() || (p.getObject().isOpenable() && p.getObject().isOpen()))) {
                 AdvObjectContainer c = (AdvObjectContainer) p.getObject();
@@ -849,6 +943,61 @@ public String nextMove(ParserOutput p) {
             output.append("Non è possibile osservare nulla!");
         }
         return output;
+    }
+
+    private void ripristinoContatti() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("sequenza: ''11 22 .. 30 22 44''\n");
+        System.out.println("Quale numero inserisco? (scrivi solo il numero)\n");
+        while (scanner.hasNextLine()) {
+            String risposta = scanner.nextLine().trim();
+            if (Integer.parseInt(risposta) == 15) {
+                System.out.println("Contatti riprestinati\n");
+                missioneRipristinoContatti = true;
+                System.out.println("Hai ricevuto il seguente messaggio: \n");
+                stampaMessaggioPianeta();
+                if (getInventory().cercaObject(ID_OBJECT_TUTA) == null) {
+                    timerOssigeno.start();
+                } else {
+                    System.out.println("Grazie alla tuta che hai preso prima riesci a respirare ancora");
+                }
+                getCurrentRoom().cercaObject(ID_OBJECT_RICETRASMITTENTE).setDescription("serve per entrare in contatto col tuo pianeta");
+                break;
+            } else {
+                System.out.println("Non valido.\n");
+                break;
+            }
+        }
+    }
+
+    private void attivazioneAtterraggioEmergenza(StringBuilder output) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Per attivare l'atterraggio d'emergenza dovrai rispondere alla seguente domanda:\n"
+                + "\"Attraversa il vetro ma senza romperlo. Cosa è?\" \n");
+        System.out.println("Quale parola inserisco? (scrivi solo la parola)\n");
+        while (scanner.hasNextLine()) {
+            String risposta = scanner.nextLine().trim();
+            if (risposta.equals("luce")) {
+                System.out.println("Hai attivato l'atterraggio d'emergenza\n");
+                timerScontroSullaTerra.interrupt();
+                //scriviamo qualcosa per dire che e' finito il gioco
+                System.out.println("Gioco Finito, alla prossima!");
+                this.end(output);
+                break;
+            } else {
+                System.out.println("Parola non valida.\n");
+                break;
+            }
+        }
+    }
+
+    private void stampaMessaggioPianeta() {
+        System.out.println("\"Salve Capitan Hector!\n"
+                + "Finalmente siamo riusciti a localizzarti, avevamo quasi perso le speranze! \n"
+                + "Attenzione! La tua navicella sta per entrare nell’Atmosfera del nostro pianeta e si sta per incendiare.\n"
+                + "I valori dell’ossigeno presente nella tua navicella si stanno abbassando rapidamente.\n"
+                + "Ti sollecitiamo di ripristinare l’impianto dell’ossigeno e ritornare sulla tua rotta. Buona Fortuna!\n"
+                + "Speriamo di rivederti al più presto… \"\n");
     }
 
     private StringBuilder comandoUse(ParserOutput p, StringBuilder output) {
@@ -881,11 +1030,11 @@ public String nextMove(ParserOutput p) {
         }
         return output;
     }
-     
+
     private StringBuilder comandoDrink(ParserOutput p, StringBuilder output) {
         if (p.getInvObject() == null && p.getObject() == null && p.getObject2() == null) {
             output.append("Devi specificare l'oggetto");
-        } else if (p.getInvObject() == null && p.getObject() != null && p.getObject2() == null){
+        } else if (p.getInvObject() == null && p.getObject() != null && p.getObject2() == null) {
             output.append("Devi avere l'oggetto nell'inventario");
         } else if (p.getInvObject() != null && p.getObject() == null && p.getObject2() == null) {
             if (p.getInvObject().isDrinkable()) {
@@ -894,11 +1043,10 @@ public String nextMove(ParserOutput p) {
                 } else {
                     output.append("Hai bevuto ").append(p.getInvObject().getName());
                     p.getInvObject().setBevuta(true);
-                    if (p.getInvObject().getId() == ID_OBJECT_FIALA3){
+                    if (p.getInvObject().getId() == ID_OBJECT_FIALA3) {
                         if (timerGasTossico.isAlive()) {
                             timerGasTossico.interrupt();
-                            output.append("\nBravo, sei riuscito a salvarti la vita!");
-                            output.append("\nSono vivo? " + timerGasTossico.isAlive());
+                            output.append("\nBravo!");
                         }
                     }
                 }
@@ -910,7 +1058,7 @@ public String nextMove(ParserOutput p) {
     }
 
     private StringBuilder comandoPickUp(ParserOutput p, StringBuilder output) {
-        if (p.getObject() != null && p.getObject2() == null) {
+        if (p.getObject() != null && p.getObject2() == null && p.getInvObject() == null) {
             if (p.getObject().isPickupable()) {
                 getInventory().add(p.getObject());
                 if (p.getObject().getId() == ID_OBJECT_PARETE) {
@@ -926,7 +1074,7 @@ public String nextMove(ParserOutput p) {
             } else {
                 output.append("Non puoi raccogliere questo oggetto.");
             }
-        } else if (p.getObject() != null && p.getObject2() != null) {
+        } else if (p.getObject() != null && p.getObject2() != null && p.getInvObject() == null) {
             if (p.getObject2().isOpenable() && !(p.getObject2().isOpen())) {
                 output.append(p.getObject2().getName()).append(" e' chiuso. Aprilo prima!");
             } else { //caso in cui non sia apribile(es tavolo con pozioni) o e' gia aperto 
@@ -940,6 +1088,9 @@ public String nextMove(ParserOutput p) {
                             it.remove();
                             output.append("Hai preso: ").append(p.getObject().getName());
                             output.append("\nVerra' inserito nell'inventario");
+                            if (p.getObject().getId() == ID_OBJECT_TUTA && timerOssigeno.isAlive()) {
+                                timerOssigeno.interrupt();
+                            }
                         }
                     }
                     output.append("\n");
@@ -947,6 +1098,8 @@ public String nextMove(ParserOutput p) {
                     output.append(p.getObject2().getName()).append(" non contiene nulla.");
                 }
             }
+        } else if (p.getObject() == null && p.getObject2() == null && p.getInvObject() != null) {
+            output.append("L'hai gia' preso!");
         } else {
             output.append("Non c'è niente da raccogliere qui.");
         }
@@ -1003,9 +1156,9 @@ public String nextMove(ParserOutput p) {
                 if (p.getObject().isOpenable() && getCurrentRoom().vediCombinazioni_(p.getObject())) {
                     output.append("L'oggetto ").append(p.getObject().getName()).append(" non si puo' aprire in questo modo!");
                 } else if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
+                    output.append("Hai aperto: ").append(p.getObject().getName()).append("\n");
+                    p.getObject().setOpen(true);
                     if (p.getObject() instanceof AdvObjectContainer) { //oggetto contenitore
-                        output.append("Hai aperto: ").append(p.getObject().getName()).append("\n");
-                        p.getObject().setOpen(true);
                         AdvObjectContainer c = (AdvObjectContainer) p.getObject();
                         if (!c.getList().isEmpty()) {
                             output.append(c.getName()).append(" contiene:");
@@ -1018,12 +1171,9 @@ public String nextMove(ParserOutput p) {
                                 //it.remove();
                             }
                         }
-                    } else if (p.getObject().isOpenable() && p.getObject().isOpen()) {
-                        output.append("E' gia' aperto ").append(p.getObject().getName());
-                    } else {
-                            output.append("Hai aperto: ").append(p.getObject().getName());
-                            p.getObject().setOpen(true);
                     }
+                } else if (p.getObject().isOpenable() && p.getObject().isOpen()) {
+                    output.append("E' gia' aperto ").append(p.getObject().getName());
                 } else {
                     output.append("Non puoi aprire questo oggetto.");
                 }
@@ -1037,13 +1187,14 @@ public String nextMove(ParserOutput p) {
                         if (p.getObject().getId() == ID_OBJECT_LUCCHETTO) {
                             getCurrentRoom().cercaObject(ID_OBJECT_LEVA).setVisibile(true);
                             p.getObject().setDescription("Un semplice lucchetto");
+                            getCurrentRoom().cercaObject(ID_OBJECT_CONTATORE).setDescription("Al centro di esso e' presente una leva che e' possibile alzare");
                         }
-                    } else if (p.getObject().isOpenable() && p.getObject().isOpen()){
+                    } else if (p.getObject().isOpenable() && p.getObject().isOpen()) {
                         output.append("E' gia' aperto!");
                     } else {
                         output.append("Non puoi fare cosi'!");
                     }
-                    
+
                 } else {
                     output.append("Non puoi fare cosi'!");
                 }
@@ -1078,24 +1229,6 @@ public String nextMove(ParserOutput p) {
         return output;
     }
 
-    private StringBuilder comandoPush(ParserOutput p, StringBuilder output) {
-        //ricerca oggetti pushabili
-        if (p.getObject() != null && p.getObject().isPushable()) {
-            output.append("Hai premuto: ").append(p.getObject().getName()).append("\n");
-            /*if (p.getObject().getId() == 3) {
-                        end(out);
-                        }*/
-        } else if (p.getInvObject() != null && p.getInvObject().isPushable()) {
-            output.append("Hai premuto: ").append(p.getInvObject().getName()).append("\n");
-            /*if (p.getInvObject().getId() == 3) {
-                                end(out);
-                            }*/
-        } else {
-            output.append("Non ci sono oggetti che puoi premere qui.\n");
-        }
-        return output;
-    }
-
     private StringBuilder comandoPull(ParserOutput p, StringBuilder output) {
         //ricerca oggetti pullabili
         if (p.getObject() != null && p.getObject().isPullable() && p.getObject().isVisibile()) {
@@ -1107,6 +1240,7 @@ public String nextMove(ParserOutput p) {
                 if (ID_OBJECT_LEVA == p.getObject().getId()) {
                     output.append("\nAdesso sei riuscito ad accedere le luci della navicella.");
                     missioneCorrente = true;
+                    p.getObject().setDescription("Semplice leva alzata");
                     for (Room room : getRooms()) {
                         if (room.getId() == ID_ROOM_SALA_COMANDI) {
                             room.setLook("Riesci a vedere tutti i comandi che però"
@@ -1115,45 +1249,35 @@ public String nextMove(ParserOutput p) {
                         if (room.getId() == ID_ROOM_CORRIDOIO_X) {
                             room.setLook("E' un semplice corridoio, cosa ti aspettavi?! Continua con le tue missioni!!");
                         }
+                        if (room.getId() == ID_ROOM_SALA_TELECOMUNICAZIONI) {
+                            room.cercaObject(ID_OBJECT_RICETRASMITTENTE).setVisibile(true);
+                        }
                     }
                 }
             }
-        } else if (p.getInvObject() != null && p.getInvObject().isPushable()) {
+        } else if (p.getInvObject() != null && p.getInvObject().isPullable()) {
             if (p.getInvObject().isPull() == true) {
                 output.append(p.getInvObject().getName()).append(" era stato gia' alzato.\nHai perso la memoria per caso?");
             } else {
                 p.getInvObject().setPull(true);
                 output.append(p.getInvObject().getName()).append(" e' stato alzato");
-                if (ID_OBJECT_LEVA == p.getInvObject().getId()) {
-                    output.append("\nAdesso sei riuscito ad accedere le luci della navicella.");
-                    //cambiare tutte le descrizioni!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                }
             }
         } else {
             output.append("Non ci sono oggetti che puoi alzare qui.\n");
         }
         return output;
     }
-
+    
     public void checkTimer(){
         if(timerActived){
-            /*System.out.println(TimerGasTossico.activeCount());//1
-            System.out.println(TimerGasTossico.currentThread().getThreadGroup());
-            System.out.println(TimerGasTossico.currentThread().getId());//1
-            System.out.print("\n");*/
-            if(TimerGasTossico.activeCount() == 1){//
-                //System.out.println(TimerGasTossico.currentThread());
+            if(timerGasTossico.activeCount() == 1){//
                 timerGasTossico.start();
             }
-            /*System.out.println(TimerGasTossico.activeCount());//1
-            System.out.println(TimerGasTossico.currentThread().getThreadGroup());
-            System.out.println(TimerGasTossico.currentThread().getId());//1*/
         }
-}
+    }
     
     private void end(StringBuilder output) {
         System.out.println(output);
         System.exit(0);
     }
-
 }
