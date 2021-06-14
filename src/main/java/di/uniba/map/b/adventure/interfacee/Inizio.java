@@ -51,8 +51,7 @@ public class Inizio extends javax.swing.JFrame {
         setFont(new java.awt.Font("Agency FB", 1, 10)); // NOI18N
         setForeground(new java.awt.Color(0, 0, 0));
         setResizable(false);
-
-        jLabelImage.setIcon((new ImageIcon("resources/Spazio.png")));
+        jLabelImage.setIcon(new ImageIcon("resources/Spazio.png"));
         jLabelImage.setOpaque(true);
 
         jButtonIniziaPartita1.setBackground(new java.awt.Color(0, 0, 255));
@@ -134,8 +133,8 @@ public class Inizio extends javax.swing.JFrame {
         option = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler chiudere il gioco?", "Uscita gioco", JOptionPane.YES_NO_OPTION);
         if (option == JOptionPane.YES_OPTION) {
             out.println("n");
+            this.dispose();
         }
-        this.dispose();
     }//GEN-LAST:event_jButtonEsciActionPerformed
 
     private void jButtonIniziaPartita1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniziaPartita1ActionPerformed

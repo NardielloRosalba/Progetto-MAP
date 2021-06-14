@@ -26,43 +26,31 @@ public class SocketClient {
 
     public static void main(String args[]) throws UnknownHostException, IOException {
         //public SocketClient() throws UnknownHostException, IOException {
-        String str = "";
+        //String str = "";
         Scanner scan = new Scanner(System.in);
         InetAddress add = InetAddress.getByName("localhost");
-        System.out.println(add);//localhost/127.0.0.1
-        Socket s = new Socket(add, 6666);
-        BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        //ho creato uno spazio comune Flush di input
-        PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
-        Inizio interfacciaInizio = new Inizio(out);
-        interfacciaInizio.setVisible(true);
-        JOptionPane.showMessageDialog(null, "Connessione avvenuta con successo", "Connessione socket", JOptionPane.INFORMATION_MESSAGE);
+        //System.out.println(add);//localhost/127.0.0.1
+        try ( Socket s = new Socket(add, 6666)) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
 
-        //spazio comune di output client-server
-        //leggo dal server
-        str = in.readLine();
-        
-        String ris_serv, ris_cl;//risposta server,risposta client
-        while (true) {
-            //JOptionPane.showMessageDialog(null, str, "Sono qui", JOptionPane.INFORMATION_MESSAGE);
-            //System.out.println(str + "-");//stampa delle possibilità
-            //rispondo al server
-            //ris_cl = scan.next();
-            //out.println(ris_cl);
-            //leggo esito
-            ris_serv = in.readLine();
-            if (ris_serv.equals("Adios!")) {
-                break;
-            } else {
-                //System.out.println(ris_serv);
-                JOptionPane.showMessageDialog(null, ris_serv, "Sono qui", JOptionPane.INFORMATION_MESSAGE);
+            Inizio interfacciaInizio = new Inizio(out);
+            interfacciaInizio.setVisible(true);
+            JOptionPane.showMessageDialog(null, "Connessione avvenuta con successo", "Connessione socket", JOptionPane.INFORMATION_MESSAGE);
+
+            String ris_serv, ris_cl;//risposta server,risposta client
+            while (true) {
+                //System.out.println(str + "-");//stampa delle possibilità
+                //ris_cl = scan.next();
+                ris_serv = in.readLine();
+                JOptionPane.showMessageDialog(null, ris_serv, "Risposta server", JOptionPane.INFORMATION_MESSAGE);
+                if (ris_serv.endsWith("Adios!")) {
+                    break;
+                } else {
+                    JOptionPane.showMessageDialog(null, ris_serv, "Sono qui", JOptionPane.INFORMATION_MESSAGE);
+                }
+
             }
-
         }
-        s.close();
-    }
-
-    public String risposta(String Risposta) {
-        return Risposta;
     }
 }

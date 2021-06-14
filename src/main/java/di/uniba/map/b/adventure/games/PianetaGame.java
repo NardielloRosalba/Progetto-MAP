@@ -15,6 +15,7 @@ import di.uniba.map.b.adventure.type.Room;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
@@ -74,27 +75,37 @@ public class PianetaGame extends GameDescription {
     private boolean missioneCorrente = false;
     private boolean missioneCrepa = false;
     private boolean missioneRipristinoContatti = false;
-    private Thread timerGasTossico = new TimerAvvisoMorte(10, "del gas tossico!");
-    private Thread timerOssigeno = new TimerAvvisoMorte(10, "dell'abbassamento livelli di ossigeno!");
-    private Thread timerScontroSullaTerra = new TimerAvvisoMorte(3, "dello scontro sulla Terra");
+    
+    private Thread timerGasTossico = new TimerAvvisoMorte("del gas tossico!");
+    //private boolean timerActived = false;
 
-    static class TimerAvvisoMorte extends Thread {
+    private Thread timerOssigeno = new TimerAvvisoMorte("dell'abbassamento livelli di ossigeno!");
+    //private boolean timerActived = false;
+
+    private Thread timerScontroSullaTerra = new TimerAvvisoMorte(3, "dello scontro sulla Terra");
+    //private boolean timerActived = false;
+     
+    static class TimerAvvisoMorte extends Thread implements Serializable{
 
         int countDown = 10;
         private int taskCount = 0;
         String causa;
-
+                
         public TimerAvvisoMorte(int num, String causaMorte) {
             this.countDown = num;
             this.causa = causaMorte;
         }
-
+        
+        public TimerAvvisoMorte(String causaMorte) {
+            this.causa = causaMorte;
+        }
+        
         @Override
         public void run() {
             while (this.taskCount != countDown) {
                 try {
                     System.out.println(avviso(this.countDown - this.taskCount));
-                    Thread.sleep(60000);
+                    Thread.sleep(5000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
                     System.out.println("Ti sei salvato la vita!");
@@ -334,7 +345,7 @@ public class PianetaGame extends GameDescription {
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject porta = new AdvObject(ID_OBJECT_PORTA, titolo, descrizione);
-        //porta.setOpenable(true);
+        porta.setOpenable(true);
         //porta.setOpen(false);
         porta.setAlias(new String[]{"porta", "portone", "portasala"});
         salaComandi.getObjects().add(porta);
@@ -641,6 +652,12 @@ public class PianetaGame extends GameDescription {
                         break;
                     case TURN_OFF:
                         output = comandoTurnOff(p, output);
+                        break;       
+                    case LOAD:
+                        checkTimer();
+                        break;
+                    case END:
+                        end(output.append("Addio!"));
                         break;
                     default:
                         break;
@@ -788,7 +805,7 @@ public class PianetaGame extends GameDescription {
                     output.append("Hai sbagliato ad uscire senza tuta.\n Sei morto!");
                     this.end(output);
                 }
-                timerScontroSullaTerra.start();
+                    timerScontroSullaTerra.start();
             }
         } else if (roomLocked) {
             output.append("La stanza è bloccata prima di cambiare stanza dovresti fare qualcosa\n");
@@ -873,7 +890,7 @@ public class PianetaGame extends GameDescription {
             if (p.getObject().getId() == ID_OBJECT_RICETRASMITTENTE) {
                 if (!missioneRipristinoContatti) {
                     Scanner scanner = new Scanner(System.in);
-                    System.out.println("Vuoi riprestinare i contatti col tuo pianeta?");
+                    System.out.println("Vuoi ripristinare i contatti col tuo pianeta?");
                     while (scanner.hasNextLine()) {
                         String risposta = scanner.nextLine().toLowerCase();
                         if (risposta.equals("si")) {
@@ -947,7 +964,7 @@ public class PianetaGame extends GameDescription {
                 System.out.println("Hai ricevuto il seguente messaggio: \n");
                 stampaMessaggioPianeta();
                 if (getInventory().cercaObject(ID_OBJECT_TUTA) == null) {
-                    timerOssigeno.start();
+                        timerOssigeno.start();
                 } else {
                     System.out.println("Grazie alla tuta che hai preso prima riesci a respirare ancora");
                 }
@@ -1170,9 +1187,14 @@ public class PianetaGame extends GameDescription {
             } else if (p.getObject() != null && p.getInvObject() != null && p.getObject2() == null) {
                 if (getCurrentRoom().vediCombinazioni(p.getInvObject(), p.getObject())) {
                     if (p.getObject().isOpenable() && p.getObject().isOpen()) {
-                        output.append("L'oggetto ").append(p.getObject().getName()).append(" e' gia' aperto");
+                        output.append("L'oggetto ").append(p.getObject().getName()).append(" e' gia' aperto").append("\n");
                     } else if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
-                        output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato aperto");
+                        output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato aperto").append("\n");
+                        p.getObject().setOpen(true);
+                        if(p.getObject().getId() == ID_OBJECT_PORTA){
+                            output.append("Hai aperto tutte le porte della navicella");
+                            getCurrentRoom().setLock(false);
+                        }
                         getCurrentRoom().togliCombinazione(p.getInvObject(), p.getObject());
                         if (p.getObject().getId() == ID_OBJECT_LUCCHETTO) {
                             getCurrentRoom().cercaObject(ID_OBJECT_LEVA).setVisibile(true);
@@ -1257,7 +1279,19 @@ public class PianetaGame extends GameDescription {
         }
         return output;
     }
-
+    
+    public void checkTimer(){
+            if(timerGasTossico.activeCount() == 1){
+                timerGasTossico.start();
+                
+            }else if(timerOssigeno.activeCount() == 1){
+                timerOssigeno.start();
+                
+            }else if(timerScontroSullaTerra.activeCount() == 1){
+                timerScontroSullaTerra.start();
+            }
+    }
+    
     private void end(StringBuilder output) {
         System.out.println(output);
         System.exit(0);
