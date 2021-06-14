@@ -31,6 +31,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * ATTENZIONE: l'Engine è molto spartano, in realtà demanda la logica alla
@@ -103,16 +104,16 @@ public class Engine {
             if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
                 this.game.nextMove(p);
                 break;
-                
+
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.SAVE) {
                 saving_loading.comandoSalva(game);
                 System.out.println("Salvataggio avvenuto con successo");
-                
+
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
                 game = saving_loading.comandoCarica();
                 System.out.println("Caricamento partita in corso");
                 this.game.nextMove(p);
-                
+
             } else {
                 System.out.println(game.nextMove(p));
                 System.out.println();
@@ -141,17 +142,17 @@ public class Engine {
                         out.println("Ora inizierai una nuova partita! Adios!");
                         ss.close();
                         return 0;
-                        
+
                     case "n":
                         out.println("Adios!");
                         ss.close();
                         return 1;
-                        
+
                     case "c":
                         out.println("Ora riprenderai una vecchia partita! Adios!");
                         ss.close();
                         return 2;
-                        
+
                     default:
                         out.println("Comando non riconosciuto");
                         break;
