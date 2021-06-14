@@ -97,8 +97,8 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabelImage">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\nasca\Progetto-MAP\resources\Spazio.png"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="(new ImageIcon(&quot;resources/Spazio.png&quot;))" type="code"/>
         </Property>
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>

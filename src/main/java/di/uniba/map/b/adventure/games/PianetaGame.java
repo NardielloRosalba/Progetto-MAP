@@ -941,7 +941,7 @@ public class PianetaGame extends GameDescription {
         System.out.println("Quale numero inserisco? (scrivi solo il numero)\n");
         while (scanner.hasNextLine()) {
             String risposta = scanner.nextLine().trim();
-            if (risposta.equals("15")) {
+            if (Integer.parseInt(risposta) == 15) {
                 System.out.println("Contatti riprestinati\n");
                 missioneRipristinoContatti = true;
                 System.out.println("Hai ricevuto il seguente messaggio: \n");
