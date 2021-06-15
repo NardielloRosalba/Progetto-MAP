@@ -51,7 +51,8 @@ public class Inizio extends javax.swing.JFrame {
         setFont(new java.awt.Font("Agency FB", 1, 10)); // NOI18N
         setForeground(new java.awt.Color(0, 0, 0));
         setResizable(false);
-        jLabelImage.setIcon(new ImageIcon("resources/Spazio.png"));
+
+        jLabelImage.setIcon(new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Spazio.png"));
         jLabelImage.setOpaque(true);
 
         jButtonIniziaPartita1.setBackground(new java.awt.Color(0, 0, 255));

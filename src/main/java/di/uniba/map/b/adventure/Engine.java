@@ -97,13 +97,14 @@ public class Engine {
                 break;
 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.SAVE) {
-                saving_loading.comandoSalva(game);
+                this.game.nextMove(p);
                 System.out.println("Salvataggio avvenuto con successo");
 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
-                game = saving_loading.comandoCarica();
-                System.out.println("Caricamento partita in corso");
+                //game = saving_loading.comandoCarica();//rimuovi
                 this.game.nextMove(p);
+                System.out.println("Caricamento partita avvenuto con successo");
+
 
             } else {
                 System.out.println(game.nextMove(p));

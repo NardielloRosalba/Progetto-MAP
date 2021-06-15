@@ -5,8 +5,10 @@
  */
 package di.uniba.map.b.adventure.games;
 
+import di.uniba.map.b.adventure.Database;
 import di.uniba.map.b.adventure.GameDescription;
 import di.uniba.map.b.adventure.parser.ParserOutput;
+import di.uniba.map.b.adventure.saving_loading;
 import di.uniba.map.b.adventure.type.AdvObject;
 import di.uniba.map.b.adventure.type.AdvObjectContainer;
 import di.uniba.map.b.adventure.type.Command;
@@ -14,10 +16,14 @@ import di.uniba.map.b.adventure.type.CommandType;
 import di.uniba.map.b.adventure.type.Room;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -658,8 +664,35 @@ public class PianetaGame extends GameDescription {
                         output = comandoTurnOff(p, output);
                         break;       
                     case LOAD:
+                        try {
+                            Database db2 = new Database();
+                            db2.getInfo();
+                            db2.saving(this, "load");
+                        } catch (SQLException ex) {
+                            Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                        Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+                            }catch (ClassNotFoundException ex) {
+                        Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         checkTimer();
-                        break;
+                    break;
+
+                    case SAVE:
+                        try {
+                            Database db = new Database();
+                            try {
+                                db.getInfo();
+                                db.saving(this, "save");
+                            } catch (IOException ex) {
+                                Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } catch (SQLException ex) {
+                            Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    break;
                     case END:
                         end(output.append("Addio!"));
                         break;

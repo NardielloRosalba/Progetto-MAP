@@ -1,0 +1,74 @@
+2021-06-15 18:24:25 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: Method is only allowed for a query. Use execute or executeUpdate instead of executeQuery; SQL statement:
+INSERT into game VALUES(?,?,?) [90002-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:505)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.command.Prepared.query(Prepared.java:231)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:285)
+	at org.h2.command.Command.executeQuery(Command.java:195)
+	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:114)
+	at di.uniba.map.b.adventure.Database.saving(Database.java:165)
+	at di.uniba.map.b.adventure.games.PianetaGame.nextMove(PianetaGame.java:693)
+	at di.uniba.map.b.adventure.Engine.execute(Engine.java:100)
+	at di.uniba.map.b.adventure.Engine.main(Engine.java:119)
+2021-06-15 18:32:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Serialization failed, cause: "java.io.NotSerializableException: java.io.ObjectOutputStream" [90026-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:590)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:194)
+	at org.h2.util.JdbcUtils.serialize(JdbcUtils.java:390)
+	at org.h2.value.ValueJavaObject.getNoCopy(ValueJavaObject.java:50)
+	at org.h2.value.DataType.convertToValue1(DataType.java:1351)
+	at org.h2.value.DataType.convertToValue(DataType.java:1216)
+	at org.h2.jdbc.JdbcPreparedStatement.setObject(JdbcPreparedStatement.java:512)
+	at di.uniba.map.b.adventure.Database.saving(Database.java:164)
+	at di.uniba.map.b.adventure.games.PianetaGame.nextMove(PianetaGame.java:693)
+	at di.uniba.map.b.adventure.Engine.execute(Engine.java:100)
+	at di.uniba.map.b.adventure.Engine.main(Engine.java:119)
+Caused by: java.io.NotSerializableException: java.io.ObjectOutputStream
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1185)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:349)
+	at org.h2.util.JdbcUtils.serialize(JdbcUtils.java:387)
+	... 8 more
+2021-06-15 18:35:33 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Serialization failed, cause: "java.io.NotSerializableException: java.io.ByteArrayOutputStream" [90026-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:590)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:194)
+	at org.h2.util.JdbcUtils.serialize(JdbcUtils.java:390)
+	at org.h2.value.ValueJavaObject.getNoCopy(ValueJavaObject.java:50)
+	at org.h2.value.DataType.convertToValue1(DataType.java:1351)
+	at org.h2.value.DataType.convertToValue(DataType.java:1216)
+	at org.h2.jdbc.JdbcPreparedStatement.setObject(JdbcPreparedStatement.java:512)
+	at di.uniba.map.b.adventure.Database.saving(Database.java:164)
+	at di.uniba.map.b.adventure.games.PianetaGame.nextMove(PianetaGame.java:693)
+	at di.uniba.map.b.adventure.Engine.execute(Engine.java:100)
+	at di.uniba.map.b.adventure.Engine.main(Engine.java:119)
+Caused by: java.io.NotSerializableException: java.io.ByteArrayOutputStream
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1185)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:349)
+	at org.h2.util.JdbcUtils.serialize(JdbcUtils.java:387)
+	... 8 more
+2021-06-15 22:57:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 22:58:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 23:02:17 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 23:04:07 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 23:26:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 23:28:20 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 23:32:33 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 23:33:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 23:35:53 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
+2021-06-15 23:38:38 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: No data is available [2000-200]
