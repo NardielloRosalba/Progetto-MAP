@@ -107,7 +107,7 @@ public class PianetaGame extends GameDescription {
             while (this.taskCount != countDown) {
                 try {
                     System.out.println(avviso(this.countDown - this.taskCount));
-                    Thread.sleep(5000);
+                    Thread.sleep(60000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
                     System.out.println("Ti sei salvato la vita!");
@@ -332,6 +332,8 @@ public class PianetaGame extends GameDescription {
         tessera.setPickupable(true);
         tessera.setUsable(true);
         armadio.getList().add(tessera);
+        salaComandi.getObjects().add(tessera);
+
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
