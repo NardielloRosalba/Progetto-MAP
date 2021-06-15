@@ -14,13 +14,10 @@ import di.uniba.map.b.adventure.type.CommandType;
 import di.uniba.map.b.adventure.type.Room;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -89,7 +86,7 @@ public class PianetaGame extends GameDescription {
 
         private int countDown = 10;
         private int taskCount = 0;
-        String causa;
+        private final String causa;
         private boolean timerActived = false;
                 
         public TimerAvvisoMorte(int num, String causaMorte) {
