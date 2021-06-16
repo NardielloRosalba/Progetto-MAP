@@ -331,25 +331,19 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject tessera = new AdvObject(ID_OBJECT_TESSERA, titolo, descrizione);
         tessera.setAlias(new String[]{"tessera", "carta", "pass"});
-        //tessera.setPushable(true);
-        tessera.setPickupable(true);
         tessera.setUsable(true);
         armadio.getList().add(tessera);
-        salaComandi.getObjects().add(tessera);
-
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject protocolli = new AdvObject(ID_OBJECT_PROTOCOLLI, titolo, descrizione);
         protocolli.setAlias(new String[]{"protocolli", "protocollinavigazione", "foglinavigazione", "fogli"});
-        protocolli.setPickupable(true);
         armadio.getList().add(protocolli);
 
         titolo = obj.nextLine();
         descrizione = obj.nextLine();
         AdvObject torcia = new AdvObject(ID_OBJECT_TORCIA, titolo, descrizione);
         torcia.setAlias(new String[]{"oggetto", "torcia"});
-        torcia.setPickupable(true);
         torcia.setSiAccende(true);
         torcia.setAcceso(false);
         corridoioX.getObjects().add(torcia);
@@ -358,7 +352,7 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject porta = new AdvObject(ID_OBJECT_PORTA, titolo, descrizione);
         porta.setOpenable(true);
-        //porta.setOpen(false);
+        porta.setPickupable(false);
         porta.setAlias(new String[]{"porta", "portone", "portasala"});
         salaComandi.getObjects().add(porta);
 
@@ -366,6 +360,7 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject contatore = new AdvObject(ID_OBJECT_CONTATORE, titolo, descrizione);
         contatore.setAlias(new String[]{"contatore", "contatoreelettrico"});
+        contatore.setPickupable(false);
         salaElettrica.getObjects().add(contatore);
 
         titolo = obj.nextLine();
@@ -381,6 +376,7 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject parete = new AdvObject(ID_OBJECT_PARETE, titolo, descrizione);
         parete.setAlias(new String[]{"paretefili", "parete", "fili"});
+        parete.setPickupable(false);
         salaElettrica.getObjects().add(parete);
 
         titolo = obj.nextLine();
@@ -534,6 +530,7 @@ public class PianetaGame extends GameDescription {
         descrizione = obj.nextLine();
         AdvObject pannello = new AdvObject(ID_OBJECT_PANNELLO, titolo, descrizione);
         pannello.setAlias(new String[]{"pannello", "pannelloemergenza"});
+        pannello.setPickupable(false);
         stanzaEsterna.getObjects().add(pannello);
 
         //AGGIUNGO COMBINAZIONI PER OGNI STANZA

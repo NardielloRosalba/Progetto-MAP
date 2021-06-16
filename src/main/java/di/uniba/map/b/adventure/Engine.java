@@ -81,7 +81,7 @@ public class Engine {
                 
             case 2:
                 System.out.println("Caricamento partita");
-                this.game = saving_loading.comandoCarica();
+                //this.game = saving_loading.comandoCarica();
                 ParserOutput o = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
                 game.nextMove(o);
                 break;
