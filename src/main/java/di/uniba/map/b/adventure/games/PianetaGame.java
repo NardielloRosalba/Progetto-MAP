@@ -109,7 +109,7 @@ public class PianetaGame extends GameDescription {
             while (this.taskCount != countDown) {
                 try {
                     System.out.println(avviso(this.countDown - this.taskCount));
-                    Thread.sleep(60000);
+                    Thread.sleep(10000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
                     System.out.println("Ti sei salvato la vita!");
@@ -133,7 +133,7 @@ public class PianetaGame extends GameDescription {
         }
 
     }
-
+    
     @Override
     public void init() throws FileNotFoundException {
         //Commands
@@ -1303,17 +1303,7 @@ public class PianetaGame extends GameDescription {
     }
     
     public void checkTimer(){
-        //non va perche mi carica il thread gas tossico senza che sia attivo
-            /*if(timerGasTossico.activeCount() == 1){
-                timerGasTossico.start();
-                
-            }else if(timerOssigeno.activeCount() == 1){
-                timerOssigeno.start();
-                
-            }else if(timerScontroSullaTerra.activeCount() == 1){
-                timerScontroSullaTerra.start();
-            }*/
-            if(timerGasTossico.isTimerActived()){
+        if(timerGasTossico.isTimerActived()){
                 timerGasTossico.start();
                 System.out.println("Vediamo timer gas tossico ATTIVATO ");
             }
