@@ -26,6 +26,8 @@ import java.sql.Statement;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,15 +37,13 @@ public class Database {
 
     public final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS game("
             + "username VARCHAR(20) PRIMARY KEY,"
-            + "password VARCHAR(20),"
-            + "match BLOB not null)";
-    public final String INSERT = "INSERT INTO game VALUES (?,?,?)";
+            + "score INT(3))";
+    public final String INSERT = "INSERT INTO game VALUES (?,?)";
     public final Connection conn;
 
     public Database() throws SQLException {
         conn = DriverManager.getConnection("jdbc:h2:.\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\db");
         this.create();
-
     }
 
     public void create() {
@@ -54,7 +54,7 @@ public class Database {
             stm.close();
 
         } catch (SQLException ex) {
-            System.err.println(ex.getErrorCode() + " :1 " + ex.getMessage());
+            System.err.println(ex.getErrorCode() + " : " + ex.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class Database {
             ResultSet rs = stm.executeQuery("SELECT * FROM game");
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
-                    System.out.println(rs.getObject(1) + " -:- " + rs.getObject(2) + " -:- " + rs.getObject(3));
+                    System.out.println(rs.getObject(1) + " -:- " + rs.getObject(2));
                 }
             } else {
                 System.out.println("Non ci sono ancora giocatori registrati");
@@ -72,7 +72,7 @@ public class Database {
 
             stm.close();
         } catch (SQLException ex) {
-            System.out.println(ex.getErrorCode() + " :2 " + ex.getMessage());
+            System.out.println(ex.getErrorCode() + " : " + ex.getMessage());
         }
     }
 
@@ -84,19 +84,17 @@ public class Database {
 
     /*public static void main(String arg[]) throws SQLException {
         Database db = new Database();
-        db.getInfo();
+        //db.getInfo();
         //db.saving();
-        db.delete();
-        db.getInfo();
-
+        //db.delete();
+        //db.getInfo();
     }*/
     public void saving(PianetaGame game, String str) throws SQLException, FileNotFoundException, IOException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         Statement stm = conn.createStatement();
         PreparedStatement p_stm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
-        PreparedStatement p_stm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
-        PreparedStatement p_ins = conn.prepareStatement("INSERT into game VALUES(?,?,?)");//per inserire una tupla
-        PreparedStatement p_alter = conn.prepareStatement("UPDATE game set match = ? where username like ?");//per caricare una partita su un giocatore già registrato
+        PreparedStatement p_ins = conn.prepareStatement("INSERT into game VALUES(?,?)");//per inserire una tupla
+        PreparedStatement p_alter = conn.prepareStatement("UPDATE game set score = ? where username like ?");//per caricare una partita su un giocatore già registrato
 
         Properties db = new Properties();
         System.out.println("Sei un nuovo utente?");//capisco cosa fare!
@@ -108,19 +106,15 @@ public class Database {
                 p_stm_user.setString(1, db.getProperty("user"));
 
                 ResultSet rs = p_stm_user.executeQuery();
-                if (rs.isBeforeFirst()) {//se utente con stesso user esiste..
+                if (rs.next()) {//se utente con stesso user esiste..
                     System.out.println("Username già esistente nel db!\n");
                 } else {
                     p_ins.setString(1, db.getProperty("user"));
-                    p_ins.setString(2, db.getProperty("psw"));
-                    //saving_loading.comandoSalva(game);
-                    //------                    
-                    p_ins.setObject(3, game);//carico pianetagame
+                    p_ins.setObject(2, 10);//salvo pianetagame
+                    this.writingFile(game);
                     p_ins.executeUpdate();
                     p_ins.close();
-                    //------
                     System.out.println("Credenziali salvate correttamente!\n");
-                    System.out.println("Partita salvata correttamente!\n");
                     break;
                 }
             }
@@ -129,56 +123,29 @@ public class Database {
         } else if (scan.hasNext("no") && str.equals("save")) {//chiedo credenziali per salvare partite di utente già registrato
 
             while (true) {
-                //p_alter
                 this.login(db);
-                p_stm_user_psw.setString(1, db.getProperty("user"));
-                p_stm_user_psw.setString(2, db.getProperty("psw"));
+                p_stm_user.setString(1, db.getProperty("user"));
 
-                ResultSet rs = p_stm_user_psw.executeQuery();
-                if (rs.next()) {//se utente con stesso user e psw esiste..
-
-                    System.out.println("Login effettuato!\n");
-
-                    System.out.println("Partita salvata correttamente!\n");
-
+                ResultSet rs = p_stm_user.executeQuery();
+                if (rs.next()) {//se utente con stesso user esiste..
+                    p_ins.setString(1, db.getProperty("user"));
+                    p_ins.setInt(2, 10);//getScore.pianetagame
+                    this.writingFile(game);
                     break;
                 } else {
                     System.out.println("Credenziali errate!\n");
                 }
             }
 
-        } else if (scan.hasNext("no") && str.equals("load")) {
-            //vuoi caricare partita di giocatore vecchio ok
+        } else if (scan.hasNext("no") && str.equals("load")) {//vuoi caricare partita di giocatore vecchio ok
             while (true) {
                 this.login(db);
-                p_stm_user_psw.setString(1, db.getProperty("user"));
-                p_stm_user_psw.setString(2, db.getProperty("psw"));
+                p_stm_user.setString(1, db.getProperty("user"));
+                //p_stm_user_psw.setString(2, db.getProperty("psw"));
 
-                ResultSet rs = p_stm_user_psw.executeQuery();
-                if (rs.next()) {//se utente con stesso user e psw esiste..
-                    System.out.println("dentro");
-                    //-------
-                    //saving_loading.comandoSalva(rs.getBytes(3));
-                    /*FileOutputStream file = new FileOutputStream(new File(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\game.dat"));
-                    while(rs.next()){
-                        InputStream input = rs.getBinaryStream(3);
-                        byte[] buffer = new byte[1024];
-                        while(input.read(buffer)>0){
-                            file.write(buffer);
-                        }
-                    }*/
-                    //saving_loading.comandoSalva(rs.getObject(3));
-                    saving_loading.comandoSalva(saving_loading.comandoCarica3(rs.getBinaryStream(3)));
-                    
-                    game = saving_loading.comandoCarica2();
-                    System.out.println(game.getInventory().toString());
-                    //game = (PianetaGame) rs.getObject(3);
-                    //System.out.println(rs.getBlob(3).getBinaryStream());
-                    //game = saving_loading.comandoCarica2();
-                    //-------
-                    System.out.println("Login effettuato!\n");
-                    System.out.println("Partita caricata correttamente!\n");
-
+                ResultSet rs = p_stm_user.executeQuery();
+                if (rs.next()) {//se utente con stesso user esiste..
+                    this.readingFile(game);
                     break;
                 } else {
                     System.out.println("Credenziali errate!\n");
@@ -188,18 +155,49 @@ public class Database {
 
     }
 
-    
     public Properties login(Properties db) {
 
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Inserire username..");
         db.setProperty("user", scan.next());
-        System.out.println("Inserire password..");
-        db.setProperty("psw", scan.next());
+        /*System.out.println("Inserire password..");
+        db.setProperty("psw", scan.next());*/
         System.out.println("");
 
         return db;
     }
 
+    public void writingFile(PianetaGame game) throws FileNotFoundException, ClassNotFoundException {
+        JFileChooser fc = new JFileChooser();
+        fc.setMultiSelectionEnabled(false);
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            try {
+                saving_loading.comandoSalva(game, file);
+                System.out.println(file);
+                JOptionPane.showMessageDialog(null, "Salvataggio andato a buon fine!", "Salvataggio", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Errore nel salvataggio!", "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void readingFile(PianetaGame game) throws FileNotFoundException, ClassNotFoundException {
+        JFileChooser fc = new JFileChooser();
+        fc.setMultiSelectionEnabled(false);
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            
+            File file = fc.getSelectedFile();
+            try {
+                game = saving_loading.comandoCarica(file);
+                System.out.println(file);
+                JOptionPane.showMessageDialog(null, "Caricamento andato a buon fine!", "Caricamento", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Errore nel caricamento!", "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 }
