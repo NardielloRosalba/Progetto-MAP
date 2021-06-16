@@ -93,10 +93,19 @@ public class PianetaGame extends GameDescription {
         private int taskCount = 0;
         private final String causa;
         private boolean timerActived = false;
-                
+        private boolean suspendTemporary = false;
+        
         public TimerAvvisoMorte(int num, String causaMorte) {
             this.countDown = num;
             this.causa = causaMorte;
+        }
+
+        public boolean isSuspendTemporary() {
+            return suspendTemporary;
+        }
+
+        public void setSuspendTemporary(boolean suspendTemporary) {
+            this.suspendTemporary = suspendTemporary;
         }
         
         public TimerAvvisoMorte(String causaMorte) {
@@ -112,8 +121,10 @@ public class PianetaGame extends GameDescription {
                     Thread.sleep(10000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
-                    System.out.println("Ti sei salvato la vita!");
-                    this.timerActived = false;
+                    if(!isSuspendTemporary()){
+                        System.out.println("Ti sei salvato la vita!");
+                        this.timerActived = false;
+                    }
                     return;
                 }
             }
@@ -1304,20 +1315,39 @@ public class PianetaGame extends GameDescription {
     
     public void checkTimer(){
         if(timerGasTossico.isTimerActived()){
-                timerGasTossico.start();
-                System.out.println("Vediamo timer gas tossico ATTIVATO ");
-            }
-            if(timerOssigeno.isTimerActived()){
-                timerOssigeno.start();
-                System.out.println("Vediamo timerOssigeno ATTIVATO ");
-            }
-            
-            if(timerScontroSullaTerra.isTimerActived()){
-                timerScontroSullaTerra.start();
-                System.out.println("Vediamo timerOssigeno ATTIVATO ");
-            }
+            timerGasTossico.setSuspendTemporary(false);
+            timerGasTossico.start();
+            System.out.println("Vediamo timer gas tossico ATTIVATO ");
+        }
+        if(timerOssigeno.isTimerActived()){
+            timerGasTossico.setSuspendTemporary(false);
+            timerOssigeno.start();
+            System.out.println("Vediamo timerOssigeno ATTIVATO ");
+        }
+        if(timerScontroSullaTerra.isTimerActived()){
+            timerGasTossico.setSuspendTemporary(false);
+            timerScontroSullaTerra.start();
+            System.out.println("Vediamo timerOssigeno ATTIVATO ");
+        }
     }
-    
+    public void stopThread(){
+        if(timerGasTossico.isTimerActived()){
+            timerGasTossico.setSuspendTemporary(true);
+            timerGasTossico.interrupt();
+            System.out.println("Stoppato timer gas tossico ATTIVATO ");
+        }
+        if(timerOssigeno.isTimerActived()){
+            timerGasTossico.setSuspendTemporary(true);
+            timerOssigeno.interrupt();
+            System.out.println("Stoppato timerOssigeno ATTIVATO ");
+        }
+        if(timerScontroSullaTerra.isTimerActived()){
+            timerGasTossico.setSuspendTemporary(true);
+            timerScontroSullaTerra.interrupt();
+            System.out.println("Stoppato timerOssigeno ATTIVATO ");
+        }
+    }
+        
     private void end(StringBuilder output) {
         System.out.println(output);
         System.exit(0);
