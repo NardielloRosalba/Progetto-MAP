@@ -19,6 +19,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
@@ -52,7 +53,7 @@ public class Engine {
         }
     }
 
-    public void execute() throws IOException, FileNotFoundException, ClassNotFoundException {
+    public void execute() throws IOException, FileNotFoundException, ClassNotFoundException, SQLException {
         System.out.println("Attesa comandi!");
         /*switch (this.socket()) {
             case 0:
@@ -88,6 +89,8 @@ public class Engine {
         }*/
         Scanner scanner = new Scanner(System.in);
         System.out.println("Cosa devo fare? ");
+        Database db = new Database();
+        db.getInfo();
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
             System.out.println("");
@@ -101,9 +104,10 @@ public class Engine {
                 System.out.println("Salvataggio avvenuto con successo");
 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
+                game = db.loading();
                 //game = saving_loading.comandoCarica();//rimuovi
                 this.game.nextMove(p);
-                System.out.println("Caricamento partita avvenuto con successo");
+                //System.out.println("Caricamento partita avvenuto con successo");
 
 
             } else {
@@ -114,7 +118,7 @@ public class Engine {
         }
     }
 
-    public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException, SQLException {
         Engine engine = new Engine(new PianetaGame());
         engine.execute();
     }

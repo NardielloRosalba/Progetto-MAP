@@ -89,7 +89,7 @@ public class Database {
         //db.delete();
         //db.getInfo();
     }*/
-    public void saving(PianetaGame game, String str) throws SQLException, FileNotFoundException, IOException, ClassNotFoundException {
+    public void saving(PianetaGame game) throws SQLException, FileNotFoundException, IOException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         Statement stm = conn.createStatement();
         PreparedStatement p_stm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
@@ -99,10 +99,10 @@ public class Database {
         Properties db = new Properties();
         System.out.println("Sei un nuovo utente?");//capisco cosa fare!
 
-        if (scan.hasNext("si") && str.equals("save")) {//nuovo utente
+        if (scan.hasNext("si")) {//nuovo utente
 
             while (true) {
-                this.login(db);//rende username e psw
+                this.login(db);//rende username
                 p_stm_user.setString(1, db.getProperty("user"));
 
                 ResultSet rs = p_stm_user.executeQuery();
@@ -112,15 +112,14 @@ public class Database {
                     p_ins.setString(1, db.getProperty("user"));
                     p_ins.setObject(2, 10);//salvo pianetagame
                     this.writingFile(game);
+
                     p_ins.executeUpdate();
                     p_ins.close();
                     System.out.println("Credenziali salvate correttamente!\n");
                     break;
                 }
             }
-        } else if (scan.hasNext("si") && str.equals("load")) {
-            System.out.println("devi prima salvarne una!!");
-        } else if (scan.hasNext("no") && str.equals("save")) {//chiedo credenziali per salvare partite di utente già registrato
+        } else {//chiedo credenziali per salvare partite di utente già registrato
 
             while (true) {
                 this.login(db);
@@ -128,8 +127,8 @@ public class Database {
 
                 ResultSet rs = p_stm_user.executeQuery();
                 if (rs.next()) {//se utente con stesso user esiste..
-                    p_ins.setString(1, db.getProperty("user"));
-                    p_ins.setInt(2, 10);//getScore.pianetagame
+                    p_alter.setInt(1, 15);//getScore.pianetagame
+                    p_alter.setString(2, db.getProperty("user"));
                     this.writingFile(game);
                     break;
                 } else {
@@ -137,7 +136,22 @@ public class Database {
                 }
             }
 
-        } else if (scan.hasNext("no") && str.equals("load")) {//vuoi caricare partita di giocatore vecchio ok
+        }
+
+    }
+
+    public PianetaGame loading() throws SQLException, FileNotFoundException, ClassNotFoundException {
+        Scanner scan = new Scanner(System.in);
+        Properties db = new Properties();
+        Statement stm = conn.createStatement();
+        PreparedStatement p_stm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
+        PreparedStatement p_ins = conn.prepareStatement("INSERT into game VALUES(?,?)");//per inserire una tupla
+        PreparedStatement p_alter = conn.prepareStatement("UPDATE game set score = ? where username like ?");//per caricare una partita su un giocatore già registrato
+        PianetaGame game = null;
+        
+        System.out.println("Sei un nuovo utente?");//capisco cosa fare!
+
+        if (scan.hasNext("no")) {//vuoi caricare partita di giocatore vecchio ok
             while (true) {
                 this.login(db);
                 p_stm_user.setString(1, db.getProperty("user"));
@@ -145,14 +159,16 @@ public class Database {
 
                 ResultSet rs = p_stm_user.executeQuery();
                 if (rs.next()) {//se utente con stesso user esiste..
-                    this.readingFile(game);
+                    game = this.readingFile();
                     break;
                 } else {
                     System.out.println("Credenziali errate!\n");
                 }
             }
+        } else {
+            System.out.println("devi prima salvarne una!!");
         }
-
+        return game;
     }
 
     public Properties login(Properties db) {
@@ -176,7 +192,11 @@ public class Database {
             File file = fc.getSelectedFile();
             try {
                 saving_loading.comandoSalva(game, file);
-                System.out.println(file);
+                /*
+                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+                out.writeObject(game);
+                out.close();
+                 */
                 JOptionPane.showMessageDialog(null, "Salvataggio andato a buon fine!", "Salvataggio", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Errore nel salvataggio!", "Errore", JOptionPane.ERROR_MESSAGE);
@@ -184,20 +204,25 @@ public class Database {
         }
     }
 
-    public void readingFile(PianetaGame game) throws FileNotFoundException, ClassNotFoundException {
+    public PianetaGame readingFile() throws FileNotFoundException, ClassNotFoundException {
         JFileChooser fc = new JFileChooser();
         fc.setMultiSelectionEnabled(false);
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        PianetaGame game = null;
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            
+
             File file = fc.getSelectedFile();
             try {
                 game = saving_loading.comandoCarica(file);
-                System.out.println(file);
+                //System.out.println(file);
                 JOptionPane.showMessageDialog(null, "Caricamento andato a buon fine!", "Caricamento", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Errore nel caricamento!", "Errore", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                return game;
             }
+        } else {
+            return game;
         }
     }
 }
