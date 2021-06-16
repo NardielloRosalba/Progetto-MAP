@@ -53,6 +53,7 @@ public class Inizio extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFont(new java.awt.Font("Agency FB", 1, 10)); // NOI18N
         setForeground(new java.awt.Color(0, 0, 0));
+        setIconImage((new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg")).getImage());
         setResizable(false);
 
         jLabelImage.setIcon(new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Spazio.png"));
@@ -103,6 +104,11 @@ public class Inizio extends javax.swing.JFrame {
         jMenuAbout.add(jMenuItemAboutUs);
 
         jMenuItemAboutGame.setText("About Game");
+        jMenuItemAboutGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAboutGameActionPerformed(evt);
+            }
+        });
         jMenuAbout.add(jMenuItemAboutGame);
 
         jMenuBar1.add(jMenuAbout);
@@ -171,8 +177,23 @@ public class Inizio extends javax.swing.JFrame {
 
     private void jMenuItemAboutUsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutUsActionPerformed
         // TODO add your handling code here:
-        
+        JOptionPane.showMessageDialog(this, "- Pianeta Game -\n"
+                + "Autori: Luca Serio, Raffaella Nasca, Rosalba Nardiello \n"
+                , "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
     }//GEN-LAST:event_jMenuItemAboutUsActionPerformed
+
+    private void jMenuItemAboutGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutGameActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "**** Adventure Luca, Rosalba, Raffaella ****\n\n"
+                + "Il protagonista, Capitan Hector, si trova \n"
+                + "nella Navicella B612 della galassia Reggy e sta per \n"
+                + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
+                + "perde il controllo della navicella e di tutti i suoi \n"
+                + "comandi e per salvarsi dovra' completare le missioni \n"
+                + "nelle varie stanze.\n"
+                + "Buon Divertimento!\n",
+                "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
+    }//GEN-LAST:event_jMenuItemAboutGameActionPerformed
 
     /**
      * @param args the command line arguments
