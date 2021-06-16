@@ -41,8 +41,11 @@ public class Inizio extends javax.swing.JFrame {
         jButtonEsci = new javax.swing.JButton();
         jButtonCaricaPartita = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenuAboutUs = new javax.swing.JMenu();
+        jMenuAbout = new javax.swing.JMenu();
+        jMenuItemAboutUs = new javax.swing.JMenuItem();
+        jMenuItemAboutGame = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
+        jMenuItemHelp = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PianetaGame");
@@ -50,6 +53,7 @@ public class Inizio extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFont(new java.awt.Font("Agency FB", 1, 10)); // NOI18N
         setForeground(new java.awt.Color(0, 0, 0));
+        setIconImage((new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg")).getImage());
         setResizable(false);
 
         jLabelImage.setIcon(new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Spazio.png"));
@@ -88,12 +92,33 @@ public class Inizio extends javax.swing.JFrame {
 
         jMenuBar1.setBackground(new java.awt.Color(0, 0, 0));
 
-        jMenuAboutUs.setForeground(new java.awt.Color(51, 51, 255));
-        jMenuAboutUs.setText("About Us");
-        jMenuBar1.add(jMenuAboutUs);
+        jMenuAbout.setForeground(new java.awt.Color(51, 51, 255));
+        jMenuAbout.setText("About");
+
+        jMenuItemAboutUs.setText("About Us");
+        jMenuItemAboutUs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAboutUsActionPerformed(evt);
+            }
+        });
+        jMenuAbout.add(jMenuItemAboutUs);
+
+        jMenuItemAboutGame.setText("About Game");
+        jMenuItemAboutGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAboutGameActionPerformed(evt);
+            }
+        });
+        jMenuAbout.add(jMenuItemAboutGame);
+
+        jMenuBar1.add(jMenuAbout);
 
         jMenuHelp.setForeground(new java.awt.Color(51, 51, 255));
         jMenuHelp.setText("Help");
+
+        jMenuItemHelp.setText("Help comandi");
+        jMenuHelp.add(jMenuItemHelp);
+
         jMenuBar1.add(jMenuHelp);
 
         setJMenuBar(jMenuBar1);
@@ -150,6 +175,26 @@ public class Inizio extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButtonCaricaPartitaActionPerformed
 
+    private void jMenuItemAboutUsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutUsActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "- Pianeta Game -\n"
+                + "Autori: Luca Serio, Raffaella Nasca, Rosalba Nardiello \n"
+                , "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
+    }//GEN-LAST:event_jMenuItemAboutUsActionPerformed
+
+    private void jMenuItemAboutGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutGameActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "**** Adventure Luca, Rosalba, Raffaella ****\n\n"
+                + "Il protagonista, Capitan Hector, si trova \n"
+                + "nella Navicella B612 della galassia Reggy e sta per \n"
+                + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
+                + "perde il controllo della navicella e di tutti i suoi \n"
+                + "comandi e per salvarsi dovra' completare le missioni \n"
+                + "nelle varie stanze.\n"
+                + "Buon Divertimento!\n",
+                "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
+    }//GEN-LAST:event_jMenuItemAboutGameActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -194,8 +239,11 @@ public class Inizio extends javax.swing.JFrame {
     private javax.swing.JButton jButtonEsci;
     private javax.swing.JButton jButtonIniziaPartita1;
     private javax.swing.JLabel jLabelImage;
-    private javax.swing.JMenu jMenuAboutUs;
+    private javax.swing.JMenu jMenuAbout;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuHelp;
+    private javax.swing.JMenuItem jMenuItemAboutGame;
+    private javax.swing.JMenuItem jMenuItemAboutUs;
+    private javax.swing.JMenuItem jMenuItemHelp;
     // End of variables declaration//GEN-END:variables
 }
