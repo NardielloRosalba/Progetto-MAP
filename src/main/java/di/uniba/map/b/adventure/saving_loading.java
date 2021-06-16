@@ -26,7 +26,7 @@ public class saving_loading {
     }
 
     public static void comandoSalva(PianetaGame game, File file) throws FileNotFoundException, IOException, ClassNotFoundException {
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file.toString().concat(".dat")));
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
         out.writeObject(game);
         out.close();
     }

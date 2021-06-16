@@ -662,25 +662,13 @@ public class PianetaGame extends GameDescription {
                         output = comandoTurnOff(p, output);
                         break;       
                     case LOAD:
-                        try {
-                            Database db2 = new Database();
-                            db2.getInfo();
-                            db2.saving(this, "load");
-                        } catch (SQLException ex) {
-                            Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                        Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                            }catch (ClassNotFoundException ex) {
-                        Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                            }
                         checkTimer();
-                    break;
-
+                        break;
                     case SAVE:
                         try {
                             Database db = new Database();
                             try {
-                                db.saving(this, "save");
+                                db.saving(this);
                             } catch (IOException ex) {
                                 Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (ClassNotFoundException ex) {
