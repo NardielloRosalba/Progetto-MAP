@@ -54,7 +54,7 @@ public class Engine {
 
     public void execute() throws IOException, FileNotFoundException, ClassNotFoundException {
         System.out.println("Attesa comandi!");
-        switch (this.socket()) {
+        /*switch (this.socket()) {
             case 0:
                 System.out.println("Inizio nuova partita");
                 System.out.println("========================================");
@@ -85,7 +85,7 @@ public class Engine {
                 ParserOutput o = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
                 game.nextMove(o);
                 break;
-        }
+        }*/
         Scanner scanner = new Scanner(System.in);
         System.out.println("Cosa devo fare? ");
         while (scanner.hasNextLine()) {

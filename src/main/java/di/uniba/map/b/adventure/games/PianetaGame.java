@@ -8,7 +8,6 @@ package di.uniba.map.b.adventure.games;
 import di.uniba.map.b.adventure.Database;
 import di.uniba.map.b.adventure.GameDescription;
 import di.uniba.map.b.adventure.parser.ParserOutput;
-import di.uniba.map.b.adventure.saving_loading;
 import di.uniba.map.b.adventure.type.AdvObject;
 import di.uniba.map.b.adventure.type.AdvObjectContainer;
 import di.uniba.map.b.adventure.type.Command;
@@ -681,7 +680,6 @@ public class PianetaGame extends GameDescription {
                         try {
                             Database db = new Database();
                             try {
-                                db.getInfo();
                                 db.saving(this, "save");
                             } catch (IOException ex) {
                                 Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
