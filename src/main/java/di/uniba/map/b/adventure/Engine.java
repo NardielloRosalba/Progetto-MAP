@@ -101,11 +101,10 @@ public class Engine {
 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.SAVE) {
                 this.game.nextMove(p);
-                System.out.println("Salvataggio avvenuto con successo");
 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
                 PianetaGame game2 = null;
-                game2 = db.loading();
+                game2 = db.loading((PianetaGame) game);
                 if(game2 != null){
                     game = game2;
                     this.game.nextMove(p);
