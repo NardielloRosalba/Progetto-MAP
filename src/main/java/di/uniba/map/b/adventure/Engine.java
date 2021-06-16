@@ -82,7 +82,7 @@ public class Engine {
                 
             case 2:
                 System.out.println("Caricamento partita");
-                //this.game = saving_loading.comandoCarica();
+                //this.game = saving_loading.comandoCarica();//attenyo da cambaire!!
                 ParserOutput o = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
                 game.nextMove(o);
                 break;
@@ -104,12 +104,12 @@ public class Engine {
                 System.out.println("Salvataggio avvenuto con successo");
 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
-                game = db.loading();
-                //game = saving_loading.comandoCarica();//rimuovi
-                this.game.nextMove(p);
-                //System.out.println("Caricamento partita avvenuto con successo");
-
-
+                PianetaGame game2 = null;
+                game2 = db.loading();
+                if(game2 != null){
+                    game = game2;
+                    this.game.nextMove(p);
+                }
             } else {
                 System.out.println(game.nextMove(p));
                 System.out.println();
