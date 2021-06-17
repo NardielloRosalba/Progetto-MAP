@@ -17,8 +17,9 @@ import java.net.SocketException;
 
 /**
  *
- * @author Luca
+ * @author gruppo 'Le bimbe di Luca'
  */
+
 public class SocketServer {
 
     //public static void main(String args[]) throws IOException {

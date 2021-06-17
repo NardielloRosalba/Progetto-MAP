@@ -20,6 +20,11 @@ import javax.swing.JOptionPane;
 
 /**
  *
+ * @author gruppo 'Le bimbe di Luca'
+ */
+
+/**
+ *
  * @author Luca
  */
 public class SocketClient {

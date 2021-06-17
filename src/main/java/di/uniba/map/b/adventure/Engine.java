@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  * classe che implementa GameDescription e si occupa di gestire I/O sul
  * terminale.
  *
- * @author pierpaolo
+ * @author gruppo 'Le bimbe di Luca'
  */
 public class Engine {
 
@@ -57,6 +57,9 @@ public class Engine {
         System.out.println("Attesa comandi!");
         switch (this.socket()) {
             case 0:
+                //chiedere nome e password
+                
+                
                 System.out.println("Inizio nuova partita");
                 System.out.println("========================================");
                 System.out.println("** Adventure Luca, Rosalba, Raffaella **");
@@ -81,6 +84,7 @@ public class Engine {
                 break;
                 
             case 2:
+                //nome e password
                 System.out.println("Caricamento partita");
                 ParserOutput p = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
                 Database db = new Database();
@@ -141,6 +145,7 @@ public class Engine {
                     case "new":
                         out.println("Ora inizierai una nuova partita!");
                         ss.close();
+                        //nome e password
                         return 0;
 
                     case "quit":

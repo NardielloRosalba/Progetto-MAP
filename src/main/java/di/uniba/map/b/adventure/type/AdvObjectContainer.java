@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ *
+ * @author gruppo 'Le bimbe di Luca'
+ */
+
 public class AdvObjectContainer extends AdvObject {
 
     private List<AdvObject> list = new ArrayList<>();

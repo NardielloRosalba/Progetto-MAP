@@ -12,6 +12,11 @@ import di.uniba.map.b.adventure.type.Command;
 import java.util.List;
 import java.util.Set;
 
+/**
+ *
+ * @author gruppo 'Le bimbe di Luca'
+ */
+
 public class Parser {
 
     private final int COSTANTE_CONTENITORI = 50;

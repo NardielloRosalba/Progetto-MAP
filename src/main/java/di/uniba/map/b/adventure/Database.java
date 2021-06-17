@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Luca
+ * @author gruppo 'Le bimbe di Luca'
  */
 public class Database {
 

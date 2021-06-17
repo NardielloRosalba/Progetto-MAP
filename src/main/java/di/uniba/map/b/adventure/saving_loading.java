@@ -17,7 +17,7 @@ import java.io.OutputStream;
 
 /**
  *
- * @author Luca
+ * @author gruppo 'Le bimbe di Luca'
  */
 public class saving_loading {
 

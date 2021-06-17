@@ -9,6 +9,11 @@ import di.uniba.map.b.adventure.type.AdvObject;
 import di.uniba.map.b.adventure.type.AdvObjectContainer;
 import di.uniba.map.b.adventure.type.Command;
 
+/**
+ *
+ * @author gruppo 'Le bimbe di Luca'
+ */
+
 public class ParserOutput {
 
     private Command command;
