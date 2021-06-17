@@ -30,7 +30,6 @@ public class Database {
             + "password VARCHAR(20),"
             + "match BLOB not null,"
             + "score int(5))";
-    //public final String INSERT = "INSERT INTO game VALUES (?,?,?,?)";
     public final Connection conn;
 
     public Database() throws SQLException {

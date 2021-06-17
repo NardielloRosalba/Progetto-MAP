@@ -37,7 +37,7 @@ public class SocketClient {
             interfacciaInizio.setVisible(true);
             JOptionPane.showMessageDialog(null, "Connessione avvenuta con successo", "Connessione socket", JOptionPane.INFORMATION_MESSAGE);
 
-            String ris_serv;//risposta server
+            String ris_serv;
             while (true) {
                 ris_serv = in.readLine();
                 JOptionPane.showMessageDialog(null, ris_serv, "Risposta server", JOptionPane.INFORMATION_MESSAGE);

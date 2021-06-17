@@ -52,6 +52,8 @@ public class Engine {
 
     public void execute() throws IOException, FileNotFoundException, ClassNotFoundException, SQLException {
         System.out.println("Attesa comandi!");
+        Database db = new Database();
+        
         switch (this.socket()) {
             case 0:
                 description();
@@ -64,7 +66,6 @@ public class Engine {
             case 2:
                 System.out.println("Caricamento partita");
                 ParserOutput p = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
-                Database db = new Database();
                 PianetaGame game_load = null;
                 game_load = db.loading((PianetaGame) game);
                 if (game_load != null) {
@@ -78,8 +79,6 @@ public class Engine {
         }
         Scanner scanner = new Scanner(System.in);
         System.out.println("Cosa devo fare? ");
-        Database db = new Database();
-        db.getInfo();
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
             System.out.println("");

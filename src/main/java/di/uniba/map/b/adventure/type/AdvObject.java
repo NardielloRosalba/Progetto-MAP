@@ -29,7 +29,7 @@ public class AdvObject implements Serializable{
 
     private boolean pickupable = true; //TRUE
     
-    private boolean siAccende = false;
+    private boolean turnOn= false;
     
     private boolean pullable = false;
 
@@ -39,13 +39,13 @@ public class AdvObject implements Serializable{
     
     private boolean drinkable = false;
     
-    private boolean acceso = false;
+    private boolean on = false;
     
-    private boolean visibile = true; //TRUE
+    private boolean visible = true;
     
     private boolean pull = false;
     
-    private boolean bevuta = false;
+    private boolean drinked = false;
 
     public AdvObject(int id) {
         this.id = id;
@@ -94,20 +94,20 @@ public class AdvObject implements Serializable{
         this.openable = openable;
     }
 
-    public boolean isSiAccende() {
-        return siAccende;
+    public boolean isTurnOn() {
+        return turnOn;
     }
 
-    public void setSiAccende(boolean siAccende) {
-        this.siAccende = siAccende;
+    public void setTurnOn(boolean turnOn) {
+        this.turnOn = turnOn;
     }
 
-    public boolean isAcceso() {
-        return acceso;
+    public boolean isOn() {
+        return on;
     }
 
-    public void setAcceso(boolean acceso) {
-        this.acceso = acceso;
+    public void setOn(boolean on) {
+        this.on = on;
     }
     
     public boolean isPickupable() {
@@ -158,12 +158,12 @@ public class AdvObject implements Serializable{
         this.drinkable = drinkable;
     }
 
-    public boolean isBevuta() {
-        return bevuta;
+    public boolean isDrinked() {
+        return drinked;
     }
 
-    public void setBevuta(boolean bevuta) {
-        this.bevuta = bevuta;
+    public void setDrinked(boolean drinked) {
+        this.drinked = drinked;
     }
     
     public boolean isPullable() {
@@ -182,12 +182,12 @@ public class AdvObject implements Serializable{
         this.pull = pull;
     }
 
-    public boolean isVisibile() {
-        return visibile;
+    public boolean isVisible() {
+        return visible;
     }
 
-    public void setVisibile(boolean visibile) {
-        this.visibile = visibile;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
     
     @Override
