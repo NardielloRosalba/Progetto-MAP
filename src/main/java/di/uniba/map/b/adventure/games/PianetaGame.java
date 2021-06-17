@@ -77,18 +77,15 @@ public class PianetaGame extends GameDescription {
 
     private boolean missionCorrente = false;
     private boolean missionCrepa = false;
-    private boolean missionRipristinoContatti = false;
+    private boolean missioncontactReset = false;
     
     private int score = 0;
     
-    private TimerAvvisoMorte timerGasTossico = new TimerAvvisoMorte("del gas tossico!");
-    //private boolean timerActived = false;
+    private TimerAvvisoMorte toxicGasTimer = new TimerAvvisoMorte("del gas tossico!");
 
-    private TimerAvvisoMorte timerOssigeno = new TimerAvvisoMorte("dell'abbassamento livelli di ossigeno!");
-    //private boolean timerActived = false;
+    private TimerAvvisoMorte oxygenTimer = new TimerAvvisoMorte("dell'abbassamento livelli di ossigeno!");
 
-    private TimerAvvisoMorte timerScontroSullaTerra = new TimerAvvisoMorte(3, "dello scontro sulla Terra");
-    //private boolean timerActived = false;
+    private TimerAvvisoMorte impactTimer = new TimerAvvisoMorte(3, "dello scontro sulla Terra");
      
     static class TimerAvvisoMorte extends Thread implements Serializable{
 
@@ -355,8 +352,8 @@ public class PianetaGame extends GameDescription {
         description = fileObject.nextLine();
         AdvObject torchObj = new AdvObject(ID_OBJECT_TORCIA, title, description);
         torchObj.setAlias(new String[]{"oggetto", "torcia"});
-        torchObj.setSiAccende(true);
-        torchObj.setAcceso(false);
+        torchObj.setTurnOn(true);
+        torchObj.setOn(false);
         xCorridor.getObjects().add(torchObj);
 
         title = fileObject.nextLine();
@@ -380,7 +377,7 @@ public class PianetaGame extends GameDescription {
         padlockObj.setAlias(new String[]{"lucchetto"});
         padlockObj.setPickupable(false);
         padlockObj.setOpenable(true);
-        padlockObj.setVisibile(false);
+        padlockObj.setVisible(false);
         electricalRoom.getObjects().add(padlockObj);
 
         title = fileObject.nextLine();
@@ -395,7 +392,7 @@ public class PianetaGame extends GameDescription {
         AdvObject keyObj = new AdvObject(ID_OBJECT_CHIAVE, title, description);
         keyObj.setAlias(new String[]{"chiave"});
         keyObj.setPickupable(false);
-        keyObj.setVisibile(false);
+        keyObj.setVisible(false);
         electricalRoom.getObjects().add(keyObj);
 
         title = fileObject.nextLine();
@@ -404,7 +401,7 @@ public class PianetaGame extends GameDescription {
         leverObj.setAlias(new String[]{"leva"});
         leverObj.setPickupable(false);
         leverObj.setPullable(true);
-        leverObj.setVisibile(false);
+        leverObj.setVisible(false);
         electricalRoom.getObjects().add(leverObj);
 
         title = fileObject.nextLine();
@@ -505,7 +502,7 @@ public class PianetaGame extends GameDescription {
         description = fileObject.nextLine();
         AdvObject transceiverObj = new AdvObject(ID_OBJECT_RICETRASMITTENTE, title, description);
         transceiverObj.setPickupable(false);
-        transceiverObj.setVisibile(false);
+        transceiverObj.setVisible(false);
         transceiverObj.setAlias(new String[]{"ricetrasmittente", "radio", "radiotrasmittente", "ricetrasmettitore"});
         telecommunicationsRoom.getObjects().add(transceiverObj);
 
@@ -627,51 +624,51 @@ public class PianetaGame extends GameDescription {
             if (null != p.getCommand().getType()) {
                 switch (p.getCommand().getType()) {
                     case NORD:
-                        output = comandoNord(p, output);
+                        output = commandNord(p, output);
                         break;
                     case SOUTH:
-                        output = comandoSud(p, output);
+                        output = commandSud(p, output);
                         break;
                     case EAST:
-                        output = comandoEst(p, output);
+                        output = commandEst(p, output);
                         break;
                     case WEST:
-                        output = comandoOvest(p, output);
+                        output = commandOvest(p, output);
                         break;
                     case INVENTORY:
-                        output = comandoInventory(p, output);
+                        output = commandInventory(p, output);
                         break;
                     case LOOK_AT:
                         if ((getCurrentRoom().getId() == ID_ROOM_SALA_COMANDI || getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X) || eventTorciaAccesa || missionCorrente) {
-                            output = comandoLookAt(p, output);
+                            output = commandLookAt(p, output);
                         } else {
                             output.append("Non riesco a vedere nulla.\n"
                                     + "La luce dell'oblo' non arriva fin qui... Fai qualcosa!");
                         }
                         break;
                     case USE:
-                        output = comandoUse(p, output);
+                        output = commandUse(p, output);
                         break;
                     case DRINK:
-                        output = comandoDrink(p, output);
+                        output = commandDrink(p, output);
                         break;
                     case PICK_UP:
-                        output = comandoPickUp(p, output);
+                        output = commandPickUp(p, output);
                         break;
                     case PUT_DOWN:
-                        output = comandoPutDown(p, output);
+                        output = commandPutDown(p, output);
                         break;
                     case OPEN:
-                        output = comandoOpen(p, output);
+                        output = commandOpen(p, output);
                         break;
                     case TURN_ON:
-                        output = comandoTurnOn(p, output);
+                        output = commandTurnOn(p, output);
                         break;
                     case PULL:
-                        output = comandoPull(p, output);
+                        output = commandPull(p, output);
                         break;
                     case TURN_OFF:
-                        output = comandoTurnOff(p, output);
+                        output = commandTurnOff(p, output);
                         break;       
                     case LOAD:
                         checkTimer();
@@ -706,7 +703,7 @@ public class PianetaGame extends GameDescription {
         return output.toString();
     }
 
-    private StringBuilder comandoNord(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandNord(ParserOutput p, StringBuilder output) {
         boolean noroom = false;
         boolean move = false;
         boolean roomLocked = false;
@@ -727,7 +724,7 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoSud(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandSud(ParserOutput p, StringBuilder output) {
         boolean noroom = false;
         boolean move = false;
         boolean roomLocked = false;
@@ -748,7 +745,7 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoOvest(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandOvest(ParserOutput p, StringBuilder output) {
         boolean noroom = false;
         boolean move = false;
         boolean roomLocked = false;
@@ -769,7 +766,7 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoEst(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandEst(ParserOutput p, StringBuilder output) {
         boolean noroom = false;
         boolean move = false;
         boolean roomLocked = false;
@@ -813,8 +810,6 @@ public class PianetaGame extends GameDescription {
                 output.append("Non riesco a vedere nulla.\n"
                         + "La luce dell'oblo' non arriva fin qui... Fai qualcosa!");
             }
-            //oppure aggiungere una seconda description se la stanza è stata già visitata
-            // o se ha compiuto una missione!!!
             if (getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X && eventTorcia == false) {
                 output.append("\n\n_________!!!ATTENZIONE!!!_________ \n"
                         + "Sei inciampato su un oggetto! \n");
@@ -823,15 +818,15 @@ public class PianetaGame extends GameDescription {
                 eventAvvisoCrepa = true;
                 if (getInventory().cercaObject(ID_OBJECT_FIALA3) != null) {
                     AdvObject fiala = getInventory().cercaObject(ID_OBJECT_FIALA3);
-                    if (fiala.isBevuta()) {
+                    if (fiala.isDrinked()) {
                         output.append("Il gas tossico non puo' nuocere alla tua salute perche' hai bevuto prima la fiala\n"
                                 + "Sei immune!");
                         this.score = 1000;
                     } else {
-                        timerGasTossico.start();
+                        toxicGasTimer.start();
                     }
                 } else {
-                    timerGasTossico.start();
+                    toxicGasTimer.start();
                 }
                 getCurrentRoom().setDescription("La navicella si e' danneggiata in seguito allo scontro.\nE' presente un crepa da cui entra"
                         + " un gas tossico che puo' nuocere alla tua salute.\nSei nel 'Corridoio Nord'!\nE' possibile dirigerti a sud o a est in cui e' presente una porta.");
@@ -841,7 +836,7 @@ public class PianetaGame extends GameDescription {
                     output.append("Hai sbagliato ad uscire senza tuta.\n Sei morto!");
                     this.end(output);
                 }
-                    timerScontroSullaTerra.start();
+                    impactTimer.start();
             }
         } else if (roomLocked) {
             output.append("La stanza è bloccata prima di cambiare stanza dovresti fare qualcosa\n");
@@ -849,15 +844,15 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoTurnOn(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandTurnOn(ParserOutput p, StringBuilder output) {
         if (p.getInvObject() == null) {
             output.append("Devi specificare l'oggetto da accendere o devi averlo nell'inventario");
         } else {
-            if (p.getInvObject().isSiAccende()) {
-                if (p.getInvObject().isAcceso()) {
+            if (p.getInvObject().isTurnOn()) {
+                if (p.getInvObject().isOn()) {
                     output.append(p.getInvObject().getName()).append(" e' gia' acceso. Quante volte intendi accenderlo??");
                 } else {
-                    p.getInvObject().setAcceso(true);
+                    p.getInvObject().setOn(true);
                     output.append(p.getInvObject().getName()).append(" e' stato acceso");
                     if (p.getInvObject().getId() == ID_OBJECT_TORCIA) {
                         output.append("\nAdesso riesci a vedere meglio l’ambiente che ti circonda");
@@ -872,13 +867,13 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoTurnOff(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandTurnOff(ParserOutput p, StringBuilder output) {
         if (p.getInvObject() == null) {
             output.append("Devi specificare l'oggetto da spegnere o devi averlo nell'inventario");
         } else {
-            if (p.getInvObject().isSiAccende()) {
-                if (p.getInvObject().isAcceso()) {
-                    p.getInvObject().setAcceso(false);
+            if (p.getInvObject().isTurnOn()) {
+                if (p.getInvObject().isOn()) {
+                    p.getInvObject().setOn(false);
                     output.append("L'oggetto ").append(p.getInvObject().getName()).append(" e' stato spento");
                     if (p.getInvObject().getId() == ID_OBJECT_TORCIA) {
                         eventTorciaAccesa = false;
@@ -893,7 +888,7 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoInventory(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandInventory(ParserOutput p, StringBuilder output) {
         output.append("Nel tuo inventario ci sono:\n");
         for (AdvObject o : getInventory().getList()) {
             output.append(o.getName()).append(": ").append(o.getDescription()).append("\n");
@@ -901,37 +896,36 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoLookAt(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandLookAt(ParserOutput p, StringBuilder output) {
         if (getCurrentRoom().getLook() != null && p.getObject() == null && p.getInvObject() == null && p.getObject2() == null) {
             output.append(getCurrentRoom().getDescription()).append("\n");
             output.append(getCurrentRoom().getLook());
             if (!getCurrentRoom().getObjects().isEmpty()) {
                 output.append("\nLa stanza contiene: ");
                 for (AdvObject object : getCurrentRoom().getObjects()) {
-                    if (object.isVisibile()) {
+                    if (object.isVisible()) {
                         output.append("\n").append(object.getName());
                     }
                 }
             }
         } else if (getCurrentRoom().getLook() == null && p.getObject() == null && p.getInvObject() == null && p.getObject2() == null) {
-            //aggiungere il fatto che vengano elencati gli elementi che contiene e dove è possibile andare
             output.append("Non c'è niente di interessante qui.");
-        } else if (p.getObject() != null && p.getObject().getDescription() != null && p.getObject().isVisibile() == true && p.getInvObject() == null && p.getObject2() == null) {
+        } else if (p.getObject() != null && p.getObject().getDescription() != null && p.getObject().isVisible() == true && p.getInvObject() == null && p.getObject2() == null) {
             if (p.getObject().getId() == ID_OBJECT_PARETE) {
-                getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setVisibile(true);
+                getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setVisible(true);
                 getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setPickupable(true);
             }
             if (p.getObject().getId() == ID_OBJECT_CONTATORE) {
-                getCurrentRoom().cercaObject(ID_OBJECT_LUCCHETTO).setVisibile(true);
+                getCurrentRoom().cercaObject(ID_OBJECT_LUCCHETTO).setVisible(true);
             }
             if (p.getObject().getId() == ID_OBJECT_RICETRASMITTENTE) {
-                if (!missionRipristinoContatti) {
+                if (!missioncontactReset) {
                     Scanner scanner = new Scanner(System.in);
                     System.out.println("Vuoi ripristinare i contatti col tuo pianeta?");
                     while (scanner.hasNextLine()) {
                         String risposta = scanner.nextLine().toLowerCase();
                         if (risposta.equals("si")) {
-                            ripristinoContatti();
+                            contactReset();
                             break;
                         } else if (risposta.equals("no")) {
                             break;
@@ -941,7 +935,7 @@ public class PianetaGame extends GameDescription {
                     }
                 } else {
                     System.out.println("Hai ricevuto il seguente messaggio: \n");
-                    stampaMessaggioPianeta();
+                    planetMessage();
                 }
             }
             if (p.getObject().getId() == ID_OBJECT_PANNELLO) {
@@ -951,7 +945,7 @@ public class PianetaGame extends GameDescription {
                 while (scanner.hasNextLine()) {
                     String risposta = scanner.nextLine().toLowerCase();
                     if (risposta.equals("si")) {
-                        attivazioneAtterraggioEmergenza(output);
+                        emergencyLanding(output);
                         break;
                     } else if (risposta.equals("no")) {
                         break;
@@ -989,7 +983,7 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private void ripristinoContatti() {
+    private void contactReset() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("sequenza: ''11 22 .. 30 22 44''\n");
         System.out.println("Quale numero inserisco? (scrivi solo il numero)\n");
@@ -998,11 +992,11 @@ public class PianetaGame extends GameDescription {
             if (Integer.parseInt(risposta) == 15) {
                 System.out.println("Contatti ripristinati\n");
                 this.score = 500;
-                missionRipristinoContatti = true;
+                missioncontactReset = true;
                 System.out.println("Hai ricevuto il seguente messaggio: \n");
-                stampaMessaggioPianeta();
+                planetMessage();
                 if (getInventory().cercaObject(ID_OBJECT_TUTA) == null) {
-                        timerOssigeno.start();
+                        oxygenTimer.start();
                 } else {
                     System.out.println("Grazie alla tuta che hai preso prima riesci a respirare ancora");
                 }
@@ -1015,7 +1009,7 @@ public class PianetaGame extends GameDescription {
         }
     }
 
-    private void attivazioneAtterraggioEmergenza(StringBuilder output) {
+    private void emergencyLanding(StringBuilder output) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Per attivare l'atterraggio d'emergenza dovrai rispondere alla seguente domanda:\n"
                 + "\"Attraversa il vetro ma senza romperlo. Cosa è?\" \n");
@@ -1025,7 +1019,7 @@ public class PianetaGame extends GameDescription {
             if (risposta.equals("luce")) {
                 this.score = 550;
                 System.out.println("Hai attivato l'atterraggio d'emergenza\n");
-                timerScontroSullaTerra.interrupt();
+                impactTimer.interrupt();
                 //scriviamo qualcosa per dire che e' finito il gioco
                 System.out.println("Gioco Finito, alla prossima!");
                 this.end(output);
@@ -1037,7 +1031,7 @@ public class PianetaGame extends GameDescription {
         }
     }
 
-    private void stampaMessaggioPianeta() {
+    private void planetMessage() {
         System.out.println("\"Salve Capitan Hector!\n"
                 + "Finalmente siamo riusciti a localizzarti, avevamo quasi perso le speranze! \n"
                 + "Attenzione! La tua navicella sta per entrare nell’Atmosfera del nostro pianeta e si sta per incendiare.\n"
@@ -1046,7 +1040,7 @@ public class PianetaGame extends GameDescription {
                 + "Speriamo di rivederti al più presto… \"\n");
     }
 
-    private StringBuilder comandoUse(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandUse(ParserOutput p, StringBuilder output) {
         if (p.getInvObject() == null) {
             output.append("Devi specificare l'oggetto da usare o devi averlo nell'inventario\n");
         } else {
@@ -1079,21 +1073,21 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoDrink(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandDrink(ParserOutput p, StringBuilder output) {
         if (p.getInvObject() == null && p.getObject() == null && p.getObject2() == null) {
             output.append("Devi specificare l'oggetto");
         } else if (p.getInvObject() == null && p.getObject() != null && p.getObject2() == null) {
             output.append("Devi avere l'oggetto nell'inventario");
         } else if (p.getInvObject() != null && p.getObject() == null && p.getObject2() == null) {
             if (p.getInvObject().isDrinkable()) {
-                if (p.getInvObject().isBevuta()) {
+                if (p.getInvObject().isDrinked()) {
                     output.append(p.getInvObject().getName()).append(" e' stata gia' bevuta!");
                 } else {
                     output.append("Hai bevuto ").append(p.getInvObject().getName());
-                    p.getInvObject().setBevuta(true);
+                    p.getInvObject().setDrinked(true);
                     if (p.getInvObject().getId() == ID_OBJECT_FIALA3) {
-                        if (timerGasTossico.isAlive()) {
-                            timerGasTossico.interrupt();
+                        if (toxicGasTimer.isAlive()) {
+                            toxicGasTimer.interrupt();
                             this.score = 100;
                             output.append("\nBravo!");
                         }
@@ -1106,7 +1100,7 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoPickUp(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandPickUp(ParserOutput p, StringBuilder output) {
         if (p.getObject() != null && p.getObject2() == null && p.getInvObject() == null) {
             if (p.getObject().isPickupable()) {
                 getInventory().add(p.getObject());
@@ -1138,8 +1132,8 @@ public class PianetaGame extends GameDescription {
                             it.remove();
                             output.append("Hai preso: ").append(p.getObject().getName());
                             output.append("\nVerra' inserito nell'inventario");
-                            if (p.getObject().getId() == ID_OBJECT_TUTA && timerOssigeno.isAlive()) {
-                                timerOssigeno.interrupt();
+                            if (p.getObject().getId() == ID_OBJECT_TUTA && oxygenTimer.isAlive()) {
+                                oxygenTimer.interrupt();
                                 this.score = 150;
                             }
                         }
@@ -1157,7 +1151,7 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    private StringBuilder comandoPutDown(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandPutDown(ParserOutput p, StringBuilder output) {
         if (p.getObject() == null && p.getObject2() == null && p.getInvObject() == null) {
             output.append("Devi specificare l'oggetto da lasciare nella stanza!");
         } else if (p.getObject() != null && p.getObject2() == null && p.getInvObject() == null) {
@@ -1187,9 +1181,7 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
-    //cercare di rendere questo metodo meno lungo
-    //semplificando qualcosa!
-    private StringBuilder comandoOpen(ParserOutput p, StringBuilder output) {
+    private StringBuilder commandOpen(ParserOutput p, StringBuilder output) {
         /*ATTENZIONE: quando un oggetto contenitore viene aperto, tutti gli oggetti contenuti
                     * vengongo inseriti nella stanza o nell'inventario a seconda di dove si trova l'oggetto contenitore.
                     * Questa soluzione NON va bene poiché quando un oggetto contenitore viene richiuso è complicato
@@ -1242,7 +1234,7 @@ public class PianetaGame extends GameDescription {
                         }
                         getCurrentRoom().togliCombinazione(p.getInvObject(), p.getObject());
                         if (p.getObject().getId() == ID_OBJECT_LUCCHETTO) {
-                            getCurrentRoom().cercaObject(ID_OBJECT_LEVA).setVisibile(true);
+                            getCurrentRoom().cercaObject(ID_OBJECT_LEVA).setVisible(true);
                             p.getObject().setDescription("Un semplice lucchetto");
                             getCurrentRoom().cercaObject(ID_OBJECT_CONTATORE).setDescription("Al centro di esso e' presente una leva che e' possibile alzare");
                         }
@@ -1290,9 +1282,8 @@ public class PianetaGame extends GameDescription {
         return score;
     }
     
-    private StringBuilder comandoPull(ParserOutput p, StringBuilder output) {
-        //ricerca oggetti pullabili
-        if (p.getObject() != null && p.getObject().isPullable() && p.getObject().isVisibile()) {
+    private StringBuilder commandPull(ParserOutput p, StringBuilder output) {
+        if (p.getObject() != null && p.getObject().isPullable() && p.getObject().isVisible()) {
             if (p.getObject().isPull() == true) {
                 output.append("L'oggetto ").append(p.getObject().getName()).append(" era stato gia' alzato.\nHai perso la memoria per caso?");
             } else {
@@ -1312,7 +1303,7 @@ public class PianetaGame extends GameDescription {
                             room.setLook("E' un semplice corridoio, cosa ti aspettavi?! Continua con le tue missioni!!");
                         }
                         if (room.getId() == ID_ROOM_SALA_TELECOMUNICAZIONI) {
-                            room.cercaObject(ID_OBJECT_RICETRASMITTENTE).setVisibile(true);
+                            room.cercaObject(ID_OBJECT_RICETRASMITTENTE).setVisible(true);
                         }
                     }
                 }
@@ -1331,37 +1322,38 @@ public class PianetaGame extends GameDescription {
     }
     
     public void checkTimer(){
-        if(timerGasTossico.isTimerActived()){
-            timerGasTossico.setSuspendTemporary(false);
-            timerGasTossico.start();
-            System.out.println("Vediamo timer gas tossico ATTIVATO ");
+        if(toxicGasTimer.isTimerActived()){
+            toxicGasTimer.setSuspendTemporary(false);
+            toxicGasTimer.start();
+            System.out.println("timer gas tossico ATTIVATO ");
         }
-        if(timerOssigeno.isTimerActived()){
-            timerGasTossico.setSuspendTemporary(false);
-            timerOssigeno.start();
-            System.out.println("Vediamo timerOssigeno ATTIVATO ");
+        if(oxygenTimer.isTimerActived()){
+            oxygenTimer.setSuspendTemporary(false);
+            oxygenTimer.start();
+            System.out.println("timer ossigeno ATTIVATO ");
         }
-        if(timerScontroSullaTerra.isTimerActived()){
-            timerGasTossico.setSuspendTemporary(false);
-            timerScontroSullaTerra.start();
-            System.out.println("Vediamo timerOssigeno ATTIVATO ");
+        if(impactTimer.isTimerActived()){
+            impactTimer.setSuspendTemporary(false);
+            impactTimer.start();
+            System.out.println("timer scontro sulla terra ATTIVATO ");
         }
     }
+    
     public void stopThread(){
-        if(timerGasTossico.isTimerActived()){
-            timerGasTossico.setSuspendTemporary(true);
-            timerGasTossico.interrupt();
-            System.out.println("Stoppato timer gas tossico ATTIVATO ");
+        if(toxicGasTimer.isTimerActived()){
+            toxicGasTimer.setSuspendTemporary(true);
+            toxicGasTimer.interrupt();
+            System.out.println("Timer gas tossico sospeso");
         }
-        if(timerOssigeno.isTimerActived()){
-            timerGasTossico.setSuspendTemporary(true);
-            timerOssigeno.interrupt();
-            System.out.println("Stoppato timerOssigeno ATTIVATO ");
+        if(oxygenTimer.isTimerActived()){
+            oxygenTimer.setSuspendTemporary(true);
+            oxygenTimer.interrupt();
+            System.out.println("Timer ossigeno sospeso");
         }
-        if(timerScontroSullaTerra.isTimerActived()){
-            timerGasTossico.setSuspendTemporary(true);
-            timerScontroSullaTerra.interrupt();
-            System.out.println("Stoppato timerOssigeno ATTIVATO ");
+        if(impactTimer.isTimerActived()){
+            impactTimer.setSuspendTemporary(true);
+            impactTimer.interrupt();
+            System.out.println("Timer scontro sulla terra sospeso");
         }
     }
         

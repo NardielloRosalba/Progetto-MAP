@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 
 /**
  *
@@ -38,7 +37,6 @@ public class saving_loading {
     }
 
     public static PianetaGame comandoCarica(InputStream is) throws FileNotFoundException, IOException, ClassNotFoundException {
-        //ObjectInputStream in = new ObjectInputStream(new FileInputStream(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\game2.dat"));
         FileOutputStream out = new FileOutputStream(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\game.dat");
         is.transferTo(out);
         is.close();
