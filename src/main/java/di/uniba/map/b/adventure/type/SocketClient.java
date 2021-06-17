@@ -20,13 +20,9 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author gruppo 'Le bimbe di Luca'
+ * @author le bimbe di Luca
  */
 
-/**
- *
- * @author Luca
- */
 public class SocketClient {
 
     public static void main(String args[]) throws UnknownHostException, IOException {
@@ -40,16 +36,19 @@ public class SocketClient {
             Inizio interfacciaInizio = new Inizio(out);
             interfacciaInizio.setVisible(true);
             JOptionPane.showMessageDialog(null, "Connessione avvenuta con successo", "Connessione socket", JOptionPane.INFORMATION_MESSAGE);
-            
+
             String ris_serv;//risposta server,risposta client
             while (true) {
                 //System.out.println(str + "-");//stampa delle possibilità
                 //ris_cl = scan.next();
-                ris_serv = in.readLine();//qua scrivo credenziali utente ottenute dal login +"!"
+                ris_serv = in.readLine();
                 JOptionPane.showMessageDialog(null, ris_serv, "Risposta server", JOptionPane.INFORMATION_MESSAGE);
-                if (ris_serv.endsWith("!")) {
+                if (ris_serv.endsWith("Adios!")) {
                     break;
+                } else {
+                    JOptionPane.showMessageDialog(null, ris_serv, "Sono qui", JOptionPane.INFORMATION_MESSAGE);
                 }
+
             }
         }
     }

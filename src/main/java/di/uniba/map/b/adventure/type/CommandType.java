@@ -7,7 +7,7 @@ package di.uniba.map.b.adventure.type;
 
 /**
  *
- * @author gruppo 'Le bimbe di Luca'
+ * @author le bimbe di Luca
  */
 
 public enum CommandType {

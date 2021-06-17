@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  *
- * @author gruppo 'Le bimbe di Luca'
+ * @author le bimbe di Luca
  */
 public abstract class GameDescription implements Serializable{
 
