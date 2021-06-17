@@ -6,11 +6,9 @@
 package di.uniba.map.b.adventure;
 
 import di.uniba.map.b.adventure.games.PianetaGame;
-import di.uniba.map.b.adventure.interfacee.Login;
 import di.uniba.map.b.adventure.parser.Parser;
 import di.uniba.map.b.adventure.parser.ParserOutput;
 import di.uniba.map.b.adventure.type.CommandType;
-import di.uniba.map.b.utils.User;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,19 +26,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * ATTENZIONE: l'Engine è molto spartano, in realtà demanda la logica alla
- * classe che implementa GameDescription e si occupa di gestire I/O sul
- * terminale.
  *
- * @author gruppo 'Le bimbe di Luca'
+ * @author le bimbe di Luca
  */
 public class Engine {
 
     private GameDescription game;
 
     private Parser parser;
-
-    private User user;
 
     public Engine(GameDescription game) {
         this.game = game;
@@ -61,38 +54,36 @@ public class Engine {
         System.out.println("Attesa comandi!");
         switch (this.socket()) {
             case 0:
-
                 System.out.println("Inizio nuova partita");
                 System.out.println("========================================");
                 System.out.println("** Adventure Luca, Rosalba, Raffaella **");
                 System.out.println("========================================" + "\n" + "\n");
                 System.out.println("Il protagonista, Capitan Hector, si trova \n"
-                        + "nella Navicella B612 della galassia Reggy e sta per \n"
-                        + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
-                        + "perde il controllo della navicella e di tutti i suoi \n"
-                        + "comandi, per salvarsi dovra' completare le missioni \n"
-                        + "nelle varie stanze,\n"
-                        + "cosi' da ristabilire i comandi persi della\n"
-                        + "navicella.\n");
+                + "nella Navicella B612 della galassia Reggy e sta per \n"
+                + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
+                + "perde il controllo della navicella e di tutti i suoi \n"
+                + "comandi, per salvarsi dovra' completare le missioni \n"
+                + "nelle varie stanze,\n"
+                + "cosi' da ristabilire i comandi persi della\n"
+                + "navicella.\n");
                 System.out.println("");
                 System.out.println(game.getCurrentRoom().getName());
                 System.out.println("");
                 System.out.println(game.getCurrentRoom().getDescription());
-                System.out.println("");
+                System.out.println("");      
                 break;
-
+                
             case 1:
                 System.out.println("Uscita in corso, addio!!");
                 break;
-
+                
             case 2:
-                //nome e password
                 System.out.println("Caricamento partita");
                 ParserOutput p = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
                 Database db = new Database();
                 PianetaGame game_load = null;
                 game_load = db.loading((PianetaGame) game);
-                if (game_load != null) {
+                if(game_load != null){
                     game = game_load;
                     this.game.nextMove(p);
                 }
@@ -116,7 +107,7 @@ public class Engine {
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
                 PianetaGame game_load = null;
                 game_load = db.loading((PianetaGame) game);
-                if (game_load != null) {
+                if(game_load != null){
                     game = game_load;
                     this.game.nextMove(p);
                 }
@@ -136,7 +127,6 @@ public class Engine {
     public int socket() {
         try {
             String str = "";
-            String str1 = "";
             ServerSocket ss = new ServerSocket(6666);
             Socket s = ss.accept();
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -147,20 +137,6 @@ public class Engine {
                 switch (str) {
                     case "new":
                         out.println("Ora inizierai una nuova partita!");
-                        
-                        //nome e password
-                        Login login = new Login(out);
-                        login.setVisible(true);
-                        while (true) {
-                            str1 = in.readLine();
-
-                            if (str1.equals("")) {
-
-                            } else {
-                                System.out.println(str1);
-                                break;
-                            }
-                        }
                         ss.close();
                         return 0;
 
@@ -174,13 +150,6 @@ public class Engine {
                         ss.close();
                         return 2;
 
-                    case "user":
-                        out.println("");
-                        System.out.println(in.readLine());
-                        out.println("");
-                        System.out.println(in.readLine());
-                        break;
-
                     default:
                         out.println("Comando non riconosciuto");
                         break;
@@ -191,13 +160,4 @@ public class Engine {
         }
         return -1;
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
 }

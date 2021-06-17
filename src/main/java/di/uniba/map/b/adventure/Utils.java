@@ -16,7 +16,7 @@ import java.util.Set;
 
 /**
  *
- * @author gruppo 'Le bimbe di Luca'
+ * @author le bimbe di Luca
  */
 
 public class Utils {

@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  *
- * @author gruppo 'Le bimbe di Luca'
+ * @author le bimbe di Luca
  */
 
 public class Room implements Serializable{
