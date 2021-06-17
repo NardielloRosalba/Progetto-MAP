@@ -540,6 +540,13 @@ public class PianetaGame extends GameDescription {
         panelObj.setAlias(new String[]{"pannello", "pannelloemergenza"});
         panelObj.setPickupable(false);
         externalRoom.getObjects().add(panelObj);
+        
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject oblo = new AdvObject(ID_OBJECT_OBLO, title, description);
+        oblo.setAlias(new String[]{"oblo"});
+        oblo.setPickupable(false);
+        controlRoom.getObjects().add(oblo);
 
         //AGGIUNGO COMBINAZIONI PER OGNI STANZA
         controlRoom.addCombinazioni(doorObj, cardObj);
