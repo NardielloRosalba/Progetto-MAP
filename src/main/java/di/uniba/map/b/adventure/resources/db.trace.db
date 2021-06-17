@@ -2104,3 +2104,113 @@ Caused by: java.lang.IllegalStateException: The file is locked: nio:C:/Users/nas
 	at org.h2.mvstore.FileStore.open(FileStore.java:172)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:381)
 	... 21 more
+2021-06-17 20:00:53 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Invalid value "4" for parameter "columnIndex" [90008-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:590)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.getInvalidValueException(DbException.java:280)
+	at org.h2.jdbc.JdbcResultSet.checkColumnIndex(JdbcResultSet.java:3212)
+	at org.h2.jdbc.JdbcResultSet.get(JdbcResultSet.java:3251)
+	at org.h2.jdbc.JdbcResultSet.getObject(JdbcResultSet.java:515)
+	at di.uniba.map.b.adventure.Database.getInfo(Database.java:60)
+	at di.uniba.map.b.adventure.Database.main(Database.java:80)
+2021-06-17 20:00:53 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP GAME[*]"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, VIEW, ROLE, ALIAS, SCHEMA, ALL, DOMAIN, TYPE, DATATYPE, AGGREGATE, SYNONYM"; SQL statement:
+drop game [42001-200]
+2021-06-17 20:01:23 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Invalid value "4" for parameter "columnIndex" [90008-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:590)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.getInvalidValueException(DbException.java:280)
+	at org.h2.jdbc.JdbcResultSet.checkColumnIndex(JdbcResultSet.java:3212)
+	at org.h2.jdbc.JdbcResultSet.get(JdbcResultSet.java:3251)
+	at org.h2.jdbc.JdbcResultSet.getObject(JdbcResultSet.java:515)
+	at di.uniba.map.b.adventure.Database.getInfo(Database.java:60)
+	at di.uniba.map.b.adventure.Database.main(Database.java:80)
+2021-06-17 20:01:23 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP GAME[*]"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, VIEW, ROLE, ALIAS, SCHEMA, ALL, DOMAIN, TYPE, DATATYPE, AGGREGATE, SYNONYM"; SQL statement:
+drop game [42001-200]
+2021-06-17 20:02:08 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Invalid value "4" for parameter "columnIndex" [90008-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:590)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.getInvalidValueException(DbException.java:280)
+	at org.h2.jdbc.JdbcResultSet.checkColumnIndex(JdbcResultSet.java:3212)
+	at org.h2.jdbc.JdbcResultSet.get(JdbcResultSet.java:3251)
+	at org.h2.jdbc.JdbcResultSet.getObject(JdbcResultSet.java:515)
+	at di.uniba.map.b.adventure.Database.getInfo(Database.java:60)
+	at di.uniba.map.b.adventure.Database.main(Database.java:80)
+2021-06-17 20:02:08 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP GAME[*]"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, VIEW, ROLE, ALIAS, SCHEMA, ALL, DOMAIN, TYPE, DATATYPE, AGGREGATE, SYNONYM"; SQL statement:
+drop game [42001-200]
+2021-06-17 20:02:31 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Invalid value "4" for parameter "columnIndex" [90008-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:590)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.getInvalidValueException(DbException.java:280)
+	at org.h2.jdbc.JdbcResultSet.checkColumnIndex(JdbcResultSet.java:3212)
+	at org.h2.jdbc.JdbcResultSet.get(JdbcResultSet.java:3251)
+	at org.h2.jdbc.JdbcResultSet.getObject(JdbcResultSet.java:515)
+	at di.uniba.map.b.adventure.Database.getInfo(Database.java:60)
+	at di.uniba.map.b.adventure.Database.main(Database.java:80)
+2021-06-17 20:02:31 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP GAME[*]"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, VIEW, ROLE, ALIAS, SCHEMA, ALL, DOMAIN, TYPE, DATATYPE, AGGREGATE, SYNONYM"; SQL statement:
+drop game [42001-200]
+2021-06-17 20:03:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Invalid value "4" for parameter "columnIndex" [90008-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:590)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.getInvalidValueException(DbException.java:280)
+	at org.h2.jdbc.JdbcResultSet.checkColumnIndex(JdbcResultSet.java:3212)
+	at org.h2.jdbc.JdbcResultSet.get(JdbcResultSet.java:3251)
+	at org.h2.jdbc.JdbcResultSet.getObject(JdbcResultSet.java:515)
+	at di.uniba.map.b.adventure.Database.getInfo(Database.java:60)
+	at di.uniba.map.b.adventure.Database.main(Database.java:80)
+2021-06-17 20:03:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "GAME" not found; SQL statement:
+SELECT * FROM game [42102-200]
+2021-06-17 20:06:07 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-200]
+2021-06-17 20:09:09 database: flush
+org.h2.message.DbException: General error: "java.lang.IllegalStateException: The file is locked: nio:C:/Users/nasca/Progetto-MAP/src/main/java/di/uniba/map/b/adventure/resources/db.mv.db [1.4.200/7]" [50000-200]
+	at org.h2.message.DbException.get(DbException.java:194)
+	at org.h2.message.DbException.convert(DbException.java:347)
+	at org.h2.mvstore.db.MVTableEngine$1.uncaughtException(MVTableEngine.java:93)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:2877)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:481)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:402)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:3579)
+	at org.h2.mvstore.db.MVTableEngine$Store.open(MVTableEngine.java:170)
+	at org.h2.mvstore.db.MVTableEngine.init(MVTableEngine.java:103)
+	at org.h2.engine.Database.getPageStore(Database.java:2659)
+	at org.h2.engine.Database.open(Database.java:675)
+	at org.h2.engine.Database.openDatabase(Database.java:307)
+	at org.h2.engine.Database.<init>(Database.java:301)
+	at org.h2.engine.Engine.openSession(Engine.java:74)
+	at org.h2.engine.Engine.openSession(Engine.java:192)
+	at org.h2.engine.Engine.createSessionAndValidate(Engine.java:171)
+	at org.h2.engine.Engine.createSession(Engine.java:166)
+	at org.h2.engine.Engine.createSession(Engine.java:29)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:340)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:173)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:152)
+	at org.h2.Driver.connect(Driver.java:69)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:677)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:251)
+	at di.uniba.map.b.adventure.Database.<init>(Database.java:37)
+	at di.uniba.map.b.adventure.Engine.execute(Engine.java:67)
+	at di.uniba.map.b.adventure.Engine.main(Engine.java:111)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "java.lang.IllegalStateException: The file is locked: nio:C:/Users/nasca/Progetto-MAP/src/main/java/di/uniba/map/b/adventure/resources/db.mv.db [1.4.200/7]" [50000-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:505)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	... 27 more
+Caused by: java.lang.IllegalStateException: The file is locked: nio:C:/Users/nasca/Progetto-MAP/src/main/java/di/uniba/map/b/adventure/resources/db.mv.db [1.4.200/7]
+	at org.h2.mvstore.DataUtils.newIllegalStateException(DataUtils.java:950)
+	at org.h2.mvstore.FileStore.open(FileStore.java:172)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:381)
+	... 21 more

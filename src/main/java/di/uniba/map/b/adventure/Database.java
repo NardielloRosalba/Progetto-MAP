@@ -28,8 +28,9 @@ public class Database {
     public final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS game("
             + "username VARCHAR(20) PRIMARY KEY,"
             + "password VARCHAR(20),"
-            + "match BLOB not null)";
-    public final String INSERT = "INSERT INTO game VALUES (?,?,?)";
+            + "match BLOB not null,"
+            + "score int(5))";
+    //public final String INSERT = "INSERT INTO game VALUES (?,?,?,?)";
     public final Connection conn;
 
     public Database() throws SQLException {
@@ -55,8 +56,9 @@ public class Database {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery("SELECT * FROM game");
             if (rs.isBeforeFirst()) {
+                System.out.println("--- NOME \t\t PUNTEGGIO ---");
                 while (rs.next()) {
-                    System.out.println(rs.getObject(1) + " -:- " + rs.getObject(2) + " -:- " + rs.getObject(3));
+                    System.out.println("  " + rs.getObject(1) + "   \t\t   " + rs.getObject(4));
                 }
             } else {
                 System.out.println("Non ci sono ancora giocatori registrati");
@@ -70,7 +72,7 @@ public class Database {
 
     public void delete() throws SQLException {
         Statement stm = conn.createStatement();
-        stm.executeUpdate("delete from game");
+        stm.executeUpdate("delete * from game");
         stm.close();
     }
 
@@ -86,8 +88,8 @@ db.getInfo();
         Scanner scan = new Scanner(System.in);
         PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
         PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
-        PreparedStatement pstm_ins = conn.prepareStatement("INSERT into game VALUES(?,?,?)");//per inserire una tupla
-        PreparedStatement pstm_alter = conn.prepareStatement("UPDATE game set match = ? where username like ?");//per caricare una partita su un giocatore già registrato
+        PreparedStatement pstm_ins = conn.prepareStatement("INSERT into game VALUES(?,?,?,?)");//per inserire una tupla
+        PreparedStatement pstm_alter = conn.prepareStatement("UPDATE game set match = ?, score = ? where username like ?");//per caricare una partita su un giocatore già registrato
         Properties db = new Properties();
 
         System.out.println("Sei un nuovo utente?");//capisco cosa fare!
@@ -113,6 +115,7 @@ db.getInfo();
                         pstm_ins.setString(2, db.getProperty("psw"));
                         saving_loading.comandoSalva(game);
                         pstm_ins.setObject(3, game);//carico pianetagame
+                        pstm_ins.setInt(4, game.getScore());
                         pstm_ins.executeUpdate();
 
                         pstm_ins.close();
@@ -136,11 +139,14 @@ db.getInfo();
 
                     ResultSet rs = pstm_user_psw.executeQuery();
                     if (rs.next()) {//se utente con stesso user e psw esiste..
+                        int score = rs.getInt(4);
                         pstm_user_psw.close();
 
                         saving_loading.comandoSalva(game);
                         pstm_alter.setObject(1, game);
-                        pstm_alter.setString(2, db.getProperty("user"));
+                        pstm_alter.setInt(2, game.getScore()+score);
+                        pstm_alter.setString(3, db.getProperty("user"));
+                        
                         pstm_alter.executeUpdate();
 
                         pstm_alter.close();
