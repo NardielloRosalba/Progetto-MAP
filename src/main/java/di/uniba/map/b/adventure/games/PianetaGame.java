@@ -79,6 +79,8 @@ public class PianetaGame extends GameDescription {
     private boolean missionCrepa = false;
     private boolean missionRipristinoContatti = false;
     
+    private int score = 0;
+    
     private TimerAvvisoMorte timerGasTossico = new TimerAvvisoMorte("del gas tossico!");
     //private boolean timerActived = false;
 
@@ -679,6 +681,7 @@ public class PianetaGame extends GameDescription {
                             Database db = new Database();
                             try {
                                 db.saving(this);
+                                db.getInfo();
                             } catch (IOException ex) {
                                 Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (ClassNotFoundException ex) {
@@ -823,6 +826,7 @@ public class PianetaGame extends GameDescription {
                     if (fiala.isBevuta()) {
                         output.append("Il gas tossico non puo' nuocere alla tua salute perche' hai bevuto prima la fiala\n"
                                 + "Sei immune!");
+                        this.score = 1000;
                     } else {
                         timerGasTossico.start();
                     }
@@ -857,6 +861,7 @@ public class PianetaGame extends GameDescription {
                     output.append(p.getInvObject().getName()).append(" e' stato acceso");
                     if (p.getInvObject().getId() == ID_OBJECT_TORCIA) {
                         output.append("\nAdesso riesci a vedere meglio l’ambiente che ti circonda");
+                        this.score = 20;
                         eventTorciaAccesa = true;
                     }
                 }
@@ -992,6 +997,7 @@ public class PianetaGame extends GameDescription {
             String risposta = scanner.nextLine().trim();
             if (Integer.parseInt(risposta) == 15) {
                 System.out.println("Contatti ripristinati\n");
+                this.score = 500;
                 missionRipristinoContatti = true;
                 System.out.println("Hai ricevuto il seguente messaggio: \n");
                 stampaMessaggioPianeta();
@@ -1017,6 +1023,7 @@ public class PianetaGame extends GameDescription {
         while (scanner.hasNextLine()) {
             String risposta = scanner.nextLine().trim();
             if (risposta.equals("luce")) {
+                this.score = 550;
                 System.out.println("Hai attivato l'atterraggio d'emergenza\n");
                 timerScontroSullaTerra.interrupt();
                 //scriviamo qualcosa per dire che e' finito il gioco
@@ -1050,10 +1057,12 @@ public class PianetaGame extends GameDescription {
                     if (getCurrentRoom().vediCombinazioni(p.getInvObject(), p.getObject())) {
                         if (p.getObject().getId() == ID_OBJECT_PORTA) {
                             getCurrentRoom().setLock(false);
+                            this.score = 100;
                             output.append("Hai aperto tutte le porte della navicella");
                         }
                         if (p.getObject().getId() == ID_OBJECT_CREPA) {
                             missionCrepa = true;
+                            this.score = 100;
                             output.append("Hai riparato la crepa. Complimenti!!");
                             getCurrentRoom().setDescription("Sei nel 'Corridoio Nord'! E' possibile dirigerti a sud e a est.");
                             getCurrentRoom().getObjects().remove(getCurrentRoom().cercaObject(ID_OBJECT_CREPA));
@@ -1085,6 +1094,7 @@ public class PianetaGame extends GameDescription {
                     if (p.getInvObject().getId() == ID_OBJECT_FIALA3) {
                         if (timerGasTossico.isAlive()) {
                             timerGasTossico.interrupt();
+                            this.score = 100;
                             output.append("\nBravo!");
                         }
                     }
@@ -1106,6 +1116,7 @@ public class PianetaGame extends GameDescription {
                 }
                 if (p.getObject().getId() == ID_OBJECT_TORCIA) {
                     eventTorcia = true;
+                    this.score = 10;
                 }
                 getCurrentRoom().getObjects().remove(p.getObject());
                 output.append("Hai raccolto: ").append(p.getObject().getDescription());
@@ -1129,6 +1140,7 @@ public class PianetaGame extends GameDescription {
                             output.append("\nVerra' inserito nell'inventario");
                             if (p.getObject().getId() == ID_OBJECT_TUTA && timerOssigeno.isAlive()) {
                                 timerOssigeno.interrupt();
+                                this.score = 150;
                             }
                         }
                     }
@@ -1224,6 +1236,7 @@ public class PianetaGame extends GameDescription {
                         output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato aperto").append("\n");
                         p.getObject().setOpen(true);
                         if(p.getObject().getId() == ID_OBJECT_PORTA){
+                            this.score = 100;
                             output.append("Hai aperto tutte le porte della navicella");
                             getCurrentRoom().setLock(false);
                         }
@@ -1273,6 +1286,10 @@ public class PianetaGame extends GameDescription {
         return output;
     }
 
+    public int getScore() {
+        return score;
+    }
+    
     private StringBuilder comandoPull(ParserOutput p, StringBuilder output) {
         //ricerca oggetti pullabili
         if (p.getObject() != null && p.getObject().isPullable() && p.getObject().isVisibile()) {
@@ -1282,6 +1299,7 @@ public class PianetaGame extends GameDescription {
                 p.getObject().setPull(true);
                 output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato alzato");
                 if (ID_OBJECT_LEVA == p.getObject().getId()) {
+                    this.score = 100;
                     output.append("\nAdesso sei riuscito ad accedere le luci della navicella.");
                     missionCorrente = true;
                     p.getObject().setDescription("Semplice leva alzata");
