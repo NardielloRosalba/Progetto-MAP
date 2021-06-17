@@ -66,14 +66,14 @@ public class Database {
                 System.out.println("--- NOME \t\t PUNTEGGIO ---");
                 while (rs.next()) {
                     System.out.println("  " + rs.getObject(1) + "   \t\t   " + rs.getObject(4));
-                    User user = new User(rs.getString(1),rs.getInt(4));
+                    User user = new User(rs.getString(1), rs.getInt(4));
                     users.add(user);
                 }
                 print(users);
             } else {
                 System.out.println("Non ci sono ancora giocatori registrati");
             }
-            
+
             stm.close();
         } catch (SQLException ex) {
             System.out.println(ex.getErrorCode() + " : " + ex.getMessage());
@@ -83,17 +83,17 @@ public class Database {
     public void delete() throws SQLException {
         Statement stm = conn.createStatement();
         stm.executeUpdate("delete * from game");
+        //stm.executeUpdate("drop table game");
         stm.close();
     }
 
     /*public static void main(String arg[]) throws SQLException {
-Database db = new Database();
-db.getInfo();
-//db.saving();
-db.delete();
-db.getInfo();
-
- }*/
+        Database db = new Database();
+        db.getInfo();
+        //db.saving();
+        db.delete();
+        db.getInfo();
+    }*/
     public PianetaGame saving(PianetaGame game) throws SQLException, FileNotFoundException, IOException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
@@ -191,6 +191,7 @@ db.getInfo();
         game.stopThread();
         Scanner scanner = new Scanner(System.in);
         PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
+        PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game");
         PianetaGame game_load = null;
         Properties db = new Properties();
 
@@ -199,33 +200,36 @@ db.getInfo();
             String command = scanner.nextLine();
 
             if (command.equalsIgnoreCase("no")) {
-//vuoi caricare partita di giocatore vecchio ok
                 while (true) {
-                    this.login(db);
-                    pstm_user_psw.setString(1, db.getProperty("user"));
-                    pstm_user_psw.setString(2, db.getProperty("psw"));
+                    ResultSet rs = pstm_user.executeQuery();
+                    if (rs.next()) {
+                        this.login(db);
+                        pstm_user_psw.setString(1, db.getProperty("user"));
+                        pstm_user_psw.setString(2, db.getProperty("psw"));
+                        rs = pstm_user_psw.executeQuery();
+                        if (rs.next()) {//se utente con stesso user e psw esiste..
 
-                    ResultSet rs = pstm_user_psw.executeQuery();
-                    if (rs.next()) {//se utente con stesso user e psw esiste..
+                            saving_loading.comandoSalva(saving_loading.comandoCarica(rs.getBinaryStream(3)));
 
-                        saving_loading.comandoSalva(saving_loading.comandoCarica(rs.getBinaryStream(3)));
+                            game_load = saving_loading.comandoCarica();
 
-                        game_load = saving_loading.comandoCarica();
+                            JOptionPane optionPane = new JOptionPane("Caricamento andato a buon fine!");
+                            JDialog dialog = optionPane.createDialog("Caricamento");
 
-                        JOptionPane optionPane = new JOptionPane("Caricamento andato a buon fine!");
-                        JDialog dialog = optionPane.createDialog("Caricamento");
-
-                        dialog.setAlwaysOnTop(true);
-                        dialog.setVisible(true);
-                        dialog.dispose();
-                        pstm_user_psw.close();
-                        break;
+                            dialog.setAlwaysOnTop(true);
+                            dialog.setVisible(true);
+                            dialog.dispose();
+                            pstm_user_psw.close();
+                            break;
+                        } else {
+                            System.out.println("Credenziali errate!\n");
+                            System.out.println("\n");
+                        }
                     } else {
-                        System.out.println("Credenziali errate!\n");
-                        System.out.println("\n");
+                        System.out.println("Non ci sono utenti registrati");
+                        break;
                     }
                 }
-                break;
             } else if (command.equalsIgnoreCase("si")) {
                 System.out.println("devi prima salvarne una!!");
                 System.out.println("\n");
@@ -239,8 +243,8 @@ db.getInfo();
                 System.out.println("Sei un nuovo utente?");//capisco cosa fare!
                 System.out.println("\n");
             }
+            break;
         }
-
         if (game_load == null) {
             game.checkTimer();
         }
