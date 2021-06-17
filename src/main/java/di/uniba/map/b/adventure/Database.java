@@ -6,6 +6,7 @@
 package di.uniba.map.b.adventure;
 
 import di.uniba.map.b.adventure.games.PianetaGame;
+import di.uniba.map.b.utils.User;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,8 +15,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedHashSet;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -56,14 +62,19 @@ public class Database {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery("SELECT * FROM game");
             if (rs.isBeforeFirst()) {
+                Set<User> users = new LinkedHashSet();
+                System.out.println("Utenti Registrati: \n");
                 System.out.println("--- NOME \t\t PUNTEGGIO ---");
                 while (rs.next()) {
                     System.out.println("  " + rs.getObject(1) + "   \t\t   " + rs.getObject(4));
+                    User user = new User(rs.getString(1),rs.getInt(4));
+                    users.add(user);
                 }
+                print(users);
             } else {
                 System.out.println("Non ci sono ancora giocatori registrati");
             }
-
+            
             stm.close();
         } catch (SQLException ex) {
             System.out.println(ex.getErrorCode() + " : " + ex.getMessage());
@@ -144,9 +155,9 @@ db.getInfo();
 
                         saving_loading.comandoSalva(game);
                         pstm_alter.setObject(1, game);
-                        pstm_alter.setInt(2, game.getScore()+score);
+                        pstm_alter.setInt(2, game.getScore() + score);
                         pstm_alter.setString(3, db.getProperty("user"));
-                        
+
                         pstm_alter.executeUpdate();
 
                         pstm_alter.close();
@@ -250,6 +261,47 @@ db.getInfo();
         System.out.println("");
 
         return db;
+    }
+
+    private void print(Set<User> users) {
+        System.out.println(""
+                + "_________ PRINCIPIANTE __________\n"
+                + "(punteggio compreso tra (" + 0 + " e " + 910 + ")\n");
+        printPersonWithPredicateConsumer(users, (User u) -> u.getScore() >= 0 && u.getScore() <= 910, u -> System.out.println(u));
+        System.out.println(""
+                + "_________ INTERMEDIO ____________\n"
+                + "(punteggio compreso tra (" + 911 + " e " + 1820 + ")\n");
+        printPersonWithPredicateConsumer(users, (User u) -> u.getScore() >= 911 && u.getScore() <= 1820, u -> System.out.println(u));
+        System.out.println(""
+                + "__________ AVANZATO  ____________\n"
+                + "(punteggio compreso tra (" + 1821 + " e " + 2730 + ")\n");
+        printPersonWithPredicateConsumer(users, (User u) -> u.getScore() >= 1821 && u.getScore() <= 2730, u -> System.out.println(u));
+        int max = users
+                .stream()
+                .mapToInt(u -> u.getScore())
+                .max().getAsInt();
+        System.out.print("L'utente con il punteggio MASSIMO ( " + max + " )e':\n");
+
+        printPersonWithPredicateConsumerFunction(users, u -> u.getScore() == max, u -> u.getName(), name -> System.out.println(name));
+    }
+
+    //prendendo solo una parte del dato
+    public static void printPersonWithPredicateConsumerFunction(Set<User> users, Predicate<User> tester, Function<User, String> mapper, Consumer<String> operation) {
+        for (User u : users) {
+            if (tester.test(u)) {
+                String data = mapper.apply(u);
+                operation.accept(data);
+            }
+        }
+    }
+
+    //senza specificare l'operazione
+    public static void printPersonWithPredicateConsumer(Set<User> users, Predicate<User> tester, Consumer<User> operation) {
+        for (User u : users) {
+            if (tester.test(u)) {
+                operation.accept(u);
+            }
+        }
     }
 
 }
