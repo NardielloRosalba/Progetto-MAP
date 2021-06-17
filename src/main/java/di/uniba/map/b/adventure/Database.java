@@ -6,6 +6,7 @@
 package di.uniba.map.b.adventure;
 
 import di.uniba.map.b.adventure.games.PianetaGame;
+import di.uniba.map.b.utils.User;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,7 +22,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author gruppo 'Le bimbe di Luca'
+ * @author Luca
  */
 public class Database {
 
@@ -178,7 +179,7 @@ public class Database {
         PianetaGame game_load = null;
         Properties db = new Properties();
 
-        System.out.println("Sei un nuovo utente?");//capisco cosa fare!
+        //System.out.println("Sei un nuovo utente?");//capisco cosa fare!
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
 
@@ -227,6 +228,39 @@ public class Database {
             game.checkTimer();
         }
         return game_load;
+    }
+
+    public boolean registration(User user) throws SQLException {
+        PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per autenticare con username e psw
+        //PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
+
+        //nuovo utente
+        pstm_user.setString(1, user.getName());
+        ResultSet rs = pstm_user.executeQuery();
+        if (rs.next()) {//se utente con stesso user esiste
+            //System.out.println("Username gia in uso");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean login(User user) throws SQLException {
+        //PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per autenticare con username e psw
+        PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
+
+        pstm_user_psw.setString(1, user.getName());
+        pstm_user_psw.setString(2, user.getPassword());
+
+        ResultSet rs = pstm_user_psw.executeQuery();
+
+        if (rs.next()) {//se utente con stesso user e psw esiste
+                return true;
+        } else{
+            System.out.println("Credenziali errate!\n");
+            System.out.println("\n");
+            return false;
+        }
     }
 
     public Properties login(Properties db) {

@@ -6,6 +6,7 @@
 package di.uniba.map.b.adventure;
 
 import di.uniba.map.b.adventure.games.PianetaGame;
+import di.uniba.map.b.adventure.interfacee.Login;
 import di.uniba.map.b.adventure.parser.Parser;
 import di.uniba.map.b.adventure.parser.ParserOutput;
 import di.uniba.map.b.adventure.type.CommandType;
@@ -57,6 +58,7 @@ public class Engine {
         System.out.println("Attesa comandi!");
         switch (this.socket()) {
             case 0:
+                
                 System.out.println("Inizio nuova partita");
                 System.out.println("========================================");
                 System.out.println("** Adventure Luca, Rosalba, Raffaella **");
@@ -136,7 +138,7 @@ public class Engine {
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
 
-            while (true) {
+            while (true) {                
                 str = in.readLine();
                 switch (str) {
                     case "new":
@@ -154,7 +156,14 @@ public class Engine {
                         out.println("Ora riprenderai una vecchia partita!");
                         ss.close();
                         return 2;
-
+                    
+                    case "user":
+                        out.println("");
+                        System.out.println(in.readLine());
+                        out.println("");
+                        System.out.println(in.readLine());
+                        break;
+                        
                     default:
                         out.println("Comando non riconosciuto");
                         break;

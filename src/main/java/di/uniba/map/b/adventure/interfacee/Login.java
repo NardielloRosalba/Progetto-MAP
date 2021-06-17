@@ -5,10 +5,16 @@
  */
 package di.uniba.map.b.adventure.interfacee;
 
+import di.uniba.map.b.adventure.Database;
+import di.uniba.map.b.utils.User;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -17,7 +23,10 @@ import javax.swing.JOptionPane;
  * @author nasca
  */
 public class Login extends javax.swing.JFrame {
+
     private int option;
+    public User user;
+
     /**
      * Creates new form Login
      */
@@ -29,16 +38,21 @@ public class Login extends javax.swing.JFrame {
             if (option == JOptionPane.YES_OPTION) {
                 //inserire nome e pass 
                 JOptionPane.showMessageDialog(this, "inserire nome e pass",
-                "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
+                        "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
             } else if (option == JOptionPane.NO_OPTION) {
                 // vedere che il nome sia giusto 
                 JOptionPane.showMessageDialog(this, "vedere che il nome sia giusto ",
-                "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
+                        "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
             } else if (option == JOptionPane.CANCEL_OPTION) {
-                
+
             }
         }
-        
+
+
+    }
+
+    public User getUser() {
+        return user;
     }
 
     private int init() {
@@ -132,19 +146,46 @@ public class Login extends javax.swing.JFrame {
 
     private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed
         // TODO add your handling code here:
-        
-        String op1 = jtfName.getText();
-        String op2 = jtfPassword.getText();
-        if (option == JOptionPane.YES_OPTION){
-            //caso nuovo utente
-            //registrazione
-            JOptionPane.showMessageDialog(this, "registrazione effettuata "+ op1 + op2,
-                "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
+
+        String name = jtfName.getText();
+        String password = jtfPassword.getText();
+        if (option == JOptionPane.YES_OPTION) {
+            user.setName(name);
+            user.setPassword(password);
+            try {
+                Database db = new Database();
+                while (true) {
+                    if (db.registration(user)) {
+                        JOptionPane.showMessageDialog(this, "Username valido",
+                                "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Username già in uso",
+                                "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.dispose();
         } else {
             //caso utente gia registrato
-            JOptionPane.showMessageDialog(this, "caso utente gia registrato "+ op1 + op2,
-                "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                Database db = new Database();
+                while (true) {
+                    if (!db.login(user)) {
+                        JOptionPane.showMessageDialog(this, "Credenziali inserite errate",
+                                "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Accesso avvenuto con successo",
+                                "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.dispose();
         }
     }//GEN-LAST:event_jButtonOkActionPerformed
@@ -158,8 +199,7 @@ public class Login extends javax.swing.JFrame {
     /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
      */
-    
-      /*  try {
+ /*  try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
             if ("Nimbus".equals(info.getName())) {
                 javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -200,7 +240,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }*/
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonOk;
     private javax.swing.JTextField jtfName;
