@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
  */
 package di.uniba.map.b.adventure;
 
@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author le bimbe di Luca
+ * @author Luca
  */
 public class Database {
 
@@ -75,12 +75,13 @@ public class Database {
     }
 
     /*public static void main(String arg[]) throws SQLException {
-        Database db = new Database();
-        db.getInfo();
-        //db.saving();
-        db.delete();
-        db.getInfo();
-    }*/
+Database db = new Database();
+db.getInfo();
+//db.saving();
+db.delete();
+db.getInfo();
+
+ }*/
     public PianetaGame saving(PianetaGame game) throws SQLException, FileNotFoundException, IOException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
@@ -182,7 +183,7 @@ public class Database {
             String command = scanner.nextLine();
 
             if (command.equalsIgnoreCase("no")) {
-                //vuoi caricare partita di giocatore vecchio ok
+//vuoi caricare partita di giocatore vecchio ok
                 while (true) {
                     this.login(db);
                     pstm_user_psw.setString(1, db.getProperty("user"));
