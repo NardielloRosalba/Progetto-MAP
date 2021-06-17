@@ -5,7 +5,7 @@
  */
 package di.uniba.map.b.adventure.games;
 
-import di.uniba.map.b.adventure.Database;
+import di.uniba.map.b.utils.Database;
 import di.uniba.map.b.adventure.GameDescription;
 import di.uniba.map.b.adventure.parser.ParserOutput;
 import di.uniba.map.b.adventure.type.AdvObject;
@@ -125,7 +125,7 @@ public class PianetaGame extends GameDescription {
             while (this.taskCount != countDown) {
                 try {
                     System.out.println(notice(this.countDown - this.taskCount));
-                    Thread.sleep(10000);
+                    Thread.sleep(60000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
                     if (!isSuspendTemporary()) {
@@ -696,20 +696,8 @@ public class PianetaGame extends GameDescription {
                         commandHelp(p);
                         break;
                     case SAVE:
-                        try {
-                        Database db = new Database();
-                        try {
-                            db.saving(this);
-                            db.getInfo();
-                        } catch (IOException ex) {
-                            Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    break;
+                        commandSave();
+                        break;
                     case END:
                         end(output.append("Addio!"));
                         break;
@@ -723,6 +711,22 @@ public class PianetaGame extends GameDescription {
 
         output.append("\n");
         return output.toString();
+    }
+
+    private void commandSave() {
+        try {
+            Database db = new Database();
+            try {
+                db.saving(this);
+                db.getInfo();
+            } catch (IOException ex) {
+                Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private StringBuilder commandNord(ParserOutput p, StringBuilder output) {
@@ -970,7 +974,7 @@ public class PianetaGame extends GameDescription {
                 while (scanner.hasNextLine()) {
                     String risposta = scanner.nextLine().toLowerCase();
                     if (risposta.equals("si")) {
-                        emergencyLanding(output);
+                        emergencyLanding(output, p);
                         break;
                     } else if (risposta.equals("no")) {
                         break;
@@ -1034,7 +1038,7 @@ public class PianetaGame extends GameDescription {
         }
     }
 
-    private void emergencyLanding(StringBuilder output) {
+    private void emergencyLanding(StringBuilder output, ParserOutput p) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Per attivare l'atterraggio d'emergenza dovrai rispondere alla seguente domanda:\n"
                 + "\"Attraversa il vetro ma senza romperlo. Cosa è?\" \n");
@@ -1045,8 +1049,8 @@ public class PianetaGame extends GameDescription {
                 this.score = 550;
                 System.out.println("Hai attivato l'atterraggio d'emergenza\n");
                 impactTimer.interrupt();
-                //scriviamo qualcosa per dire che e' finito il gioco
                 System.out.println("Gioco Finito, alla prossima!");
+                commandSave();
                 this.end(output);
                 break;
             } else {
@@ -1087,7 +1091,7 @@ public class PianetaGame extends GameDescription {
         dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
         dialog.dispose();
-        
+
     }
 
     private StringBuilder commandUse(ParserOutput p, StringBuilder output) {

@@ -5,6 +5,8 @@
  */
 package di.uniba.map.b.adventure;
 
+import di.uniba.map.b.utils.Utils;
+import di.uniba.map.b.utils.Database;
 import di.uniba.map.b.adventure.games.PianetaGame;
 import di.uniba.map.b.adventure.parser.Parser;
 import di.uniba.map.b.adventure.parser.ParserOutput;
