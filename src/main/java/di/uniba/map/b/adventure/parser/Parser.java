@@ -5,7 +5,7 @@
  */
 package di.uniba.map.b.adventure.parser;
 
-import di.uniba.map.b.adventure.Utils;
+import di.uniba.map.b.utils.Utils;
 import di.uniba.map.b.adventure.type.AdvObject;
 import di.uniba.map.b.adventure.type.AdvObjectContainer;
 import di.uniba.map.b.adventure.type.Command;

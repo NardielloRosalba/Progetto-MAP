@@ -5,6 +5,8 @@
  */
 package di.uniba.map.b.adventure;
 
+import di.uniba.map.b.utils.Utils;
+import di.uniba.map.b.utils.Database;
 import di.uniba.map.b.adventure.games.PianetaGame;
 import di.uniba.map.b.adventure.parser.Parser;
 import di.uniba.map.b.adventure.parser.ParserOutput;
@@ -61,18 +63,17 @@ public class Engine {
                 
             case 1:
                 System.out.println("Uscita in corso, addio!!");
+                ParserOutput p = parser.parse("esci", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
+                game.nextMove(p);
                 break;
-
             case 2:
-                System.out.println("Caricamento partita");
-                ParserOutput p = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
+                p = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
                 PianetaGame game_load = null;
                 game_load = db.loading((PianetaGame) game);
                 if (game_load != null) {
                     game = game_load;
                     this.game.nextMove(p);
                 } else {
-                    System.out.println("Caricamento partita");
                     description();
                 }
                 break;

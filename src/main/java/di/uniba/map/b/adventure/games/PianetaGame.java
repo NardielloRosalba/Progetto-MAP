@@ -5,7 +5,7 @@
  */
 package di.uniba.map.b.adventure.games;
 
-import di.uniba.map.b.adventure.Database;
+import di.uniba.map.b.utils.Database;
 import di.uniba.map.b.adventure.GameDescription;
 import di.uniba.map.b.adventure.parser.ParserOutput;
 import di.uniba.map.b.adventure.type.AdvObject;
@@ -23,6 +23,13 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -78,23 +85,23 @@ public class PianetaGame extends GameDescription {
     private boolean missionCorrente = false;
     private boolean missionCrepa = false;
     private boolean missioncontactReset = false;
-    
+
     private int score = 0;
-    
+
     private TimerAvvisoMorte toxicGasTimer = new TimerAvvisoMorte("del gas tossico!");
 
     private TimerAvvisoMorte oxygenTimer = new TimerAvvisoMorte("dell'abbassamento livelli di ossigeno!");
 
     private TimerAvvisoMorte impactTimer = new TimerAvvisoMorte(3, "dello scontro sulla Terra");
-     
-    static class TimerAvvisoMorte extends Thread implements Serializable{
+
+    static class TimerAvvisoMorte extends Thread implements Serializable {
 
         private int countDown = 10;
         private int taskCount = 0;
         private final String cause;
         private boolean timerActived = false;
         private boolean suspendTemporary = false;
-        
+
         public TimerAvvisoMorte(int num, String causaMorte) {
             this.countDown = num;
             this.cause = causaMorte;
@@ -107,21 +114,21 @@ public class PianetaGame extends GameDescription {
         public void setSuspendTemporary(boolean suspendTemporary) {
             this.suspendTemporary = suspendTemporary;
         }
-        
+
         public TimerAvvisoMorte(String causaMorte) {
             this.cause = causaMorte;
         }
-        
+
         @Override
         public void run() {
             this.timerActived = true;
             while (this.taskCount != countDown) {
                 try {
                     System.out.println(notice(this.countDown - this.taskCount));
-                    Thread.sleep(10000);
+                    Thread.sleep(60000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
-                    if(!isSuspendTemporary()){
+                    if (!isSuspendTemporary()) {
                         System.out.println("Ti sei salvato la vita!");
                         this.timerActived = false;
                     }
@@ -144,7 +151,7 @@ public class PianetaGame extends GameDescription {
         }
 
     }
-    
+
     @Override
     public void init() throws FileNotFoundException {
         //Commands
@@ -203,6 +210,10 @@ public class PianetaGame extends GameDescription {
         Command open = new Command(CommandType.OPEN, "apri");
         open.setAlias(new String[]{"aprire"});
         getCommands().add(open);
+
+        Command help = new Command(CommandType.HELP, "aiuto");
+        help.setAlias(new String[]{"help", "helpcomandi", "comandi"});
+        getCommands().add(help);
 
         Command push = new Command(CommandType.PUSH, "premi");
         push.setAlias(new String[]{"spingi"});
@@ -540,7 +551,7 @@ public class PianetaGame extends GameDescription {
         panelObj.setAlias(new String[]{"pannello", "pannelloemergenza"});
         panelObj.setPickupable(false);
         externalRoom.getObjects().add(panelObj);
-        
+
         title = fileObject.nextLine();
         description = fileObject.nextLine();
         AdvObject oblo = new AdvObject(ID_OBJECT_OBLO, title, description);
@@ -625,6 +636,7 @@ public class PianetaGame extends GameDescription {
         StringBuilder output = new StringBuilder();
 
         if (p.getCommand() == null) {
+            System.out.println();
             output.append("Non ho capito cosa devo fare! Prova con un altro comando.");
         } else {
 
@@ -676,25 +688,16 @@ public class PianetaGame extends GameDescription {
                         break;
                     case TURN_OFF:
                         output = commandTurnOff(p, output);
-                        break;       
+                        break;
                     case LOAD:
                         checkTimer();
                         break;
+                    case HELP:
+                        commandHelp(p);
+                        break;
                     case SAVE:
-                        try {
-                            Database db = new Database();
-                            try {
-                                db.saving(this);
-                                db.getInfo();
-                            } catch (IOException ex) {
-                                Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (ClassNotFoundException ex) {
-                                Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } catch (SQLException ex) {
-                            Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    break;
+                        commandSave();
+                        break;
                     case END:
                         end(output.append("Addio!"));
                         break;
@@ -708,6 +711,22 @@ public class PianetaGame extends GameDescription {
 
         output.append("\n");
         return output.toString();
+    }
+
+    private void commandSave() {
+        try {
+            Database db = new Database();
+            try {
+                db.saving(this);
+                db.getInfo();
+            } catch (IOException ex) {
+                Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PianetaGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private StringBuilder commandNord(ParserOutput p, StringBuilder output) {
@@ -843,7 +862,7 @@ public class PianetaGame extends GameDescription {
                     output.append("Hai sbagliato ad uscire senza tuta.\n Sei morto!");
                     this.end(output);
                 }
-                    impactTimer.start();
+                impactTimer.start();
             }
         } else if (roomLocked) {
             output.append("La stanza è bloccata prima di cambiare stanza dovresti fare qualcosa\n");
@@ -922,6 +941,9 @@ public class PianetaGame extends GameDescription {
                 getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setVisible(true);
                 getCurrentRoom().cercaObject(ID_OBJECT_CHIAVE).setPickupable(true);
             }
+            if (p.getObject().getId() == ID_OBJECT_OBLO) {
+                printWeather();
+            }
             if (p.getObject().getId() == ID_OBJECT_CONTATORE) {
                 getCurrentRoom().cercaObject(ID_OBJECT_LUCCHETTO).setVisible(true);
             }
@@ -952,7 +974,7 @@ public class PianetaGame extends GameDescription {
                 while (scanner.hasNextLine()) {
                     String risposta = scanner.nextLine().toLowerCase();
                     if (risposta.equals("si")) {
-                        emergencyLanding(output);
+                        emergencyLanding(output, p);
                         break;
                     } else if (risposta.equals("no")) {
                         break;
@@ -1003,7 +1025,7 @@ public class PianetaGame extends GameDescription {
                 System.out.println("Hai ricevuto il seguente messaggio: \n");
                 planetMessage();
                 if (getInventory().cercaObject(ID_OBJECT_TUTA) == null) {
-                        oxygenTimer.start();
+                    oxygenTimer.start();
                 } else {
                     System.out.println("Grazie alla tuta che hai preso prima riesci a respirare ancora");
                 }
@@ -1016,7 +1038,7 @@ public class PianetaGame extends GameDescription {
         }
     }
 
-    private void emergencyLanding(StringBuilder output) {
+    private void emergencyLanding(StringBuilder output, ParserOutput p) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Per attivare l'atterraggio d'emergenza dovrai rispondere alla seguente domanda:\n"
                 + "\"Attraversa il vetro ma senza romperlo. Cosa è?\" \n");
@@ -1027,8 +1049,8 @@ public class PianetaGame extends GameDescription {
                 this.score = 550;
                 System.out.println("Hai attivato l'atterraggio d'emergenza\n");
                 impactTimer.interrupt();
-                //scriviamo qualcosa per dire che e' finito il gioco
                 System.out.println("Gioco Finito, alla prossima!");
+                commandSave();
                 this.end(output);
                 break;
             } else {
@@ -1045,6 +1067,31 @@ public class PianetaGame extends GameDescription {
                 + "I valori dell’ossigeno presente nella tua navicella si stanno abbassando rapidamente.\n"
                 + "Ti sollecitiamo di ripristinare l’impianto dell’ossigeno e ritornare sulla tua rotta. Buona Fortuna!\n"
                 + "Speriamo di rivederti al più presto… \"\n");
+    }
+
+    private void commandHelp(ParserOutput p) {
+        JOptionPane optionPane = new JOptionPane("HELP COMANDI:\n\n"
+                + "- osserva -> per osservare la stanza corrente;\n"
+                + "- osserva [oggetto] -> per osservare meglio l'oggetto specificato;\n"
+                + "- prendi [oggetto] -> per raccogliere l'oggetto presente nella stanza;\n"
+                + "- prendi [oggetto] da [contenitore] -> per prendere un oggetto presente in un contenitore es. armadio;\n"
+                + "- apri [contenitore/oggetto] -> per aprire un oggetto/contenitore;\n"
+                + "- inventario -> per vedere gli oggetti raccolti durante il gioco;\n"
+                + "- salva -> per salvare la partita corrente nel DB;\n"
+                + "- carica -> per caricare una partita salvata nel DB;\n"
+                + "\n"
+                + "PER MUOVERSI:\n"
+                + "- nord -> per spostarsi a Nord;\n"
+                + "- sud -> per spostarsi a Sud;\n"
+                + "- ovest -> per spostarsi a Ovest;\n"
+                + "- est -> per spostarsi a Est;\n"
+                + "\n\n... per scoprire altri comandi inizia a giocare!\n");
+        JDialog dialog = optionPane.createDialog("Pianeta Game - Help Comandi");
+
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+        dialog.dispose();
+
     }
 
     private StringBuilder commandUse(ParserOutput p, StringBuilder output) {
@@ -1234,7 +1281,7 @@ public class PianetaGame extends GameDescription {
                     } else if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
                         output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato aperto").append("\n");
                         p.getObject().setOpen(true);
-                        if(p.getObject().getId() == ID_OBJECT_PORTA){
+                        if (p.getObject().getId() == ID_OBJECT_PORTA) {
                             this.score = 100;
                             output.append("Hai aperto tutte le porte della navicella");
                             getCurrentRoom().setLock(false);
@@ -1288,7 +1335,7 @@ public class PianetaGame extends GameDescription {
     public int getScore() {
         return score;
     }
-    
+
     private StringBuilder commandPull(ParserOutput p, StringBuilder output) {
         if (p.getObject() != null && p.getObject().isPullable() && p.getObject().isVisible()) {
             if (p.getObject().isPull() == true) {
@@ -1327,45 +1374,61 @@ public class PianetaGame extends GameDescription {
         }
         return output;
     }
-    
-    public void checkTimer(){
-        if(toxicGasTimer.isTimerActived()){
+
+    public void checkTimer() {
+        if (toxicGasTimer.isTimerActived()) {
             toxicGasTimer.setSuspendTemporary(false);
             toxicGasTimer.start();
             System.out.println("timer gas tossico ATTIVATO ");
         }
-        if(oxygenTimer.isTimerActived()){
+        if (oxygenTimer.isTimerActived()) {
             oxygenTimer.setSuspendTemporary(false);
             oxygenTimer.start();
             System.out.println("timer ossigeno ATTIVATO ");
         }
-        if(impactTimer.isTimerActived()){
+        if (impactTimer.isTimerActived()) {
             impactTimer.setSuspendTemporary(false);
             impactTimer.start();
             System.out.println("timer scontro sulla terra ATTIVATO ");
         }
     }
-    
-    public void stopThread(){
-        if(toxicGasTimer.isTimerActived()){
+
+    public void stopThread() {
+        if (toxicGasTimer.isTimerActived()) {
             toxicGasTimer.setSuspendTemporary(true);
             toxicGasTimer.interrupt();
             System.out.println("Timer gas tossico sospeso");
         }
-        if(oxygenTimer.isTimerActived()){
+        if (oxygenTimer.isTimerActived()) {
             oxygenTimer.setSuspendTemporary(true);
             oxygenTimer.interrupt();
             System.out.println("Timer ossigeno sospeso");
         }
-        if(impactTimer.isTimerActived()){
+        if (impactTimer.isTimerActived()) {
             impactTimer.setSuspendTemporary(true);
             impactTimer.interrupt();
             System.out.println("Timer scontro sulla terra sospeso");
         }
     }
-        
+
     private void end(StringBuilder output) {
         System.out.println(output);
         System.exit(0);
+    }
+
+    private void printWeather() {
+        Client client = ClientBuilder.newClient();
+        //?q={city name}&appid={API key}
+        WebTarget target = client.target("http://api.openweathermap.org/data/2.5/weather");
+        String city = "Bari";
+        Response resp = target.queryParam("q", city).queryParam("appid", "0d81343944ce1f325107f3f2570d55cd").request(MediaType.APPLICATION_JSON).get();
+        System.out.println(resp);
+        String[] prova = resp.readEntity(String.class).split(",");
+        String meteo = "";
+        for (String s : prova) {
+            meteo += (s + ";\n");
+        }
+        JOptionPane.showMessageDialog(null, meteo,
+                "Meteo " + city, JOptionPane.INFORMATION_MESSAGE);
     }
 }

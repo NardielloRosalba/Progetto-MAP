@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package di.uniba.map.b.adventure;
+package di.uniba.map.b.utils;
 
 import di.uniba.map.b.adventure.games.PianetaGame;
 import java.io.FileInputStream;
