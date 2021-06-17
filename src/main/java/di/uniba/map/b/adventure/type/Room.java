@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+/**
+ *
+ * @author gruppo 'Le bimbe di Luca'
+ */
+
 public class Room implements Serializable{
 
     private final int id;

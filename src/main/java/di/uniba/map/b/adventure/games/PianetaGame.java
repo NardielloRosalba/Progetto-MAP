@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author le bimbe di Luca
+ * @author gruppo 'Le bimbe di Luca'
  */
 public class PianetaGame extends GameDescription {
 

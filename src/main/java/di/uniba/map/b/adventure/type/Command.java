@@ -11,6 +11,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ *
+ * @author gruppo 'Le bimbe di Luca'
+ */
+
 public class Command implements Serializable{
 
     private final CommandType type;

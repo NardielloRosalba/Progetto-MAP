@@ -10,6 +10,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ * @author gruppo 'Le bimbe di Luca'
+ */
+
 public class AdvObject implements Serializable{
 
     private final int id;

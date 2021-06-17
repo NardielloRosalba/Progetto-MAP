@@ -5,6 +5,11 @@
  */
 package di.uniba.map.b.adventure.type;
 
+/**
+ *
+ * @author gruppo 'Le bimbe di Luca'
+ */
+
 public enum CommandType {
     END, SAVE, LOAD, INVENTORY, NORD, SOUTH, EAST, WEST, OPEN, CLOSE, PUSH, PULL, PUT_DOWN, WALK_TO, PICK_UP, TALK_TO, GIVE, USE, DRINK, LOOK_AT, TURN_ON, TURN_OFF
 }

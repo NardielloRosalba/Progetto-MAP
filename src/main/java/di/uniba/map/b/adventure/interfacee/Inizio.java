@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author nasca
+ * @author gruppo 'Le bimbe di Luca'
  */
 public class Inizio extends javax.swing.JFrame {
 
@@ -165,6 +165,8 @@ public class Inizio extends javax.swing.JFrame {
 
     private void jButtonIniziaPartita1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniziaPartita1ActionPerformed
         // TODO add your handling code here:
+        Login login = new Login();
+        login.setVisible(true);
         out.println("new");
         this.dispose();
     }//GEN-LAST:event_jButtonIniziaPartita1ActionPerformed
