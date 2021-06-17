@@ -16,14 +16,15 @@ import javax.swing.JOptionPane;
 public class Inizio extends javax.swing.JFrame {
 
     PrintWriter out;
+
     /**
      * Creates new form Inizio
+     *
      * @param out
      */
     // Costruttore
-    public Inizio(PrintWriter out ) {
+    public Inizio(PrintWriter out) {
         initComponents();
-        init();
         this.out = out;
     }
 
@@ -117,6 +118,11 @@ public class Inizio extends javax.swing.JFrame {
         jMenuHelp.setText("Help");
 
         jMenuItemHelp.setText("Help comandi");
+        jMenuItemHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemHelpActionPerformed(evt);
+            }
+        });
         jMenuHelp.add(jMenuItemHelp);
 
         jMenuBar1.add(jMenuHelp);
@@ -178,8 +184,8 @@ public class Inizio extends javax.swing.JFrame {
     private void jMenuItemAboutUsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutUsActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "- Pianeta Game -\n"
-                + "Autori: Luca Serio, Raffaella Nasca, Rosalba Nardiello \n"
-                , "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
+                + "Autori: Luca Serio, Raffaella Nasca, Rosalba Nardiello \n",
+                 "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
     }//GEN-LAST:event_jMenuItemAboutUsActionPerformed
 
     private void jMenuItemAboutGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutGameActionPerformed
@@ -195,44 +201,27 @@ public class Inizio extends javax.swing.JFrame {
                 "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
     }//GEN-LAST:event_jMenuItemAboutGameActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    //public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        /*try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Inizio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Inizio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Inizio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Inizio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }*/
-        //</editor-fold>
-
-        /* Create and display the form */
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Inizio().setVisible(true);
-            }
-        });
-    }*/
-    
-    private void init () {
-        //jLabelImage.setIcon(new javax.swing.ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Spazio.png");
-    }
+    private void jMenuItemHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHelpActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "HELP COMANDI:\n\n"
+                + "- osserva -> per osservare la stanza corrente;\n"
+                + "- osserva [oggetto] -> per osservare meglio l'oggetto specificato;\n"
+                + "- prendi [oggetto] -> per raccogliere l'oggetto presente nella stanza;\n"
+                + "- prendi [oggetto] da [contenitore] -> per prendere un oggetto presente in un contenitore es. armadio;\n"
+                + "- apri [contenitore/oggetto] -> per aprire un oggetto/contenitore;\n"
+                + "- inventario -> per vedere gli oggetti raccolti durante il gioco;\n"
+                + "- salva -> per salvare la partita corrente nel DB;\n"
+                + "- carica -> per caricare una partita salvata nel DB;\n"
+                + "\n"
+                + "PER MUOVERSI:\n"
+                + "- nord -> per spostarsi a Nord;\n"
+                + "- sud -> per spostarsi a Sud;\n"
+                + "- ovest -> per spostarsi a Ovest;\n"
+                + "- est -> per spostarsi a Est;\n"
+                + "\n\n... per scoprire altri comandi inizia a giocare!\n"
+                ,
+                "Pianeta Game - Help Comandi", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jMenuItemHelpActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCaricaPartita;
