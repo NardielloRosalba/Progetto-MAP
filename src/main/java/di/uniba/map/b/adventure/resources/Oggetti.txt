@@ -58,3 +58,5 @@ Estintore
 Apparecchio per estinguere principi d'incendio
 Pannello
 serve per attivare l'atterraggio di emergenza
+Oblo
+serve per vedere il meteo della citta' di Bari
