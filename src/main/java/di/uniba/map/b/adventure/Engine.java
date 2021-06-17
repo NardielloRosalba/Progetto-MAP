@@ -54,38 +54,25 @@ public class Engine {
         System.out.println("Attesa comandi!");
         switch (this.socket()) {
             case 0:
-                System.out.println("Inizio nuova partita");
-                System.out.println("========================================");
-                System.out.println("** Adventure Luca, Rosalba, Raffaella **");
-                System.out.println("========================================" + "\n" + "\n");
-                System.out.println("Il protagonista, Capitan Hector, si trova \n"
-                + "nella Navicella B612 della galassia Reggy e sta per \n"
-                + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
-                + "perde il controllo della navicella e di tutti i suoi \n"
-                + "comandi, per salvarsi dovra' completare le missioni \n"
-                + "nelle varie stanze,\n"
-                + "cosi' da ristabilire i comandi persi della\n"
-                + "navicella.\n");
-                System.out.println("");
-                System.out.println(game.getCurrentRoom().getName());
-                System.out.println("");
-                System.out.println(game.getCurrentRoom().getDescription());
-                System.out.println("");      
+                description();
                 break;
                 
             case 1:
                 System.out.println("Uscita in corso, addio!!");
                 break;
-                
+
             case 2:
                 System.out.println("Caricamento partita");
                 ParserOutput p = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
                 Database db = new Database();
                 PianetaGame game_load = null;
                 game_load = db.loading((PianetaGame) game);
-                if(game_load != null){
+                if (game_load != null) {
                     game = game_load;
                     this.game.nextMove(p);
+                } else {
+                    System.out.println("Caricamento partita");
+                    description();
                 }
                 break;
         }
@@ -107,7 +94,7 @@ public class Engine {
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
                 PianetaGame game_load = null;
                 game_load = db.loading((PianetaGame) game);
-                if(game_load != null){
+                if (game_load != null) {
                     game = game_load;
                     this.game.nextMove(p);
                 }
@@ -159,5 +146,25 @@ public class Engine {
             Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
         }
         return -1;
+    }
+
+    private void description() {
+        System.out.println("Inizio nuova partita");
+        System.out.println("========================================");
+        System.out.println("** Adventure Luca, Rosalba, Raffaella **");
+        System.out.println("========================================" + "\n" + "\n");
+        System.out.println("Il protagonista, Capitan Hector, si trova \n"
+                + "nella Navicella B612 della galassia Reggy e sta per \n"
+                + "tornare nel suo pianeta nativo: Blind. Per cause oscure,\n"
+                + "perde il controllo della navicella e di tutti i suoi \n"
+                + "comandi, per salvarsi dovra' completare le missioni \n"
+                + "nelle varie stanze,\n"
+                + "cosi' da ristabilire i comandi persi della\n"
+                + "navicella.\n");
+        System.out.println("");
+        System.out.println(game.getCurrentRoom().getName());
+        System.out.println("");
+        System.out.println(game.getCurrentRoom().getDescription());
+        System.out.println("");
     }
 }

@@ -69,6 +69,7 @@ public class PianetaGame extends GameDescription {
     private final int ID_OBJECT_ANFIBI = 27;
     private final int ID_OBJECT_ESTINTORE = 28;
     private final int ID_OBJECT_PANNELLO = 29;
+    private final int ID_OBJECT_OBLO = 30;
 
     private boolean eventTorcia = false;
     private boolean eventTorciaAccesa = false;

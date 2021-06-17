@@ -43,6 +43,9 @@ public class saving_loading {
         is.transferTo(out);
         is.close();
         
-        return comandoCarica();
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\game.dat"));
+        PianetaGame game = (PianetaGame) in.readObject();
+        in.close();
+        return game;
     }
 }
