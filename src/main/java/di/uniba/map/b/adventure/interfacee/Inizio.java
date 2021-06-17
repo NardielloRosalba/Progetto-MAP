@@ -167,12 +167,16 @@ public class Inizio extends javax.swing.JFrame {
 
     private void jButtonIniziaPartita1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniziaPartita1ActionPerformed
         // TODO add your handling code here:
-        Login login = new Login();
+        /*Login login = new Login();
+        login.setVisible(true);*/
+        /*boolean isInserted = false;
+        while (!isInserted){
+            isInserted = login.isInsertedUser();
+        }*/
         
-        login.setVisible(true);
         
         
-        System.out.println(login.getUser().getName());
+        //System.out.println(login.getUser().getName());
         /*out.println("user");
         
         out.println(login.getUser().getName());

@@ -6,6 +6,7 @@
 package di.uniba.map.b.adventure.interfacee;
 
 import di.uniba.map.b.adventure.Database;
+import di.uniba.map.b.adventure.GameDescription;
 import di.uniba.map.b.utils.User;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -25,12 +27,19 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
 
     private int option;
-    public User user;
+    private User user;
+    private boolean insertedUser = false;
+    private PrintWriter out;
+
+    public boolean isInsertedUser() {
+        return insertedUser;
+    }
 
     /**
      * Creates new form Login
      */
-    public Login() {
+    public Login(PrintWriter out) {
+        this.out = out;
         initComponents();
         option = JOptionPane.CANCEL_OPTION;
         while (option == JOptionPane.CANCEL_OPTION) {
@@ -47,8 +56,7 @@ public class Login extends javax.swing.JFrame {
 
             }
         }
-
-
+        System.out.println("Option " + option);
     }
 
     public User getUser() {
@@ -84,6 +92,8 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login Pianeta game");
+        setBackground(new java.awt.Color(0, 0, 0));
+        setIconImage((new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg")).getImage());
         setResizable(false);
 
         label1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -104,10 +114,6 @@ public class Login extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(145, 145, 145)
-                .addComponent(jButtonOk)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -116,6 +122,10 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jtfName, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                     .addComponent(jtfPassword))
                 .addGap(61, 61, 61))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(145, 145, 145)
+                .addComponent(jButtonOk)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(20, 20, 20)
@@ -146,24 +156,26 @@ public class Login extends javax.swing.JFrame {
 
     private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed
         // TODO add your handling code here:
-
+        
         String name = jtfName.getText();
+        
         String password = jtfPassword.getText();
+        JOptionPane.showMessageDialog(this, "cliccato conferma \n "+ name+ password,
+                        "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
             user.setName(name);
             user.setPassword(password);
             try {
                 Database db = new Database();
-                while (true) {
-                    if (db.registration(user)) {
-                        JOptionPane.showMessageDialog(this, "Username valido",
-                                "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
-                        break;
+                if (db.registration(user)) {
+                    JOptionPane.showMessageDialog(this, "Username valido",
+                            "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
+                    out.println(name + "," + password);
+                    insertedUser = true;
 
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Username già in uso",
-                                "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
-                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Username già in uso",
+                            "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,20 +185,21 @@ public class Login extends javax.swing.JFrame {
             //caso utente gia registrato
             try {
                 Database db = new Database();
-                while (true) {
-                    if (!db.login(user)) {
-                        JOptionPane.showMessageDialog(this, "Credenziali inserite errate",
-                                "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Accesso avvenuto con successo",
-                                "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
-                        break;
-                    }
+                if (!db.login(user)) {
+                    JOptionPane.showMessageDialog(this, "Credenziali inserite errate",
+                            "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Accesso avvenuto con successo",
+                            "Inizio nuova partita", JOptionPane.INFORMATION_MESSAGE);
+                    insertedUser = true;
+                    out.println(name + "," + password);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.dispose();
+            if (insertedUser) {
+                this.dispose();
+            }
         }
     }//GEN-LAST:event_jButtonOkActionPerformed
 
