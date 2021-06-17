@@ -25,11 +25,9 @@ import javax.swing.JOptionPane;
 public class SocketClient {
 
     public static void main(String args[]) throws UnknownHostException, IOException {
-        //public SocketClient() throws UnknownHostException, IOException {
-        //String str = "";
+
         Scanner scan = new Scanner(System.in);
         InetAddress add = InetAddress.getByName("localhost");
-        //System.out.println(add);//localhost/127.0.0.1
         try ( Socket s = new Socket(add, 6666)) {
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
@@ -38,7 +36,7 @@ public class SocketClient {
             interfacciaInizio.setVisible(true);
             JOptionPane.showMessageDialog(null, "Connessione avvenuta con successo", "Connessione socket", JOptionPane.INFORMATION_MESSAGE);
 
-            String ris_serv, ris_cl;//risposta server,risposta client
+            String ris_serv;//risposta server,risposta client
             while (true) {
                 //System.out.println(str + "-");//stampa delle possibilità
                 //ris_cl = scan.next();
