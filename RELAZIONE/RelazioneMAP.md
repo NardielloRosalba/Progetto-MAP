@@ -35,9 +35,9 @@ L'idea del nostro gioco si basa su di un Capitano che ha perso i controlli della
 <br><br>
 
 # <span id = "2">2. Architettura del sistema</span>
-
+da fare alla fine
 # <span id = "3">1. Diagramma UML delle classi</span>
-
+da fare alla fine
 
 # <span id = "4">4. Dettagli implementativi e tecnologie utilizzate</span>
 ## <span id = "4.1">4.1. Dettagli implementativi</span>
