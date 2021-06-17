@@ -191,7 +191,6 @@ public class Database {
 
                     ResultSet rs = pstm_user_psw.executeQuery();
                     if (rs.next()) {//se utente con stesso user e psw esiste..
-                        pstm_user_psw.close();
 
                         saving_loading.comandoSalva(saving_loading.comandoCarica(rs.getBinaryStream(3)));
 
@@ -203,6 +202,7 @@ public class Database {
                         dialog.setAlwaysOnTop(true);
                         dialog.setVisible(true);
                         dialog.dispose();
+                        pstm_user_psw.close();
                         break;
                     } else {
                         System.out.println("Credenziali errate!\n");
@@ -213,8 +213,10 @@ public class Database {
             } else if (command.equalsIgnoreCase("si")) {
                 System.out.println("devi prima salvarne una!!");
                 System.out.println("\n");
+                game.checkTimer();
                 break;
             } else if (command.equalsIgnoreCase("esci")) {
+                game.checkTimer();
                 break;
             } else {
                 System.out.println("Inserire comando valido");
