@@ -17,13 +17,13 @@ import javax.swing.JOptionPane;
  * @author nasca
  */
 public class Login extends javax.swing.JFrame {
-
+    private int option;
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
-        int option = JOptionPane.CANCEL_OPTION;
+        option = JOptionPane.CANCEL_OPTION;
         while (option == JOptionPane.CANCEL_OPTION) {
             option = init();
             if (option == JOptionPane.YES_OPTION) {
@@ -35,10 +35,10 @@ public class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "vedere che il nome sia giusto ",
                 "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
             } else if (option == JOptionPane.CANCEL_OPTION) {
-                return;
+                
             }
         }
-        this.dispose();
+        
     }
 
     private int init() {
@@ -62,21 +62,92 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        label1 = new java.awt.Label();
+        label2 = new java.awt.Label();
+        jButtonOk = new javax.swing.JButton();
+        jtfName = new javax.swing.JTextField();
+        jtfPassword = new javax.swing.JTextField();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login Pianeta game");
+        setResizable(false);
+
+        label1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        label1.setText("Inserire password utente");
+
+        label2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        label2.setMinimumSize(new java.awt.Dimension(146, 20));
+        label2.setText("Inserire nome utente");
+
+        jButtonOk.setText("conferma");
+        jButtonOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOkActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(145, 145, 145)
+                .addComponent(jButtonOk)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jtfName, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(jtfPassword))
+                .addGap(61, 61, 61))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(20, 20, 20)
+                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(234, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButtonOk)
+                .addGap(75, 75, 75))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(44, 44, 44)
+                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(208, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed
+        // TODO add your handling code here:
+        
+        String op1 = jtfName.getText();
+        String op2 = jtfPassword.getText();
+        if (option == JOptionPane.YES_OPTION){
+            //caso nuovo utente
+            //registrazione
+            JOptionPane.showMessageDialog(this, "registrazione effettuata "+ op1 + op2,
+                "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } else {
+            //caso utente gia registrato
+            JOptionPane.showMessageDialog(this, "caso utente gia registrato "+ op1 + op2,
+                "Pianeta Game", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        }
+    }//GEN-LAST:event_jButtonOkActionPerformed
 
     /**
      * @param args the command line arguments
@@ -131,5 +202,10 @@ public class Login extends javax.swing.JFrame {
     }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonOk;
+    private javax.swing.JTextField jtfName;
+    private javax.swing.JTextField jtfPassword;
+    private java.awt.Label label1;
+    private java.awt.Label label2;
     // End of variables declaration//GEN-END:variables
 }

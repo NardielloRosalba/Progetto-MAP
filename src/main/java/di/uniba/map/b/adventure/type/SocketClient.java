@@ -40,19 +40,16 @@ public class SocketClient {
             Inizio interfacciaInizio = new Inizio(out);
             interfacciaInizio.setVisible(true);
             JOptionPane.showMessageDialog(null, "Connessione avvenuta con successo", "Connessione socket", JOptionPane.INFORMATION_MESSAGE);
-
+            
             String ris_serv;//risposta server,risposta client
             while (true) {
                 //System.out.println(str + "-");//stampa delle possibilità
                 //ris_cl = scan.next();
                 ris_serv = in.readLine();
                 JOptionPane.showMessageDialog(null, ris_serv, "Risposta server", JOptionPane.INFORMATION_MESSAGE);
-                if (ris_serv.endsWith("Adios!")) {
+                if (ris_serv.endsWith("!")) {
                     break;
-                } else {
-                    JOptionPane.showMessageDialog(null, ris_serv, "Sono qui", JOptionPane.INFORMATION_MESSAGE);
                 }
-
             }
         }
     }
