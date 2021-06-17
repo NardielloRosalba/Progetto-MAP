@@ -1,2 +1,0 @@
-2021-06-17 17:42:48 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-200]
