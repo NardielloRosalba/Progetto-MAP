@@ -45,7 +45,7 @@ public class SocketClient {
             while (true) {
                 //System.out.println(str + "-");//stampa delle possibilità
                 //ris_cl = scan.next();
-                ris_serv = in.readLine();
+                ris_serv = in.readLine();//qua scrivo credenziali utente ottenute dal login +"!"
                 JOptionPane.showMessageDialog(null, ris_serv, "Risposta server", JOptionPane.INFORMATION_MESSAGE);
                 if (ris_serv.endsWith("!")) {
                     break;

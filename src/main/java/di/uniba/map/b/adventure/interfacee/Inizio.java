@@ -16,12 +16,14 @@ import javax.swing.JOptionPane;
 public class Inizio extends javax.swing.JFrame {
 
     PrintWriter out;
+
     /**
      * Creates new form Inizio
+     *
      * @param out
      */
     // Costruttore
-    public Inizio( PrintWriter out ) {
+    public Inizio(PrintWriter out) {
         initComponents();
         init();
         this.out = out;
@@ -166,7 +168,17 @@ public class Inizio extends javax.swing.JFrame {
     private void jButtonIniziaPartita1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniziaPartita1ActionPerformed
         // TODO add your handling code here:
         Login login = new Login();
+        
         login.setVisible(true);
+        
+        
+        System.out.println(login.getUser().getName());
+        /*out.println("user");
+        
+        out.println(login.getUser().getName());
+        
+        out.println(login.getUser().getPassword());*/
+        
         out.println("new");
         this.dispose();
     }//GEN-LAST:event_jButtonIniziaPartita1ActionPerformed
@@ -180,8 +192,8 @@ public class Inizio extends javax.swing.JFrame {
     private void jMenuItemAboutUsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutUsActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "- Pianeta Game -\n"
-                + "Autori: Luca Serio, Raffaella Nasca, Rosalba Nardiello \n"
-                , "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
+                + "Autori: Luca Serio, Raffaella Nasca, Rosalba Nardiello \n",
+                 "Pianeta Game", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\logo.jpeg"));
     }//GEN-LAST:event_jMenuItemAboutUsActionPerformed
 
     private void jMenuItemAboutGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutGameActionPerformed
@@ -201,12 +213,12 @@ public class Inizio extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     //public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        /*try {
+     */
+ /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -222,17 +234,16 @@ public class Inizio extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Inizio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }*/
-        //</editor-fold>
+    //</editor-fold>
 
-        /* Create and display the form */
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
+    /* Create and display the form */
+ /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Inizio().setVisible(true);
             }
         });
     }*/
-    
-    private void init () {
+    private void init() {
         //jLabelImage.setIcon(new javax.swing.ImageIcon(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Spazio.png");
     }
 
