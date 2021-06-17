@@ -57,9 +57,6 @@ public class Engine {
         System.out.println("Attesa comandi!");
         switch (this.socket()) {
             case 0:
-                //chiedere nome e password
-                
-                
                 System.out.println("Inizio nuova partita");
                 System.out.println("========================================");
                 System.out.println("** Adventure Luca, Rosalba, Raffaella **");
