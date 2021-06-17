@@ -55,7 +55,7 @@ public class Engine {
 
     public void execute() throws IOException, FileNotFoundException, ClassNotFoundException, SQLException {
         System.out.println("Attesa comandi!");
-        /*switch (this.socket()) {
+        switch (this.socket()) {
             case 0:
                 System.out.println("Inizio nuova partita");
                 System.out.println("========================================");
@@ -82,11 +82,16 @@ public class Engine {
                 
             case 2:
                 System.out.println("Caricamento partita");
-                //this.game = saving_loading.comandoCarica();//attenyo da cambaire!!
-                ParserOutput o = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
-                game.nextMove(o);
+                ParserOutput p = parser.parse("carica", game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory().getList());
+                Database db = new Database();
+                PianetaGame game_load = null;
+                game_load = db.loading((PianetaGame) game);
+                if(game_load != null){
+                    game = game_load;
+                    this.game.nextMove(p);
+                }
                 break;
-        }*/
+        }
         Scanner scanner = new Scanner(System.in);
         System.out.println("Cosa devo fare? ");
         Database db = new Database();
@@ -103,10 +108,10 @@ public class Engine {
                 this.game.nextMove(p);
 
             } else if (p.getCommand() != null && p.getCommand().getType() == CommandType.LOAD) {
-                PianetaGame game2 = null;
-                game2 = db.loading((PianetaGame) game);
-                if(game2 != null){
-                    game = game2;
+                PianetaGame game_load = null;
+                game_load = db.loading((PianetaGame) game);
+                if(game_load != null){
+                    game = game_load;
                     this.game.nextMove(p);
                 }
             } else {
@@ -124,7 +129,7 @@ public class Engine {
 
     public int socket() {
         try {
-            String str;
+            String str = "";
             ServerSocket ss = new ServerSocket(6666);
             Socket s = ss.accept();
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -133,18 +138,18 @@ public class Engine {
             while (true) {
                 str = in.readLine();
                 switch (str) {
-                    case "s":
-                        out.println("Ora inizierai una nuova partita! Adios!");
+                    case "new":
+                        out.println("Ora inizierai una nuova partita!");
                         ss.close();
                         return 0;
 
-                    case "n":
+                    case "quit":
                         out.println("Adios!");
                         ss.close();
                         return 1;
 
-                    case "c":
-                        out.println("Ora riprenderai una vecchia partita! Adios!");
+                    case "load":
+                        out.println("Ora riprenderai una vecchia partita!");
                         ss.close();
                         return 2;
 

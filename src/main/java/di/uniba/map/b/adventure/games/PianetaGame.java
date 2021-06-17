@@ -74,9 +74,9 @@ public class PianetaGame extends GameDescription {
     private boolean eventTorciaAccesa = false;
     private boolean eventAvvisoCrepa = false;
 
-    private boolean missioneCorrente = false;
-    private boolean missioneCrepa = false;
-    private boolean missioneRipristinoContatti = false;
+    private boolean missionCorrente = false;
+    private boolean missionCrepa = false;
+    private boolean missionRipristinoContatti = false;
     
     private TimerAvvisoMorte timerGasTossico = new TimerAvvisoMorte("del gas tossico!");
     //private boolean timerActived = false;
@@ -91,13 +91,13 @@ public class PianetaGame extends GameDescription {
 
         private int countDown = 10;
         private int taskCount = 0;
-        private final String causa;
+        private final String cause;
         private boolean timerActived = false;
         private boolean suspendTemporary = false;
         
         public TimerAvvisoMorte(int num, String causaMorte) {
             this.countDown = num;
-            this.causa = causaMorte;
+            this.cause = causaMorte;
         }
 
         public boolean isSuspendTemporary() {
@@ -109,7 +109,7 @@ public class PianetaGame extends GameDescription {
         }
         
         public TimerAvvisoMorte(String causaMorte) {
-            this.causa = causaMorte;
+            this.cause = causaMorte;
         }
         
         @Override
@@ -117,7 +117,7 @@ public class PianetaGame extends GameDescription {
             this.timerActived = true;
             while (this.taskCount != countDown) {
                 try {
-                    System.out.println(avviso(this.countDown - this.taskCount));
+                    System.out.println(notice(this.countDown - this.taskCount));
                     Thread.sleep(10000);
                     this.taskCount++;
                 } catch (InterruptedException ex) {
@@ -131,11 +131,11 @@ public class PianetaGame extends GameDescription {
             new PianetaGame().end(new StringBuilder("Sei morto!"));
         }
 
-        public String avviso(int n) {
+        public String notice(int n) {
             if (n != 1) {
-                return ("- Mancano " + (this.countDown - this.taskCount) + " minuti prima di morire a causa " + this.causa);
+                return ("- Mancano " + (this.countDown - this.taskCount) + " minuti prima di morire a cause " + this.cause);
             } else {
-                return ("- Manca " + (this.countDown - this.taskCount) + " minuto prima di morire a causa " + this.causa);
+                return ("- Manca " + (this.countDown - this.taskCount) + " minuto prima di morire a cause " + this.cause);
             }
         }
 
@@ -221,398 +221,396 @@ public class PianetaGame extends GameDescription {
         getCommands().add(pull);
 
         //Stanze lette da file aggiungi try catch
-        Scanner fr;
-        fr = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Stanze.txt"));
-        String titolo, descrizione = "";
+        Scanner fileRooms = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Stanze.txt"));
+        String title, description = "";
         String[] prova;
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
+        title = fileRooms.nextLine();
+        prova = fileRooms.nextLine().split("\\.");
         for (String s : prova) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        Room salaComandi = new Room(ID_ROOM_SALA_COMANDI, titolo, descrizione);
+        Room controlRoom = new Room(ID_ROOM_SALA_COMANDI, title, description);
 
-        descrizione = "";
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
+        description = "";
+        title = fileRooms.nextLine();
+        prova = fileRooms.nextLine().split("\\.");
         for (String s : prova) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        Room corridoioX = new Room(ID_ROOM_CORRIDOIO_X, titolo, descrizione);
+        Room xCorridor = new Room(ID_ROOM_CORRIDOIO_X, title, description);
 
-        descrizione = "";
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
+        description = "";
+        title = fileRooms.nextLine();
+        prova = fileRooms.nextLine().split("\\.");
         for (String s : prova) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        Room corridoioSud = new Room(ID_ROOM_CORRIDOIO_SUD, titolo, descrizione);
+        Room southCorridor = new Room(ID_ROOM_CORRIDOIO_SUD, title, description);
 
-        descrizione = "";
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
+        description = "";
+        title = fileRooms.nextLine();
+        prova = fileRooms.nextLine().split("\\.");
         for (String s : prova) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        Room salaElettrica = new Room(ID_ROOM_SALA_ELETTRICA, titolo, descrizione);
+        Room electricalRoom = new Room(ID_ROOM_SALA_ELETTRICA, title, description);
 
-        descrizione = "";
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
+        description = "";
+        title = fileRooms.nextLine();
+        prova = fileRooms.nextLine().split("\\.");
         for (String s : prova) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        Room corridoioNord = new Room(ID_ROOM_CORRIDOIO_NORD, titolo, descrizione);
+        Room northCorridor = new Room(ID_ROOM_CORRIDOIO_NORD, title, description);
 
-        descrizione = "";
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
+        description = "";
+        title = fileRooms.nextLine();
+        prova = fileRooms.nextLine().split("\\.");
         for (String s : prova) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        Room infermeria = new Room(ID_ROOM_INFERMERIA, titolo, descrizione);
+        Room infirmaryRoom = new Room(ID_ROOM_INFERMERIA, title, description);
 
-        descrizione = "";
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
+        description = "";
+        title = fileRooms.nextLine();
+        prova = fileRooms.nextLine().split("\\.");
         for (String s : prova) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        Room stanzaTelecomunicazioni = new Room(ID_ROOM_SALA_TELECOMUNICAZIONI, titolo, descrizione);
+        Room telecommunicationsRoom = new Room(ID_ROOM_SALA_TELECOMUNICAZIONI, title, description);
 
-        descrizione = "";
-        titolo = fr.nextLine();
-        prova = fr.nextLine().split("\\.");
+        description = "";
+        title = fileRooms.nextLine();
+        prova = fileRooms.nextLine().split("\\.");
         for (String s : prova) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        Room stanzaEsterna = new Room(ID_ROOM_SALA_ESTERNA, titolo, descrizione);
+        Room externalRoom = new Room(ID_ROOM_SALA_ESTERNA, title, description);
 
         //maps
-        salaComandi.setSouth(corridoioX);
-        salaComandi.setLock(true);
-        salaComandi.setLook(salaComandi.getDescription());
+        controlRoom.setSouth(xCorridor);
+        controlRoom.setLock(true);
+        controlRoom.setLook(controlRoom.getDescription());
 
-        corridoioX.setWest(salaComandi);
-        corridoioX.setNorth(corridoioNord);
-        corridoioX.setSouth(corridoioSud);
-        corridoioX.setEast(stanzaTelecomunicazioni);
+        xCorridor.setWest(controlRoom);
+        xCorridor.setNorth(northCorridor);
+        xCorridor.setSouth(southCorridor);
+        xCorridor.setEast(telecommunicationsRoom);
 
-        corridoioNord.setEast(infermeria);
-        corridoioNord.setSouth(corridoioX);
+        northCorridor.setEast(infirmaryRoom);
+        northCorridor.setSouth(xCorridor);
 
-        infermeria.setSouth(stanzaTelecomunicazioni);
-        infermeria.setWest(corridoioNord);
+        infirmaryRoom.setSouth(telecommunicationsRoom);
+        infirmaryRoom.setWest(northCorridor);
 
-        salaElettrica.setEast(corridoioSud);
+        electricalRoom.setEast(southCorridor);
 
-        corridoioSud.setWest(salaElettrica);
-        corridoioSud.setNorth(corridoioX);
+        southCorridor.setWest(electricalRoom);
+        southCorridor.setNorth(xCorridor);
 
-        stanzaTelecomunicazioni.setNorth(infermeria);
-        stanzaTelecomunicazioni.setSouth(stanzaEsterna);
-        stanzaTelecomunicazioni.setWest(corridoioX);
+        telecommunicationsRoom.setNorth(infirmaryRoom);
+        telecommunicationsRoom.setSouth(externalRoom);
+        telecommunicationsRoom.setWest(xCorridor);
 
-        stanzaEsterna.setNorth(stanzaTelecomunicazioni);
+        externalRoom.setNorth(telecommunicationsRoom);
 
-        getRooms().add(salaComandi);
-        getRooms().add(corridoioX);
-        getRooms().add(corridoioSud);
-        getRooms().add(salaElettrica);
-        getRooms().add(infermeria);
-        getRooms().add(corridoioNord);
-        getRooms().add(stanzaTelecomunicazioni);
-        getRooms().add(stanzaEsterna);
+        getRooms().add(controlRoom);
+        getRooms().add(xCorridor);
+        getRooms().add(southCorridor);
+        getRooms().add(electricalRoom);
+        getRooms().add(infirmaryRoom);
+        getRooms().add(northCorridor);
+        getRooms().add(telecommunicationsRoom);
+        getRooms().add(externalRoom);
 
         //obejcts
-        //AdvObjectContainer armadio = new AdvObjectContainer(1, );
-        Scanner obj;
-        obj = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Oggetti.txt"));
+        //AdvObjectContainer wardrobeObj = new AdvObjectContainer(1, );
+        Scanner fileObject = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Oggetti.txt"));
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObjectContainer armadio = new AdvObjectContainer(ID_OBJECT_ARMADIO, titolo, descrizione);
-        armadio.setAlias(new String[]{"armadio"});
-        armadio.setPickupable(false);
-        armadio.setOpenable(true);
-        salaComandi.getObjects().add(armadio);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObjectContainer wardrobeObj = new AdvObjectContainer(ID_OBJECT_ARMADIO, title, description);
+        wardrobeObj.setAlias(new String[]{"armadio"});
+        wardrobeObj.setPickupable(false);
+        wardrobeObj.setOpenable(true);
+        controlRoom.getObjects().add(wardrobeObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject tessera = new AdvObject(ID_OBJECT_TESSERA, titolo, descrizione);
-        tessera.setAlias(new String[]{"tessera", "carta", "pass"});
-        tessera.setUsable(true);
-        armadio.getList().add(tessera);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject cardObj = new AdvObject(ID_OBJECT_TESSERA, title, description);
+        cardObj.setAlias(new String[]{"tessera", "carta", "pass"});
+        cardObj.setUsable(true);
+        wardrobeObj.getList().add(cardObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject protocolli = new AdvObject(ID_OBJECT_PROTOCOLLI, titolo, descrizione);
-        protocolli.setAlias(new String[]{"protocolli", "protocollinavigazione", "foglinavigazione", "fogli"});
-        armadio.getList().add(protocolli);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject protocollObj = new AdvObject(ID_OBJECT_PROTOCOLLI, title, description);
+        protocollObj.setAlias(new String[]{"protocolli", "protocollinavigazione", "foglinavigazione", "fogli"});
+        wardrobeObj.getList().add(protocollObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject torcia = new AdvObject(ID_OBJECT_TORCIA, titolo, descrizione);
-        torcia.setAlias(new String[]{"oggetto", "torcia"});
-        torcia.setSiAccende(true);
-        torcia.setAcceso(false);
-        corridoioX.getObjects().add(torcia);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject torchObj = new AdvObject(ID_OBJECT_TORCIA, title, description);
+        torchObj.setAlias(new String[]{"oggetto", "torcia"});
+        torchObj.setSiAccende(true);
+        torchObj.setAcceso(false);
+        xCorridor.getObjects().add(torchObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject porta = new AdvObject(ID_OBJECT_PORTA, titolo, descrizione);
-        porta.setOpenable(true);
-        porta.setPickupable(false);
-        porta.setAlias(new String[]{"porta", "portone", "portasala"});
-        salaComandi.getObjects().add(porta);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject doorObj = new AdvObject(ID_OBJECT_PORTA, title, description);
+        doorObj.setOpenable(true);
+        doorObj.setPickupable(false);
+        doorObj.setAlias(new String[]{"porta", "portone", "portasala"});
+        controlRoom.getObjects().add(doorObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject contatore = new AdvObject(ID_OBJECT_CONTATORE, titolo, descrizione);
-        contatore.setAlias(new String[]{"contatore", "contatoreelettrico"});
-        contatore.setPickupable(false);
-        salaElettrica.getObjects().add(contatore);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject counterObj = new AdvObject(ID_OBJECT_CONTATORE, title, description);
+        counterObj.setAlias(new String[]{"contatore", "contatoreelettrico"});
+        counterObj.setPickupable(false);
+        electricalRoom.getObjects().add(counterObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject lucchetto = new AdvObject(ID_OBJECT_LUCCHETTO, titolo, descrizione);
-        lucchetto.setAlias(new String[]{"lucchetto"});
-        lucchetto.setPickupable(false);
-        lucchetto.setOpenable(true);
-        lucchetto.setVisibile(false);
-        salaElettrica.getObjects().add(lucchetto);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject padlockObj = new AdvObject(ID_OBJECT_LUCCHETTO, title, description);
+        padlockObj.setAlias(new String[]{"lucchetto"});
+        padlockObj.setPickupable(false);
+        padlockObj.setOpenable(true);
+        padlockObj.setVisibile(false);
+        electricalRoom.getObjects().add(padlockObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject parete = new AdvObject(ID_OBJECT_PARETE, titolo, descrizione);
-        parete.setAlias(new String[]{"paretefili", "parete", "fili"});
-        parete.setPickupable(false);
-        salaElettrica.getObjects().add(parete);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject wallObj = new AdvObject(ID_OBJECT_PARETE, title, description);
+        wallObj.setAlias(new String[]{"paretefili", "parete", "fili"});
+        wallObj.setPickupable(false);
+        electricalRoom.getObjects().add(wallObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject chiave = new AdvObject(ID_OBJECT_CHIAVE, titolo, descrizione);
-        chiave.setAlias(new String[]{"chiave"});
-        chiave.setPickupable(false);
-        chiave.setVisibile(false);
-        salaElettrica.getObjects().add(chiave);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject keyObj = new AdvObject(ID_OBJECT_CHIAVE, title, description);
+        keyObj.setAlias(new String[]{"chiave"});
+        keyObj.setPickupable(false);
+        keyObj.setVisibile(false);
+        electricalRoom.getObjects().add(keyObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject leva = new AdvObject(ID_OBJECT_LEVA, titolo, descrizione);
-        leva.setAlias(new String[]{"leva"});
-        leva.setPickupable(false);
-        leva.setPullable(true);
-        leva.setVisibile(false);
-        salaElettrica.getObjects().add(leva);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject leverObj = new AdvObject(ID_OBJECT_LEVA, title, description);
+        leverObj.setAlias(new String[]{"leva"});
+        leverObj.setPickupable(false);
+        leverObj.setPullable(true);
+        leverObj.setVisibile(false);
+        electricalRoom.getObjects().add(leverObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObjectContainer cassetta = new AdvObjectContainer(ID_OBJECT_CASSETTA, titolo, descrizione);
-        cassetta.setAlias(new String[]{"cassetta", "cassettaprontosoccorso"});
-        cassetta.setPickupable(false);
-        cassetta.setOpenable(true);
-        infermeria.getObjects().add(cassetta);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObjectContainer cassetteObj = new AdvObjectContainer(ID_OBJECT_CASSETTA, title, description);
+        cassetteObj.setAlias(new String[]{"cassetta", "cassettaprontosoccorso"});
+        cassetteObj.setPickupable(false);
+        cassetteObj.setOpenable(true);
+        infirmaryRoom.getObjects().add(cassetteObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject colla = new AdvObject(ID_OBJECT_COLLA, titolo, descrizione);
-        colla.setAlias(new String[]{"collaindustiale", "supercolla", "colla"});
-        colla.setUsable(true);
-        cassetta.getList().add(colla);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject glueObj = new AdvObject(ID_OBJECT_COLLA, title, description);
+        glueObj.setAlias(new String[]{"collaindustiale", "supercolla", "colla"});
+        glueObj.setUsable(true);
+        cassetteObj.getList().add(glueObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject forbici = new AdvObject(ID_OBJECT_FORBICI, titolo, descrizione);
-        forbici.setAlias(new String[]{"forbici"});
-        cassetta.getList().add(forbici);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject scissorsObj = new AdvObject(ID_OBJECT_FORBICI, title, description);
+        scissorsObj.setAlias(new String[]{"forbici"});
+        cassetteObj.getList().add(scissorsObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject bisturi = new AdvObject(ID_OBJECT_BISTURI, titolo, descrizione);
-        bisturi.setAlias(new String[]{"bisturi"});
-        cassetta.getList().add(bisturi);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject scalpelObj = new AdvObject(ID_OBJECT_BISTURI, title, description);
+        scalpelObj.setAlias(new String[]{"bisturi"});
+        cassetteObj.getList().add(scalpelObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject garze = new AdvObject(ID_OBJECT_GARZE, titolo, descrizione);
-        garze.setAlias(new String[]{"garze"});
-        cassetta.getList().add(garze);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject gauzeObj = new AdvObject(ID_OBJECT_GARZE, title, description);
+        gauzeObj.setAlias(new String[]{"garze"});
+        cassetteObj.getList().add(gauzeObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject laccio = new AdvObject(ID_OBJECT_LACCIO, titolo, descrizione);
-        laccio.setAlias(new String[]{"laccio", "laccioemostatico"});
-        cassetta.getList().add(laccio);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject snareObj = new AdvObject(ID_OBJECT_LACCIO, title, description);
+        snareObj.setAlias(new String[]{"laccio", "laccioemostatico"});
+        cassetteObj.getList().add(snareObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject crepa = new AdvObject(ID_OBJECT_CREPA, titolo, descrizione);
-        crepa.setAlias(new String[]{"buco", "crepa"});
-        crepa.setPickupable(false);
-        corridoioNord.getObjects().add(crepa);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject crackObj = new AdvObject(ID_OBJECT_CREPA, title, description);
+        crackObj.setAlias(new String[]{"buco", "crepa"});
+        crackObj.setPickupable(false);
+        northCorridor.getObjects().add(crackObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject lettino = new AdvObject(ID_OBJECT_LETTINO, titolo, descrizione);
-        lettino.setAlias(new String[]{"lettino", "lettinovisita", "lettovisita", "letto"});
-        lettino.setPickupable(false);
-        infermeria.getObjects().add(lettino);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject bedObj = new AdvObject(ID_OBJECT_LETTINO, title, description);
+        bedObj.setAlias(new String[]{"lettino", "lettinovisita", "lettovisita", "letto"});
+        bedObj.setPickupable(false);
+        infirmaryRoom.getObjects().add(bedObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObjectContainer tavolo = new AdvObjectContainer(ID_OBJECT_TAVOLO, titolo, descrizione);
-        tavolo.setAlias(new String[]{"tavolo", "tavolino"});
-        tavolo.setPickupable(false);
-        infermeria.getObjects().add(tavolo);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObjectContainer tableObj = new AdvObjectContainer(ID_OBJECT_TAVOLO, title, description);
+        tableObj.setAlias(new String[]{"tavolo", "tavolino"});
+        tableObj.setPickupable(false);
+        infirmaryRoom.getObjects().add(tableObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject libro = new AdvObject(ID_OBJECT_LIBRO, titolo, descrizione);
-        libro.setAlias(new String[]{"libro", "librofiale"});
-        tavolo.getList().add(libro); //aggiungere comando leggi libro/ osserva libro
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject bookObj = new AdvObject(ID_OBJECT_LIBRO, title, description);
+        bookObj.setAlias(new String[]{"libro", "librofiale"});
+        tableObj.getList().add(bookObj); //aggiungere comando leggi libro/ osserva libro
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject fiala1 = new AdvObject(ID_OBJECT_FIALA1, titolo, descrizione);
-        fiala1.setDrinkable(true);
-        fiala1.setAlias(new String[]{"fiala1", "pozione1", "fialaacqua"});
-        tavolo.getList().add(fiala1);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject phialObj1 = new AdvObject(ID_OBJECT_FIALA1, title, description);
+        phialObj1.setDrinkable(true);
+        phialObj1.setAlias(new String[]{"fiala1", "pozione1", "fialaacqua"});
+        tableObj.getList().add(phialObj1);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject fiala2 = new AdvObject(ID_OBJECT_FIALA2, titolo, descrizione);
-        fiala2.setDrinkable(true);
-        fiala2.setAlias(new String[]{"fiala2", "pozione2", "fialaanimali"});
-        tavolo.getList().add(fiala2);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject phialObj2 = new AdvObject(ID_OBJECT_FIALA2, title, description);
+        phialObj2.setDrinkable(true);
+        phialObj2.setAlias(new String[]{"fiala2", "pozione2", "fialaanimali"});
+        tableObj.getList().add(phialObj2);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject fiala3 = new AdvObject(ID_OBJECT_FIALA3, titolo, descrizione);
-        fiala3.setAlias(new String[]{"fiala3", "pozione3", "fialagas", "fialagastossici", "fialagastossico"});
-        fiala3.setDrinkable(true);
-        tavolo.getList().add(fiala3);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject phialObj3 = new AdvObject(ID_OBJECT_FIALA3, title, description);
+        phialObj3.setAlias(new String[]{"fiala3", "pozione3", "fialagas", "fialagastossici", "fialagastossico"});
+        phialObj3.setDrinkable(true);
+        tableObj.getList().add(phialObj3);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject fiala4 = new AdvObject(ID_OBJECT_FIALA4, titolo, descrizione);
-        fiala4.setDrinkable(true);
-        fiala4.setAlias(new String[]{"fiala4", "pozione4", "fialapensiero"});
-        tavolo.getList().add(fiala4);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject phialObj4 = new AdvObject(ID_OBJECT_FIALA4, title, description);
+        phialObj4.setDrinkable(true);
+        phialObj4.setAlias(new String[]{"fiala4", "pozione4", "fialapensiero"});
+        tableObj.getList().add(phialObj4);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject ricetrasmittente = new AdvObject(ID_OBJECT_RICETRASMITTENTE, titolo, descrizione);
-        ricetrasmittente.setPickupable(false);
-        ricetrasmittente.setVisibile(false);
-        ricetrasmittente.setAlias(new String[]{"ricetrasmittente", "radio", "radiotrasmittente", "ricetrasmettitore"});
-        stanzaTelecomunicazioni.getObjects().add(ricetrasmittente);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject transceiverObj = new AdvObject(ID_OBJECT_RICETRASMITTENTE, title, description);
+        transceiverObj.setPickupable(false);
+        transceiverObj.setVisibile(false);
+        transceiverObj.setAlias(new String[]{"ricetrasmittente", "radio", "radiotrasmittente", "ricetrasmettitore"});
+        telecommunicationsRoom.getObjects().add(transceiverObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObjectContainer deposito = new AdvObjectContainer(ID_OBJECT_DEPOSITO, titolo, descrizione);
-        deposito.setPickupable(false);
-        deposito.setOpenable(true);
-        deposito.setAlias(new String[]{"deposito", "magazzino"});
-        stanzaTelecomunicazioni.getObjects().add(deposito);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObjectContainer storageObj = new AdvObjectContainer(ID_OBJECT_DEPOSITO, title, description);
+        storageObj.setPickupable(false);
+        storageObj.setOpenable(true);
+        storageObj.setAlias(new String[]{"deposito", "magazzino"});
+        telecommunicationsRoom.getObjects().add(storageObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject tuta = new AdvObject(ID_OBJECT_TUTA, titolo, descrizione);
-        tuta.setAlias(new String[]{"tutadaastronauta", "tutaastronauta", "tuta"});
-        deposito.getList().add(tuta);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject suitObj = new AdvObject(ID_OBJECT_TUTA, title, description);
+        suitObj.setAlias(new String[]{"tutadaastronauta", "tutaastronauta", "tuta"});
+        storageObj.getList().add(suitObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject anfibi = new AdvObject(ID_OBJECT_ANFIBI, titolo, descrizione);
-        anfibi.setUsable(true);
-        anfibi.setAlias(new String[]{"anfibi", "stivali", "scarpe"});
-        deposito.getList().add(anfibi);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject bootsObj = new AdvObject(ID_OBJECT_ANFIBI, title, description);
+        bootsObj.setUsable(true);
+        bootsObj.setAlias(new String[]{"anfibi", "stivali", "scarpe"});
+        storageObj.getList().add(bootsObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject estintore = new AdvObject(ID_OBJECT_ESTINTORE, titolo, descrizione);
-        estintore.setUsable(true);
-        estintore.setAlias(new String[]{"anfibi", "stivali", "scarpe"});
-        deposito.getList().add(estintore);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject fireExtinguisherObj = new AdvObject(ID_OBJECT_ESTINTORE, title, description);
+        fireExtinguisherObj.setUsable(true);
+        fireExtinguisherObj.setAlias(new String[]{"estintore"});
+        storageObj.getList().add(fireExtinguisherObj);
 
-        titolo = obj.nextLine();
-        descrizione = obj.nextLine();
-        AdvObject pannello = new AdvObject(ID_OBJECT_PANNELLO, titolo, descrizione);
-        pannello.setAlias(new String[]{"pannello", "pannelloemergenza"});
-        pannello.setPickupable(false);
-        stanzaEsterna.getObjects().add(pannello);
+        title = fileObject.nextLine();
+        description = fileObject.nextLine();
+        AdvObject panelObj = new AdvObject(ID_OBJECT_PANNELLO, title, description);
+        panelObj.setAlias(new String[]{"pannello", "pannelloemergenza"});
+        panelObj.setPickupable(false);
+        externalRoom.getObjects().add(panelObj);
 
         //AGGIUNGO COMBINAZIONI PER OGNI STANZA
-        salaComandi.addCombinazioni(porta, tessera);
-        salaElettrica.addCombinazioni(chiave, lucchetto);
-        corridoioNord.addCombinazioni(colla, crepa);
+        controlRoom.addCombinazioni(doorObj, cardObj);
+        electricalRoom.addCombinazioni(keyObj, padlockObj);
+        northCorridor.addCombinazioni(glueObj, crackObj);
 
         //DESCRIZIONI STANZE IN SEGUITO AL COMANDO OSSERVA
         Scanner os;
         os = new Scanner(new FileReader(".\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\Osserva.txt"));
         String[] osserva;
 
-        descrizione = "";
+        description = "";
         osserva = os.nextLine().split("\\.");
         for (String s : osserva) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        salaComandi.setLook(descrizione);
+        controlRoom.setLook(description);
 
-        descrizione = "";
+        description = "";
         osserva = os.nextLine().split("\\.");
         for (String s : osserva) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        corridoioX.setLook(descrizione);
+        xCorridor.setLook(description);
 
-        descrizione = "";
+        description = "";
         osserva = os.nextLine().split("\\.");
         for (String s : osserva) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        corridoioNord.setLook(descrizione);
+        northCorridor.setLook(description);
 
-        descrizione = "";
+        description = "";
         osserva = os.nextLine().split("\\.");
         for (String s : osserva) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        infermeria.setLook(descrizione);
+        infirmaryRoom.setLook(description);
 
-        descrizione = "";
+        description = "";
         osserva = os.nextLine().split("\\.");
         for (String s : osserva) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        salaElettrica.setLook(descrizione);
+        electricalRoom.setLook(description);
 
-        descrizione = "";
+        description = "";
         osserva = os.nextLine().split("\\.");
         for (String s : osserva) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        corridoioSud.setLook(descrizione);
+        southCorridor.setLook(description);
 
-        descrizione = "";
+        description = "";
         osserva = os.nextLine().split("\\.");
         for (String s : osserva) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        stanzaTelecomunicazioni.setLook(descrizione);
+        telecommunicationsRoom.setLook(description);
 
-        descrizione = "";
+        description = "";
         osserva = os.nextLine().split("\\.");
         for (String s : osserva) {
-            descrizione += (s + ".\n");
+            description += (s + ".\n");
         }
-        stanzaEsterna.setLook(descrizione);
+        externalRoom.setLook(description);
 
-        fr.close();
-        obj.close();
+        fileRooms.close();
+        fileObject.close();
         os.close();
-        setCurrentRoom(salaComandi);
+        setCurrentRoom(controlRoom);
     }
 
     @Override
@@ -641,7 +639,7 @@ public class PianetaGame extends GameDescription {
                         output = comandoInventory(p, output);
                         break;
                     case LOOK_AT:
-                        if ((getCurrentRoom().getId() == ID_ROOM_SALA_COMANDI || getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X) || eventTorciaAccesa || missioneCorrente) {
+                        if ((getCurrentRoom().getId() == ID_ROOM_SALA_COMANDI || getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X) || eventTorciaAccesa || missionCorrente) {
                             output = comandoLookAt(p, output);
                         } else {
                             output.append("Non riesco a vedere nulla.\n"
@@ -805,13 +803,13 @@ public class PianetaGame extends GameDescription {
         } else if (move) {
             output.append("           ////  ").append(getCurrentRoom().getName()).append("   ////");
             output.append("\n=====================================================================\n");
-            if ((getCurrentRoom().getId() == ID_ROOM_SALA_COMANDI || getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X) || eventTorciaAccesa || missioneCorrente) {
+            if ((getCurrentRoom().getId() == ID_ROOM_SALA_COMANDI || getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X) || eventTorciaAccesa || missionCorrente) {
                 output.append("\n").append(getCurrentRoom().getDescription()).append("\n");
             } else {
                 output.append("Non riesco a vedere nulla.\n"
                         + "La luce dell'oblo' non arriva fin qui... Fai qualcosa!");
             }
-            //oppure aggiungere una seconda descrizione se la stanza è stata già visitata
+            //oppure aggiungere una seconda description se la stanza è stata già visitata
             // o se ha compiuto una missione!!!
             if (getCurrentRoom().getId() == ID_ROOM_CORRIDOIO_X && eventTorcia == false) {
                 output.append("\n\n_________!!!ATTENZIONE!!!_________ \n"
@@ -921,7 +919,7 @@ public class PianetaGame extends GameDescription {
                 getCurrentRoom().cercaObject(ID_OBJECT_LUCCHETTO).setVisibile(true);
             }
             if (p.getObject().getId() == ID_OBJECT_RICETRASMITTENTE) {
-                if (!missioneRipristinoContatti) {
+                if (!missionRipristinoContatti) {
                     Scanner scanner = new Scanner(System.in);
                     System.out.println("Vuoi ripristinare i contatti col tuo pianeta?");
                     while (scanner.hasNextLine()) {
@@ -993,7 +991,7 @@ public class PianetaGame extends GameDescription {
             String risposta = scanner.nextLine().trim();
             if (Integer.parseInt(risposta) == 15) {
                 System.out.println("Contatti ripristinati\n");
-                missioneRipristinoContatti = true;
+                missionRipristinoContatti = true;
                 System.out.println("Hai ricevuto il seguente messaggio: \n");
                 stampaMessaggioPianeta();
                 if (getInventory().cercaObject(ID_OBJECT_TUTA) == null) {
@@ -1054,7 +1052,7 @@ public class PianetaGame extends GameDescription {
                             output.append("Hai aperto tutte le porte della navicella");
                         }
                         if (p.getObject().getId() == ID_OBJECT_CREPA) {
-                            missioneCrepa = true;
+                            missionCrepa = true;
                             output.append("Hai riparato la crepa. Complimenti!!");
                             getCurrentRoom().setDescription("Sei nel 'Corridoio Nord'! E' possibile dirigerti a sud e a est.");
                             getCurrentRoom().getObjects().remove(getCurrentRoom().cercaObject(ID_OBJECT_CREPA));
@@ -1284,7 +1282,7 @@ public class PianetaGame extends GameDescription {
                 output.append("L'oggetto ").append(p.getObject().getName()).append(" e' stato alzato");
                 if (ID_OBJECT_LEVA == p.getObject().getId()) {
                     output.append("\nAdesso sei riuscito ad accedere le luci della navicella.");
-                    missioneCorrente = true;
+                    missionCorrente = true;
                     p.getObject().setDescription("Semplice leva alzata");
                     for (Room room : getRooms()) {
                         if (room.getId() == ID_ROOM_SALA_COMANDI) {

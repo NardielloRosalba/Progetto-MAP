@@ -158,20 +158,20 @@ public class Inizio extends javax.swing.JFrame {
         int option;
         option = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler chiudere il gioco?", "Uscita gioco", JOptionPane.YES_NO_OPTION);
         if (option == JOptionPane.YES_OPTION) {
-            out.println("n");
+            out.println("quit");
             this.dispose();
         }
     }//GEN-LAST:event_jButtonEsciActionPerformed
 
     private void jButtonIniziaPartita1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniziaPartita1ActionPerformed
         // TODO add your handling code here:
-        out.println("s");
+        out.println("new");
         this.dispose();
     }//GEN-LAST:event_jButtonIniziaPartita1ActionPerformed
 
     private void jButtonCaricaPartitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCaricaPartitaActionPerformed
         // TODO add your handling code here:
-        out.println("c");
+        out.println("load");
         this.dispose();
     }//GEN-LAST:event_jButtonCaricaPartitaActionPerformed
 

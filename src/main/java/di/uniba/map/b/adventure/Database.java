@@ -34,7 +34,7 @@ public class Database {
 
     public Database() throws SQLException {
         conn = DriverManager.getConnection("jdbc:h2:.\\src\\main\\java\\di\\uniba\\map\\b\\adventure\\resources\\db");
-        this.create();
+        create();
 
     }
 
@@ -64,7 +64,7 @@ public class Database {
 
             stm.close();
         } catch (SQLException ex) {
-            System.out.println(ex.getErrorCode() + " :2 " + ex.getMessage());
+            System.out.println(ex.getErrorCode() + " : " + ex.getMessage());
         }
     }
 
@@ -84,13 +84,14 @@ public class Database {
     }*/
     public PianetaGame saving(PianetaGame game) throws SQLException, FileNotFoundException, IOException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
-        PreparedStatement p_stm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
-        PreparedStatement p_stm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
-        PreparedStatement p_ins = conn.prepareStatement("INSERT into game VALUES(?,?,?)");//per inserire una tupla
-        PreparedStatement p_alter = conn.prepareStatement("UPDATE game set match = ? where username like ?");//per caricare una partita su un giocatore già registrato
-
+        PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
+        PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
+        PreparedStatement pstm_ins = conn.prepareStatement("INSERT into game VALUES(?,?,?)");//per inserire una tupla
+        PreparedStatement pstm_alter = conn.prepareStatement("UPDATE game set match = ? where username like ?");//per caricare una partita su un giocatore già registrato
         Properties db = new Properties();
+
         System.out.println("Sei un nuovo utente?");//capisco cosa fare!
+
         while (scan.hasNextLine()) {
             String command = scan.nextLine();
 
@@ -98,20 +99,23 @@ public class Database {
 
                 while (true) {
                     this.login(db);//rende username e psw
-                    p_stm_user.setString(1, db.getProperty("user"));
+                    pstm_user.setString(1, db.getProperty("user"));
 
-                    ResultSet rs = p_stm_user.executeQuery();
+                    ResultSet rs = pstm_user.executeQuery();
                     if (rs.isBeforeFirst()) {//se utente con stesso user esiste..
                         System.out.println("Username già esistente nel db!\n");
                         System.out.println("\n");
-                        
+
                     } else {
-                        p_ins.setString(1, db.getProperty("user"));
-                        p_ins.setString(2, db.getProperty("psw"));
+                        pstm_user.close();
+
+                        pstm_ins.setString(1, db.getProperty("user"));
+                        pstm_ins.setString(2, db.getProperty("psw"));
                         saving_loading.comandoSalva(game);
-                        p_ins.setObject(3, game);//carico pianetagame
-                        p_ins.executeUpdate();
-                        p_ins.close();
+                        pstm_ins.setObject(3, game);//carico pianetagame
+                        pstm_ins.executeUpdate();
+
+                        pstm_ins.close();
 
                         JOptionPane optionPane = new JOptionPane("Salvataggio andato a buon fine!");
                         JDialog dialog = optionPane.createDialog("Salvataggio");
@@ -127,17 +131,19 @@ public class Database {
             } else if (command.equalsIgnoreCase("no")) {//chiedo credenziali per salvare partite di utente già registrato
                 while (true) {
                     this.login(db);
-                    p_stm_user_psw.setString(1, db.getProperty("user"));
-                    p_stm_user_psw.setString(2, db.getProperty("psw"));
+                    pstm_user_psw.setString(1, db.getProperty("user"));
+                    pstm_user_psw.setString(2, db.getProperty("psw"));
 
-                    ResultSet rs = p_stm_user_psw.executeQuery();
+                    ResultSet rs = pstm_user_psw.executeQuery();
                     if (rs.next()) {//se utente con stesso user e psw esiste..
+                        pstm_user_psw.close();
 
                         saving_loading.comandoSalva(game);
-                        p_alter.setObject(1, game);
-                        p_alter.setString(2, db.getProperty("user"));
-                        p_alter.executeUpdate();
-                        p_alter.close();
+                        pstm_alter.setObject(1, game);
+                        pstm_alter.setString(2, db.getProperty("user"));
+                        pstm_alter.executeUpdate();
+
+                        pstm_alter.close();
 
                         JOptionPane optionPane = new JOptionPane("Salvataggio andato a buon fine!");
                         JDialog dialog = optionPane.createDialog("Salvataggio");
@@ -165,29 +171,32 @@ public class Database {
         return game;
     }
 
-    public PianetaGame loading(PianetaGame game2) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
-        game2.stopThread();
-        Scanner scan = new Scanner(System.in);
-        PreparedStatement p_stm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
-        PianetaGame game = null;
+    public PianetaGame loading(PianetaGame game) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+        game.stopThread();
+        Scanner scanner = new Scanner(System.in);
+        PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
+        PianetaGame game_load = null;
         Properties db = new Properties();
 
         System.out.println("Sei un nuovo utente?");//capisco cosa fare!
-        while (scan.hasNextLine()) {
-            String command = scan.nextLine();
+        while (scanner.hasNextLine()) {
+            String command = scanner.nextLine();
 
             if (command.equalsIgnoreCase("no")) {
                 //vuoi caricare partita di giocatore vecchio ok
                 while (true) {
                     this.login(db);
-                    p_stm_user_psw.setString(1, db.getProperty("user"));
-                    p_stm_user_psw.setString(2, db.getProperty("psw"));
+                    pstm_user_psw.setString(1, db.getProperty("user"));
+                    pstm_user_psw.setString(2, db.getProperty("psw"));
 
-                    ResultSet rs = p_stm_user_psw.executeQuery();
+                    ResultSet rs = pstm_user_psw.executeQuery();
                     if (rs.next()) {//se utente con stesso user e psw esiste..
-                        saving_loading.comandoSalva(saving_loading.comandoCarica3(rs.getBinaryStream(3)));
+                        pstm_user_psw.close();
 
-                        game = saving_loading.comandoCarica2();
+                        saving_loading.comandoSalva(saving_loading.comandoCarica(rs.getBinaryStream(3)));
+
+                        game_load = saving_loading.comandoCarica();
+
                         JOptionPane optionPane = new JOptionPane("Caricamento andato a buon fine!");
                         JDialog dialog = optionPane.createDialog("Caricamento");
 
@@ -214,20 +223,22 @@ public class Database {
             }
         }
 
-        if (game == null) {
-            game2.checkTimer();
+        if (game_load == null) {
+            game.checkTimer();
         }
-        return game;
+        return game_load;
     }
 
     public Properties login(Properties db) {
 
-        Scanner scan = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Inserire username..");
-        db.setProperty("user", scan.next());
+        db.setProperty("user", scanner.next());
+
         System.out.println("Inserire password..");
-        db.setProperty("psw", scan.next());
+        db.setProperty("psw", scanner.next());
+
         System.out.println("");
 
         return db;
