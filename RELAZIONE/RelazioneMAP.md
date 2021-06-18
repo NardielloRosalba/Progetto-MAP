@@ -24,7 +24,7 @@
 2. [Teconologie utilizzate](#3.1)<br>
 ### 4. [Specifica algebrica di una struttura dati utilizzata](#4)
 ### 5. [Soluzione del gioco](#5)
-### 6. [Diagramma delle classi] (#6)
+### 6. [Diagramma delle classi](#6)
 <br><br>
 
 # <span id = "1">1. Introduzione</span>
