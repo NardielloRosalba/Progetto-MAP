@@ -1175,12 +1175,11 @@ public class PianetaGame extends GameDescription {
         } else if (p.getObject() != null && p.getObject2() != null && p.getInvObject() == null) {
             if (p.getObject2().isOpenable() && !(p.getObject2().isOpen())) {
                 output.append(p.getObject2().getName()).append(" e' chiuso. Aprilo prima!");
-            } else { //caso in cui non sia apribile(es tavolo con pozioni) o e' gia aperto 
+            } else {
                 if (!p.getObject2().getList().isEmpty()) {
                     Iterator<AdvObject> it = p.getObject2().getList().iterator();
                     while (it.hasNext()) {
                         AdvObject next = it.next();
-                        //System.out.println("primo oggetto chiesto "+ p.getObject().getId() + "iteratore "+ next.getId());
                         if (p.getObject().getId() == next.getId()) {
                             getInventory().add(next);
                             it.remove();
@@ -1236,12 +1235,6 @@ public class PianetaGame extends GameDescription {
     }
 
     private StringBuilder commandOpen(ParserOutput p, StringBuilder output) {
-        /*ATTENZIONE: quando un oggetto contenitore viene aperto, tutti gli oggetti contenuti
-                    * vengongo inseriti nella stanza o nell'inventario a seconda di dove si trova l'oggetto contenitore.
-                    * Questa soluzione NON va bene poiché quando un oggetto contenitore viene richiuso è complicato
-                    * non rendere più disponibili gli oggetti contenuti rimuovendoli dalla stanza o dall'invetario.
-                    * Trovare altra soluzione.
-         */
         if (p.getObject() == null && p.getInvObject() == null && p.getObject2() == null) {
             output.append("Non c'è niente da aprire qui.\n");
         } else {
@@ -1418,7 +1411,6 @@ public class PianetaGame extends GameDescription {
 
     private void printWeather() {
         Client client = ClientBuilder.newClient();
-        //?q={city name}&appid={API key}
         WebTarget target = client.target("http://api.openweathermap.org/data/2.5/weather");
         String city = "Bari";
         Response resp = target.queryParam("q", city).queryParam("appid", "0d81343944ce1f325107f3f2570d55cd").request(MediaType.APPLICATION_JSON).get();

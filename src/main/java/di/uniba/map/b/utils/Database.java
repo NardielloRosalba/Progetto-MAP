@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Luca
+ * @author le bimbe di Luca
  */
 public class Database {
 
@@ -80,41 +80,27 @@ public class Database {
         }
     }
 
-    public void delete() throws SQLException {
-        Statement stm = conn.createStatement();
-        stm.executeUpdate("delete * from game");
-        //stm.executeUpdate("drop table game");
-        stm.close();
-    }
-
-    /*public static void main(String arg[]) throws SQLException {
-        Database db = new Database();
-        db.getInfo();
-        //db.saving();
-        db.delete();
-        db.getInfo();
-    }*/
     public PianetaGame saving(PianetaGame game) throws SQLException, FileNotFoundException, IOException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
-        PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game where username like ?");//per verificare esistenza di stesso username
-        PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
-        PreparedStatement pstm_ins = conn.prepareStatement("INSERT into game VALUES(?,?,?,?)");//per inserire una tupla
-        PreparedStatement pstm_alter = conn.prepareStatement("UPDATE game set match = ?, score = ? where username like ?");//per caricare una partita su un giocatore già registrato
+        PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game where username like ?");
+        PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");
+        PreparedStatement pstm_ins = conn.prepareStatement("INSERT into game VALUES(?,?,?,?)");
+        PreparedStatement pstm_alter = conn.prepareStatement("UPDATE game set match = ?, score = ? where username like ?");
         Properties db = new Properties();
 
-        System.out.println("Sei un nuovo utente?");//capisco cosa fare!
+        System.out.println("Sei un nuovo utente?");
 
         while (scan.hasNextLine()) {
             String command = scan.nextLine();
 
-            if (command.equalsIgnoreCase("si")) {//nuovo utente
+            if (command.equalsIgnoreCase("si")) {
 
                 while (true) {
-                    this.login(db);//rende username e psw
+                    this.login(db);
                     pstm_user.setString(1, db.getProperty("user"));
 
                     ResultSet rs = pstm_user.executeQuery();
-                    if (rs.isBeforeFirst()) {//se utente con stesso user esiste..
+                    if (rs.isBeforeFirst()) {
                         System.out.println("Username già esistente nel db!\n");
                         System.out.println("\n");
 
@@ -124,7 +110,7 @@ public class Database {
                         pstm_ins.setString(1, db.getProperty("user"));
                         pstm_ins.setString(2, db.getProperty("psw"));
                         saving_loading.comandoSalva(game);
-                        pstm_ins.setObject(3, game);//carico pianetagame
+                        pstm_ins.setObject(3, game);
                         pstm_ins.setInt(4, game.getScore());
                         pstm_ins.executeUpdate();
 
@@ -141,14 +127,14 @@ public class Database {
                     break;
                 }
                 break;
-            } else if (command.equalsIgnoreCase("no")) {//chiedo credenziali per salvare partite di utente già registrato
+            } else if (command.equalsIgnoreCase("no")) {
                 while (true) {
                     this.login(db);
                     pstm_user_psw.setString(1, db.getProperty("user"));
                     pstm_user_psw.setString(2, db.getProperty("psw"));
 
                     ResultSet rs = pstm_user_psw.executeQuery();
-                    if (rs.next()) {//se utente con stesso user e psw esiste..
+                    if (rs.next()) {
                         int score = rs.getInt(4);
                         pstm_user_psw.close();
 
@@ -180,7 +166,7 @@ public class Database {
                 break;
             } else {
                 System.out.println("Inserire comando valido");
-                System.out.println("Sei un nuovo utente?");//capisco cosa fare
+                System.out.println("Sei un nuovo utente?");
                 System.out.println("\n");
             }
         }
@@ -190,12 +176,12 @@ public class Database {
     public PianetaGame loading(PianetaGame game) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
         game.stopThread();
         Scanner scanner = new Scanner(System.in);
-        PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");//per autenticare con username e psw
+        PreparedStatement pstm_user_psw = conn.prepareStatement("SELECT * FROM game where username like ? and password like ?");
         PreparedStatement pstm_user = conn.prepareStatement("SELECT * FROM game");
         PianetaGame game_load = null;
         Properties db = new Properties();
 
-        System.out.println("Sei un nuovo utente?");//capisco cosa fare!
+        System.out.println("Sei un nuovo utente?");
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
 
@@ -207,7 +193,7 @@ public class Database {
                         pstm_user_psw.setString(1, db.getProperty("user"));
                         pstm_user_psw.setString(2, db.getProperty("psw"));
                         rs = pstm_user_psw.executeQuery();
-                        if (rs.next()) {//se utente con stesso user e psw esiste..
+                        if (rs.next()) {
 
                             saving_loading.comandoSalva(saving_loading.comandoCarica(rs.getBinaryStream(3)));
 
@@ -240,7 +226,7 @@ public class Database {
                 break;
             } else {
                 System.out.println("Inserire comando valido");
-                System.out.println("Sei un nuovo utente?");//capisco cosa fare!
+                System.out.println("Sei un nuovo utente?");
                 System.out.println("\n");
             }
             break;
@@ -288,7 +274,6 @@ public class Database {
         printPersonWithPredicateConsumerFunction(users, u -> u.getScore() == max, u -> u.getName(), name -> System.out.println(name));
     }
 
-    //prendendo solo una parte del dato
     public static void printPersonWithPredicateConsumerFunction(Set<User> users, Predicate<User> tester, Function<User, String> mapper, Consumer<String> operation) {
         for (User u : users) {
             if (tester.test(u)) {
@@ -298,7 +283,6 @@ public class Database {
         }
     }
 
-    //senza specificare l'operazione
     public static void printPersonWithPredicateConsumer(Set<User> users, Predicate<User> tester, Consumer<User> operation) {
         for (User u : users) {
             if (tester.test(u)) {
