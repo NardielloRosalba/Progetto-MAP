@@ -23,6 +23,7 @@
 2. [Teconologie utilizzate](#3.1)<br>
 ### 4. [Specifica algebrica di una struttura dati utilizzata](#4)
 ### 5. [Soluzione del gioco](#5)
+### 6. [Diagramma delle classi] (#6)
 <br><br>
 
 # <span id = "1">1. Introduzione</span>
@@ -37,6 +38,7 @@ L'idea del nostro gioco si basa su di un Capitano che ha perso i controlli della
 # <span id = "2">2. Architettura del sistema</span>
 La nostra avventura testuale è stata sviluppata in un'ottica di estendibilità sotto più fronti.
 In primo luogo, come previsto nel paradigma Object Oriented, vengono sfruttati meccanismi di ereditarietà tra classi per lasciare spazio ad eventuali future estensioni, prevenendo inoltre la ripetizione di codice. 
+ Inoltre per avviare il gioco bisognerà avviare prima la classe Engine e subito dopo la classe SocketClient
 Le classi che sono state implementate e divise nei vari PacKages sono le seguenti: 
 
 ![divisione_packages](immagini_MAP/divisione_packages.PNG) 
@@ -107,3 +109,7 @@ MAPPA RELATIVA AL GIOCO :
 - indovinello 5 -> SALA ESTERNA/IMPIANTO O2: per poter riattivare l'ossigeno all'interno della navicella bisogna semplicemente indossare prima la tuta per poter sbloccarli esternamente.
 
 - indovinello 6 -> ATTERRAGGIO D'EMERGENZA: per attivare l'atterraggio d'emergenza bisogna rispondere alla seguente domanda: Attraversa il vetro ma senza romperlo. Cosa è? La risposta è LUCE.
+ 
+# <span id = "6">6. Diagramma delle classi</span>
+ <br>
+ ![diagrammaDelleClassi](immaginiMap/diagrammaDelleClassi.png)
