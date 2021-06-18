@@ -20,6 +20,7 @@
 1.4 [Socket](#3.1.4)<br>
 1.5 [Swing](#3.1.5)<br>
 1.6 [Lambda expressions](#3.1.6)<br>
+1.7 [Rest Full](#3.1.7)<br>
 2. [Teconologie utilizzate](#3.1)<br>
 ### 4. [Specifica algebrica di una struttura dati utilizzata](#4)
 ### 5. [Soluzione del gioco](#5)
@@ -81,7 +82,10 @@ Ecco come appare la schermata iniziale grafica:
 ![grafica_inziale](immagini_MAP/grafica_iniziale.PNG) 
 
 ### <span id = "3.1.6">3.1.6. Lambda Expression</span>
-Per il nostro proggetto le Lambda Expressions sono state usate per la visualizzazione dei punteggi dei giocatori che hanno salvato le loro credenziali. 
+Per il nostro proggetto le Lambda Expressions sono state usate per la visualizzazione dei punteggi dei giocatori che hanno salvato le loro credenziali.
+ 
+ ### <span id = "3.1.7">3.1.7. Rest Full</span>
+Sono state utilizzate le Rest Full per implementare il meteo della città di Bari, aggiornato in tempo reale, all'interno del gioco nel momento in cui il giocatore si affaccia verso l'oblo della navicella.
 
 ## <span id = "3.2">3.2. Tecnologie utilizzate</span>
 All'interno del nostro progetto è stata utilazzata la tabella hash per far si che vengono memorizzati gli alias, quindi i sinonimi di determinati comandi che possono essere usati con più frequenza all'interno del gioco,come ad esempio i comandi "osserva" o "usa" hanno a disposizione vari sinonimi che l'utente può scegliere di utilizzare. Tutti questi sinonimi vengono immagazinati all'interno delle tabelle hash.
