@@ -112,4 +112,5 @@ MAPPA RELATIVA AL GIOCO :
  
 # <span id = "6">6. Diagramma delle classi</span>
  <br>
- ![diagrammaDelleClassi](immaginiMap/diagrammaDelleClassi.png)
+ 
+ ![diagrammaDelleClassi](immagini_MAP/diagrammaDelleClassi.png)
